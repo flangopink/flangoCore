@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.props" Condition="Exists('..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{5D915FD2-8C9D-4A85-8E52-67D859E2F50C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>flangoCore</RootNamespace>
+    <AssemblyName>flangoCore</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="0Harmony">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\Current\Assemblies\0Harmony.dll</HintPath>
+    </Reference>
+    <Reference Include="Assembly-CSharp">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\Assembly-CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="UnityEngine.CoreModule">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+    </Reference>
+    <Reference Include="VFECore">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\2023507013\1.3\Assemblies\VFECore.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Abilities\TransformCreature\Ability_Transform.cs" />
+    <Compile Include="Abilities\TransformCreature\Ability_TransformDef.cs" />
+    <Compile Include="Abilities\TransformCreature\Command_Transform.cs" />
+    <Compile Include="Abilities\TransformCreature\CompEffect_AbilityTransform.cs" />
+    <Compile Include="Abilities\TransformCreature\CompProperties_AbilityTransform.cs" />
+    <Compile Include="Abilities\TransformCreature\TransformOutcomeOptions.cs" />
+    <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
+    <Compile Include="DeflectProjectiles\Patch_Projectile_Impact.cs" />
+    <Compile Include="Settings.cs" />
+    <Compile Include="HediffsExtended\HediffComp_HediffOverTime.cs" />
+    <Compile Include="HediffsExtended\HediffComp_HealOverTime.cs" />
+    <Compile Include="Misc\Building_MassGrave.cs" />
+    <Compile Include="Misc\Bullet_Beam.cs" />
+    <Compile Include="Misc\CompPsychicGiveHediffSeverity.cs" />
+    <Compile Include="CustomizableProjectiles\Classes\APWithChance.cs" />
+    <Compile Include="CustomizableProjectiles\CompProjectileVFX.cs" />
+    <Compile Include="CustomizableProjectiles\Classes\ExtraWithChance.cs" />
+    <Compile Include="CustomizableProjectiles\Classes\FleckProps.cs" />
+    <Compile Include="CustomizableProjectiles\Classes\HediffWithChance.cs" />
+    <Compile Include="CustomizableProjectiles\ModExt_ExtraDamageToRace.cs" />
+    <Compile Include="CustomizableProjectiles\Patches\Patch_ExactRotation.cs" />
+    <Compile Include="CustomizableProjectiles\Patches\Patch_RandomArmorPen.cs" />
+    <Compile Include="CustomizableProjectiles\Patches\Patch_Thing_TakeDamage_CustomizableProjectiles.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_ThingDef_ExplosiveShaped.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomAPBullet.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomExtraBullet.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomHediffBullet.cs" />
+    <Compile Include="FastGetComps.cs" />
+    <Compile Include="Harmony_flangoCore.cs" />
+    <Compile Include="HediffsExtended\HediffComp_Combo.cs" />
+    <Compile Include="HediffsExtended\HediffComp_DamageOverTime.cs" />
+    <Compile Include="HediffsExtended\HediffComp_VFX.cs" />
+    <Compile Include="Immunities\CompDamageImmunities.cs" />
+    <Compile Include="Immunities\CompHediffImmunities.cs" />
+    <Compile Include="Immunities\Patch_Thing_TakeDamage_Immunities.cs" />
+    <Compile Include="Misc\Building_FlickableTexture.cs" />
+    <Compile Include="Misc\CustomDescriptions.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stats\Stat_VerbCooldownFactor.cs" />
+    <Compile Include="VanillaExpanded\Patch_Building_ItemProcessor_CheckTheHoppers.cs" />
+    <Compile Include="VanillaExpanded\ModExt_AcceptedHoppers.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Publicize Include="Assembly-CSharp:Verse.ThingDef.descriptionDetailedCached" />
+    <Publicize Include="Assembly-CSharp:Verse.Projectile.ImpactSomething" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.props'))" />
+    <Error Condition="!Exists('..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.targets'))" />
+  </Target>
+  <Import Project="..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.targets" Condition="Exists('..\packages\Krafs.Publicizer.2.0.1\build\Krafs.Publicizer.targets')" />
+</Project>
