@@ -6,7 +6,7 @@ using UnityEngine;
 namespace flangoCore
 {
     [HarmonyPatch(typeof(Projectile), "get_ExactRotation")]
-    public static class Patch_ExactRotation
+    public static class Patch_Projectile_get_ExactRotation
     {
         [HarmonyPrefix]
         public static bool ExactRotation_Prefix(Projectile __instance, ref Quaternion __result)

@@ -47,7 +47,7 @@ namespace flangoCore
 				{
 					pawn.health.RemoveHediff(firstHediffOfDef); 
 					if (Props.throwText)
-						MoteMaker.ThrowText(pawn.Position.ToVector3() + Props.textOffset, pawn.Map, "flangoCore_Immune".Translate(hed.label), Props.textColor, Props.textDuration);
+						MoteMaker.ThrowText(pawn.Position.ToVector3() + Props.textOffset, pawn.Map, "fc_Immune".Translate(hed.label), Props.textColor, Props.textDuration);
 				}
 			}
 		}

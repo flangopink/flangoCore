@@ -13,7 +13,7 @@ namespace flangoCore
 	}
 
 	[HarmonyPatch(typeof(VerbTracker), "CreateVerbTargetCommand")]
-	public static class CreateVerbTargetCommand_Patch
+	public static class Patch_CreateVerbTargetCommand
 	{
 		[HarmonyPostfix]
 		public static void Postfix(ref Command_VerbTarget __result, Thing ownerThing)
@@ -24,7 +24,7 @@ namespace flangoCore
 	}
 
 	[HarmonyPatch(typeof(ThingDef), "get_DescriptionDetailed")]
-	public static class DescriptionDetailed_Patch
+	public static class Patch_DescriptionDetailed
 	{
 		[HarmonyPrefix]
 		public static bool Prefix(ThingDef __instance, ref string __result)

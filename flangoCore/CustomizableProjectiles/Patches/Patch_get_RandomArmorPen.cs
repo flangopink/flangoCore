@@ -5,7 +5,7 @@ using RimWorld;
 namespace flangoCore
 {
     [HarmonyPatch(typeof(Projectile), "get_ArmorPenetration")]
-    public static class Patch_RandomArmorPen
+    public static class Patch_get_RandomArmorPen
     {
         [HarmonyPrefix]
         public static bool ArmorPen_Prefix(Projectile __instance, ref float __result)

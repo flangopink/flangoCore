@@ -40,8 +40,10 @@ namespace flangoCore
 					
 					if (itemProcessor.def.GetModExtension<ModExt_AcceptedHoppers>() == null || itemProcessor.def.GetModExtension<ModExt_AcceptedHoppers>().thingDefs.NullOrEmpty())
 					{
-						thing3.def = ThingDefOf.Hopper;
-						thing2 = thing3;
+						if (thing3.def == ThingDefOf.Hopper || thing3.def == DefDatabase<ThingDef>.GetNamedSilentFail("VFEM_HeavyHopper"))
+						{
+							thing2 = thing3;
+						}
 					}
 					else if (itemProcessor.def.GetModExtension<ModExt_AcceptedHoppers>().thingDefs.Contains(thing3.def))
                     {

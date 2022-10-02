@@ -57,44 +57,53 @@ namespace flangoCore
             Pawn_HealthTracker pawn = parent.pawn.health;
 
             // Remove self if incompatible with other
-            foreach (HediffDef h in Props.incompatibleWith)
+            if (!Props.incompatibleWith.NullOrEmpty())
             {
-                if (pawn.hediffSet.GetFirstHediffOfDef(h) != null)
+                foreach (HediffDef h in Props.incompatibleWith)
                 {
-                    pawn.hediffSet.hediffs.Remove(parent);
-                    return;
+                    if (pawn.hediffSet.GetFirstHediffOfDef(h) != null)
+                    {
+                        pawn.hediffSet.hediffs.Remove(parent);
+                        return;
+                    }
                 }
             }
 
             // Remove other hediffs
-            foreach (HediffDef h in Props.removesHediffs)
+            if (!Props.removesHediffs.NullOrEmpty())
             {
-                pawn.hediffSet.hediffs.Remove(pawn.hediffSet.GetFirstHediffOfDef(h));
+                foreach (HediffDef h in Props.removesHediffs)
+                {
+                    pawn.hediffSet.hediffs.Remove(pawn.hediffSet.GetFirstHediffOfDef(h));
+                }
             }
 
-            foreach (HediffCombo combo in Props.combos)
+            if (!Props.combos.NullOrEmpty())
             {
-                // Combine
-                if (pawn.hediffSet.HasHediff(combo.reactWith))
+                foreach (HediffCombo combo in Props.combos)
                 {
-                    if (combo.isAreaOfEffect)
+                    // Combine
+                    if (pawn.hediffSet.HasHediff(combo.reactWith))
                     {
-                        var cells = GenRadial.RadialCellsAround(parent.pawn.Position, combo.resultRadius, combo.useCenterCellForAOE);
-                        foreach (IntVec3 cell in cells)
+                        if (combo.isAreaOfEffect)
                         {
-                            foreach (Pawn p in cell.GetThingList(parent.pawn.Map))
+                            var cells = GenRadial.RadialCellsAround(parent.pawn.Position, combo.resultRadius, combo.useCenterCellForAOE);
+                            foreach (IntVec3 cell in cells)
                             {
-                                ApplyCombo(p.health, combo);
-                                MakeFlecks(combo);
-                                DealDamage(combo);
+                                foreach (Pawn p in cell.GetThingList(parent.pawn.Map))
+                                {
+                                    ApplyCombo(p.health, combo);
+                                    MakeFlecks(combo);
+                                    DealDamage(combo);
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        ApplyCombo(pawn, combo);
-                        MakeFlecks(combo);
-                        DealDamage(combo);
+                        else
+                        {
+                            ApplyCombo(pawn, combo);
+                            MakeFlecks(combo);
+                            DealDamage(combo);
+                        }
                     }
                 }
             }

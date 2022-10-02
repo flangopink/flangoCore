@@ -12,8 +12,8 @@ namespace flangoCore
         public List<FleckProps> onTickFlecks;
         public List<FleckProps> onRemoveFlecks;
 
-        public bool canColor;
-        public Color color = Color.white;
+        //public bool canColor;
+        //public Color color = Color.white; // doesn't work
 
         public HediffCompProperties_VFX()
         {
@@ -25,7 +25,7 @@ namespace flangoCore
     {
         public HediffCompProperties_VFX Props => (HediffCompProperties_VFX)props;
 
-        private Color originalColor;
+        //private Color originalColor;
 
         public void MakeFleck(FleckProps fleck)
         {
@@ -39,13 +39,13 @@ namespace flangoCore
         {
             base.CompPostPostAdd(dinfo);
 
-            if (Props.canColor)
+            /*if (Props.canColor)
             {
                 originalColor = parent.pawn.Graphic.color;
                 parent.pawn.Graphic.color = Props.color;
-            }
+            }*/
 
-            if (Props.emitFlecks)
+            if (Props.emitFlecks && !Props.onAddFlecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.onAddFlecks)
                 {
@@ -61,7 +61,7 @@ namespace flangoCore
         {
             base.CompPostTick(ref severityAdjustment);
 
-            if (Props.emitFlecks)
+            if (Props.emitFlecks && !Props.onTickFlecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.onTickFlecks)
                 {
@@ -77,12 +77,12 @@ namespace flangoCore
         {
             base.CompPostPostRemoved();
 
-            if (Props.canColor)
+            /*if (Props.canColor)
             {
                 parent.pawn.Graphic.color = originalColor;
-            }
+            }*/
 
-            if (Props.emitFlecks)
+            if (Props.emitFlecks && !Props.onRemoveFlecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.onRemoveFlecks)
                 {

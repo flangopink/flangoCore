@@ -8,6 +8,7 @@ namespace flangoCore
         public float deflectChance = 0.4f;
         public float deflectAccuracy = 0.4f;
         public List<ThingDef> cantDeflect;
+        public SoundDef deflectSound;
         public FleckDef deflectFleck;
         public bool fleckRandomRotation;
     }

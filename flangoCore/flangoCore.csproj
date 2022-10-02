@@ -50,6 +50,19 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Abilities\AbilitiesExtended\AbilityEffectDest.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\CompAbilityEffect_Shoot.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\AbilityTracker_Extensions.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\EquipmentAbility.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\ModExt_AbilityGiver.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_ShootEquipment.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\HediffComp_Ability.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Pawn_ApparelTracker_NotifyApparelAdded_Removed.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Pawn_EquipmentTracker_Notify_EquipmentAdded_Removed.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Verb_get_HediffSource.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Verb_get_EquipmentSource.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_EquipmentLaunchProjectile.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_UseEquipmentAbility.cs" />
     <Compile Include="Abilities\TransformCreature\Ability_Transform.cs" />
     <Compile Include="Abilities\TransformCreature\Ability_TransformDef.cs" />
     <Compile Include="Abilities\TransformCreature\Command_Transform.cs" />
@@ -57,21 +70,23 @@
     <Compile Include="Abilities\TransformCreature\CompProperties_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformCreature\TransformOutcomeOptions.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
-    <Compile Include="DeflectProjectiles\Patch_Projectile_Impact.cs" />
+    <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething.cs" />
+    <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
+    <Compile Include="HediffsExtended\HediffComp_Stun.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="HediffsExtended\HediffComp_HediffOverTime.cs" />
     <Compile Include="HediffsExtended\HediffComp_HealOverTime.cs" />
     <Compile Include="Misc\Building_MassGrave.cs" />
     <Compile Include="Misc\Bullet_Beam.cs" />
-    <Compile Include="Misc\CompPsychicGiveHediffSeverity.cs" />
+    <Compile Include="Misc\CompGiveHediffSeverityExtended.cs" />
     <Compile Include="CustomizableProjectiles\Classes\APWithChance.cs" />
     <Compile Include="CustomizableProjectiles\CompProjectileVFX.cs" />
     <Compile Include="CustomizableProjectiles\Classes\ExtraWithChance.cs" />
     <Compile Include="CustomizableProjectiles\Classes\FleckProps.cs" />
     <Compile Include="CustomizableProjectiles\Classes\HediffWithChance.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ExtraDamageToRace.cs" />
-    <Compile Include="CustomizableProjectiles\Patches\Patch_ExactRotation.cs" />
-    <Compile Include="CustomizableProjectiles\Patches\Patch_RandomArmorPen.cs" />
+    <Compile Include="CustomizableProjectiles\Patches\Patch_Projectile_get_ExactRotation.cs" />
+    <Compile Include="CustomizableProjectiles\Patches\Patch_get_RandomArmorPen.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_Thing_TakeDamage_CustomizableProjectiles.cs" />
     <Compile Include="CustomizableProjectiles\Proj_ThingDef_ExplosiveShaped.cs" />
     <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomAPBullet.cs" />
@@ -79,7 +94,7 @@
     <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomHediffBullet.cs" />
     <Compile Include="FastGetComps.cs" />
     <Compile Include="Harmony_flangoCore.cs" />
-    <Compile Include="HediffsExtended\HediffComp_Combo.cs" />
+    <Compile Include="HediffsExtended\HediffComp_Combos.cs" />
     <Compile Include="HediffsExtended\HediffComp_DamageOverTime.cs" />
     <Compile Include="HediffsExtended\HediffComp_VFX.cs" />
     <Compile Include="Immunities\CompDamageImmunities.cs" />
@@ -88,7 +103,8 @@
     <Compile Include="Misc\Building_FlickableTexture.cs" />
     <Compile Include="Misc\CustomDescriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stats\Stat_VerbCooldownFactor.cs" />
+    <Compile Include="Stats\StatDefOf_flangoCore.cs" />
+    <Compile Include="Stats\Patch_VerbProperties_AdjustedCooldown.cs" />
     <Compile Include="VanillaExpanded\Patch_Building_ItemProcessor_CheckTheHoppers.cs" />
     <Compile Include="VanillaExpanded\ModExt_AcceptedHoppers.cs" />
   </ItemGroup>
@@ -98,6 +114,7 @@
   <ItemGroup>
     <Publicize Include="Assembly-CSharp:Verse.ThingDef.descriptionDetailedCached" />
     <Publicize Include="Assembly-CSharp:Verse.Projectile.ImpactSomething" />
+    <Publicize Include="Assembly-CSharp:Verse.GraphicData.cachedGraphic" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

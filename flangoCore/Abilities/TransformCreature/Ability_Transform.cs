@@ -7,7 +7,7 @@ namespace flangoCore
 {
     public class Ability_Transform : Ability
     {
-        Ability_TransformDef AbilityDef => (Ability_TransformDef)this.def;
+        Ability_TransformDef AbilityDef => (Ability_TransformDef)def;
 
         public Ability_Transform() : base() {}
         public Ability_Transform(Pawn pawn) : base(pawn) {}
@@ -28,26 +28,20 @@ namespace flangoCore
 
         public override void ExposeData()
         {
-            Scribe_Defs.Look<AbilityDef>(ref this.def, "def");
-            if (this.def == null)
+            Scribe_Defs.Look(ref def, "def");
+            if (def == null)
             {
                 return;
             }
-            Scribe_Values.Look<int>(ref this.Id, "Id", -1, false);
-            if (Scribe.mode == LoadSaveMode.LoadingVars && this.Id == -1)
+            Scribe_Values.Look(ref Id, "Id", -1, false);
+            if (Scribe.mode == LoadSaveMode.LoadingVars && Id == -1)
             {
-                this.Id = Find.UniqueIDsManager.GetNextAbilityID();
+                Id = Find.UniqueIDsManager.GetNextAbilityID();
             }
-            Scribe_References.Look<Precept>(ref this.sourcePrecept, "sourcePrecept", false);
-            /*Scribe_Deep.Look<VerbTracker>(ref this.verbTracker, "verbTracker", new object[]
-            {
-                this
-            });
-            Scribe_Values.Look<int>(ref this.cooldownTicks, "cooldownTicks", 0, false);
-            Scribe_Values.Look<int>(ref this.cooldownTicksDuration, "cooldownTicksDuration", 0, false);*/
+            Scribe_References.Look(ref sourcePrecept, "sourcePrecept", false);
             if (Scribe.mode == LoadSaveMode.PostLoadInit)
             {
-                this.Initialize();
+                Initialize();
             }
             Scribe_Values.Look(ref TicksUntilCasting, "EquipmentAbilityTicksUntilcasting", -5);
         }
@@ -66,13 +60,13 @@ namespace flangoCore
 
                 if (!CanCastPowerCheck("Player", out string reason))
                     command.Disable(reason);
-                this.gizmo = command;
+                gizmo = command;
 
-                if (this.CooldownTicksLeft == -5) // Min is -1, but this will do a one-time cooldown upon equipping
+                if (CooldownTicksLeft == -5) // Min is -1, but this will do a one-time cooldown upon equipping
                 {
-                    this.CooldownTicksLeft = this.MaxCastingTicks;
-                    this.StartCooldown(MaxCastingTicks);
-                    this.gizmo.Disable("AbilityOnCooldown".Translate(this.TicksUntilCasting.ToStringSecondsFromTicks()));
+                    CooldownTicksLeft = MaxCastingTicks;
+                    StartCooldown(MaxCastingTicks);
+                    gizmo.Disable("AbilityOnCooldown".Translate(TicksUntilCasting.ToStringSecondsFromTicks()));
                 }
             }
             yield return gizmo;
@@ -82,8 +76,8 @@ namespace flangoCore
             {
                 yield return new Command_Action()
                 {
-                    defaultLabel = "TransformOptions".Translate(),
-                    defaultDesc = "TransformOptionsDesc".Translate(),
+                    defaultLabel = "fc_TransformOptions".Translate(),
+                    defaultDesc = "fc_TransformOptionsDesc".Translate(),
                     icon = OptionsIcon,
                     order = def.uiOrder + 1,
                     action = () =>
@@ -105,7 +99,7 @@ namespace flangoCore
             }
 
             // Reset cooldown if devmode is on
-            if (Prefs.DevMode && this.CooldownTicksLeft > 0)
+            if (Prefs.DevMode && CooldownTicksLeft > 0)
             {
                 Command_Action command_Action = new Command_Action
                 {
@@ -115,7 +109,7 @@ namespace flangoCore
                     action = delegate
                     {
                         CooldownTicksLeft = 0;
-                        this.StartCooldown(0);
+                        StartCooldown(0);
                     }
                 };
                 yield return command_Action;
@@ -127,19 +121,19 @@ namespace flangoCore
         {
             reason = "";
 
-            if (context == "Player" && this.pawn.Faction != Faction.OfPlayer)
+            if (context == "Player" && pawn.Faction != Faction.OfPlayer)
             {
                 reason = "CannotOrderNonControlled".Translate();
                 return false;
             }
-            if (this.pawn.story.DisabledWorkTagsBackstoryAndTraits.HasFlag(WorkTags.Violent) && AbilityDef.verbProperties.violent)
+            if (pawn.story.DisabledWorkTagsBackstoryAndTraits.HasFlag(WorkTags.Violent) && AbilityDef.verbProperties.violent)
             {
-                reason = "AbilityDisabled_IncapableOfWorkTag".Translate(this.pawn.Named("PAWN"), WorkTags.Violent.LabelTranslated());
+                reason = "AbilityDisabled_IncapableOfWorkTag".Translate(pawn.Named("PAWN"), WorkTags.Violent.LabelTranslated());
                 return false;
             }
             if (CooldownTicksLeft > 0)
             {
-                reason = "AU_PawnAbilityRecharging".Translate(this.pawn.NameShortColored);
+                reason = "fc_PawnAbilityRecharging".Translate(pawn.NameShortColored);
                 return false;
             }
             //else if (!Verb.CasterPawn.drafter.Drafted)
@@ -157,7 +151,7 @@ namespace flangoCore
         {
             base.QueueCastingJob(target, destination);
             CooldownTicksLeft = MaxCastingTicks;
-            this.StartCooldown(MaxCastingTicks);
+            StartCooldown(MaxCastingTicks);
         }
 
         public override void AbilityTick()
@@ -171,20 +165,20 @@ namespace flangoCore
                 CooldownTicksLeft--;
                 //Log.Error("fuck you");
 
-                if (!this.gizmo.disabled)
+                if (!gizmo.disabled)
                 {
-                    this.gizmo.Disable("AbilityOnCooldown".Translate(this.CooldownTicksLeft.ToStringSecondsFromTicks()));
+                    gizmo.Disable("AbilityOnCooldown".Translate(CooldownTicksLeft.ToStringSecondsFromTicks()));
                 }
             }
             else
             {
                 if (!Find.TickManager.Paused)
                 {
-                    if (this.gizmo != null)
+                    if (gizmo != null)
                     {
-                        if (this.gizmo.disabled)
+                        if (gizmo.disabled)
                         {
-                            this.gizmo.disabled = false;
+                            gizmo.disabled = false;
                         }
                     }
                 }

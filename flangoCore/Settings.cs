@@ -27,8 +27,11 @@ namespace flangoCore
 
 	public class Settings : ModSettings
 	{
-		public bool enableVFEPatches;
-
+		public bool enableVFEPatches = true;
+		public bool enableDeflectionText = true;
+		public bool enableVCF = false;
+		public bool enableAbilityCooldownOnEquipForItems = true;
+		public bool enableAbilityCooldownOnEquipForHediffs = false;
 
 		private int corpseCapacity = 20;
 		public int CorpseCapacity => corpseCapacity;
@@ -36,20 +39,29 @@ namespace flangoCore
 		public void DoWindowContents(Rect canvas)
 		{
             Listing_Standard listing_Standard = new Listing_Standard
-            { ColumnWidth = canvas.width / 2.5f };
+            { ColumnWidth = canvas.width / 2f };
             listing_Standard.Begin(canvas);
 
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableVFEPatches"), ref enableVFEPatches);
 			listing_Standard.Label("fc_VFEPatchesExplained".Translate());
 
+			listing_Standard.Gap(16f);
+			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableDeflectionText"), ref enableDeflectionText);
+
+			listing_Standard.Gap(16f);
+			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableVCF"), ref enableVCF);
+
+			listing_Standard.Gap(16f);
+			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableAbilityCooldownOnEquipForItems"), ref enableAbilityCooldownOnEquipForItems);
+			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableAbilityCooldownOnEquipForHediffs"), ref enableAbilityCooldownOnEquipForHediffs);
+
 			//listing_Standard.NewColumn();
 
 			listing_Standard.Gap(16f);
-			//listing_Standard.Label("fc_MassGraves".Translate());
-			listing_Standard.Label("fc_MassGravesCapacity".Translate());
-			string buffer = corpseCapacity.ToString();
-			listing_Standard.TextFieldNumeric(ref corpseCapacity, ref buffer, 1f);
+			listing_Standard.Label("fc_MassGrave_Capacity".Translate());
+			string b1 = corpseCapacity.ToString();
+			listing_Standard.TextFieldNumeric(ref corpseCapacity, ref b1, 1f);
 
 			listing_Standard.End();
 		}
@@ -57,7 +69,11 @@ namespace flangoCore
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Values.Look(ref enableVFEPatches, "enableVFEPatches", false);
+			Scribe_Values.Look(ref enableVFEPatches, "enableVFEPatches", true);
+			Scribe_Values.Look(ref enableDeflectionText, "enableDeflectionText", true);
+			Scribe_Values.Look(ref enableVCF, "enableVCF", false);
+			Scribe_Values.Look(ref enableAbilityCooldownOnEquipForItems, "enableAbilityCooldownOnEquipForItems", true);
+			Scribe_Values.Look(ref enableAbilityCooldownOnEquipForHediffs, "enableAbilityCooldownOnEquipForHediffs", false);
 			Scribe_Values.Look(ref corpseCapacity, "corpseCapacity", 20);
 		}
 	}

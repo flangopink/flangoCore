@@ -25,7 +25,7 @@ namespace flangoCore
 				var props = __instance.TryGetCompFast<CompDamageImmunities>().Props;
 				__result = new DamageWorker.DamageResult();
 				if (props.throwText)
-					MoteMaker.ThrowText(__instance.Position.ToVector3() + props.textOffset, __instance.Map, "flangoCore_Immune".Translate(dinfo.Def.label), props.textColor, props.textDuration);
+					MoteMaker.ThrowText(__instance.Position.ToVector3() + props.textOffset, __instance.Map, "fc_Immune".Translate(dinfo.Def.label), props.textColor, props.textDuration);
 
 				return false;
 			}

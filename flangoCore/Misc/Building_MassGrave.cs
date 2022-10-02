@@ -33,7 +33,7 @@ namespace flangoCore
 			foreach (Gizmo gizmo1 in gizmos)
 			{
 				string str = ((!(gizmo1 is Command_Action commandAction)) ? null : commandAction.defaultLabel);
-				if (!(str == "CommandGraveAssignColonistLabel".Translate()))
+				if (!(str == "fc_CommandGraveAssignColonistLabel".Translate()))
 				{
 					yield return gizmo1;
 				}
@@ -54,7 +54,7 @@ namespace flangoCore
 			stringBuilder.Append(InspectStringPartsFromComps());
 			string[] array = new string[5]
 			{
-			"MassGrave_Capacity".Translate(),
+			"fc_MassGrave_Capacity".Translate(),
 			": ",
 			null,
 			null,

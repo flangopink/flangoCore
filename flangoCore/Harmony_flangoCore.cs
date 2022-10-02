@@ -1,5 +1,6 @@
 ﻿using Verse;
 using HarmonyLib;
+using System.Linq;
 
 namespace flangoCore
 {
@@ -13,14 +14,13 @@ namespace flangoCore
             var harmony = new Harmony("com.flangopink.flangoCore");
             harmony.PatchAll();
 
-
             if (ModLister.HasActiveModWithName("Vanilla Expanded Framework") && Controller.settings.enableVFEPatches)
             {
                 Log.Message("<color=#FFC0CB>Vanilla Expanded Framework detected. Patching...</color>");
                 VFEPatches(harmony);
             }
 
-            Log.Message("<color=#FFC0CB>Launched successfully!\nThank you for using flangoCore!</color>");
+            Log.Message($"<color=#FFC0CB>Launched successfully! Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
         }
 
         static void VFEPatches(Harmony harmony)
