@@ -68,9 +68,8 @@ namespace flangoCore
 			PawnGenerationRequest req = new PawnGenerationRequest(val.kindDef, targetPawn.Faction, PawnGenerationContext.NonPlayer, -1);
 			var reqPawn = PawnGenerator.GeneratePawn(req);
 
-			//if (targetPawn.Name != null) reqPawn.Name = targetPawn.Name;
 			reqPawn.Name = targetPawn.Name ?? targetPawn.Name;
-			//if (targetPawn.gender != Gender.None) reqPawn.gender = targetPawn.gender;
+
 			reqPawn.gender = targetPawn.gender != Gender.None ? targetPawn.gender : Gender.None;
 
 			GenSpawn.Spawn(reqPawn, target.Cell, target.Pawn.Map);
@@ -78,22 +77,15 @@ namespace flangoCore
 			if (reqPawn.kindDef != val.kindDef)
 				Log.Error($"Something went wrong while spawning a pawn of kind {val.kindDef}. Instead spawned of kind {reqPawn.kindDef}");
 
-			foreach (FleckProps f in Props.flecks)
-            {
-				MakeFleck(f, targetPawn.Position.ToVector3());
-            }
-
-			//GenExplosion.DoExplosion(targetPawn.Position, targetPawn.Map, 30, DamageDefOf.Bomb, targetPawn); // lol
+			if (!Props.flecks.NullOrEmpty())
+			{
+				foreach (FleckProps fleck in Props.flecks)
+				{
+					fleck.MakeFleck(parent.pawn.Map, targetPawn.Position.ToVector3());
+				}
+			}
 
 			targetPawn.DeSpawn();
-		}
-
-		public void MakeFleck(FleckProps fleck, Vector3 pos)
-		{
-			Map map = parent.pawn.Map;
-			FleckCreationData dataStatic = FleckMaker.GetDataStatic(pos + fleck.offset, map, fleck.fleckDef, fleck.scaleRange.RandomInRange);
-			if (fleck.randomRotation) dataStatic.rotation = Rand.Range(0f, 360f);
-			map.flecks.CreateFleck(dataStatic);
 		}
 	}
 }

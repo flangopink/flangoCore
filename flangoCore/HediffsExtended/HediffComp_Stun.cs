@@ -24,5 +24,25 @@ namespace flangoCore
 				parent.pawn.stances.stunner.StunFor(Props.stunDurationSeconds.SecondsToTicks(), parent.pawn, false, Props.showStunMote);
 			}
 		}
+
+        public override void CompPostTick(ref float severityAdjustment)
+        {
+            base.CompPostTick(ref severityAdjustment);
+
+			if (Props.stunDurationSeconds * 60 - parent.ageTicks < 0)
+            {
+				int ticks;
+				if (parent.def.HasComp(typeof(HediffComp_SeverityPerDay)))
+				{
+					ticks = (int)(parent.Severity / parent.TryGetCompFast<HediffComp_SeverityPerDay>().SeverityChangePerDay() * 60000);
+				}
+				else if (parent.def.HasComp(typeof(HediffComp_SeverityPerDayExtra)))
+				{
+					ticks = (int)(parent.Severity / parent.TryGetCompFast<HediffComp_SeverityPerDayExtra>().SeverityChangePerDay() * 60000);
+				}
+				else return;
+				parent.pawn.stances.stunner.StunFor(ticks, parent.pawn, false, Props.showStunMote);
+			}
+        }
     }
 }

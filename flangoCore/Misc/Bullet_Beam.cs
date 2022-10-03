@@ -56,13 +56,14 @@ namespace flangoCore
 		}
 		public override void Destroy(DestroyMode mode = DestroyMode.Vanish)
 		{
-			foreach (FleckProps fleck in flecksOnHit)
+			if (!flecksOnHit.NullOrEmpty())
 			{
-				if (Map != null)
+				foreach (FleckProps fleck in flecksOnHit)
 				{
-					FleckCreationData dataStatic = FleckMaker.GetDataStatic(DrawPos + fleck.offset, Map, fleck.fleckDef, fleck.scaleRange.RandomInRange);
-					if (fleck.randomRotation) dataStatic.rotation = Rand.Range(0f, 360f);
-					Map.flecks.CreateFleck(dataStatic);
+					if (Map != null)
+					{
+						fleck.MakeFleck(Map, DrawPos);
+					}
 				}
 			}
 		}

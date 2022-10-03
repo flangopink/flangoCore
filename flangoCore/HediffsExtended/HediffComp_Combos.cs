@@ -21,7 +21,7 @@ namespace flangoCore
         public bool dontRemoveOther;
         public bool dontRemoveSelf;
 
-        public FleckDef reactFleck;
+        public FleckProps reactFleck;
 
         public DamageDef damageDef;
         public float damageAmount = 0f;
@@ -93,7 +93,12 @@ namespace flangoCore
                                 foreach (Pawn p in cell.GetThingList(parent.pawn.Map))
                                 {
                                     ApplyCombo(p.health, combo);
-                                    MakeFlecks(combo);
+
+                                    if (combo.reactFleck != null && parent.pawn.Map != null)
+                                    {
+                                        combo.reactFleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
+                                    }
+
                                     DealDamage(combo);
                                 }
                             }
@@ -101,7 +106,12 @@ namespace flangoCore
                         else
                         {
                             ApplyCombo(pawn, combo);
-                            MakeFlecks(combo);
+
+                            if (combo.reactFleck != null && parent.pawn.Map != null)
+                            {
+                                combo.reactFleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
+                            }
+
                             DealDamage(combo);
                         }
                     }
@@ -127,16 +137,6 @@ namespace flangoCore
                     }
                 }
                 else GenSpawn.Spawn(combo.spawnThing, parent.pawn.Position.RandomAdjacentCell8Way(), parent.pawn.Map);
-            }
-        }
-
-        public void MakeFlecks(HediffCombo combo)
-        {
-            if (combo.reactFleck != null && parent.pawn.Map != null)
-            {
-                Map map = parent.pawn.Map;
-                FleckCreationData dataStatic = FleckMaker.GetDataStatic(parent.pawn.DrawPos, map, combo.reactFleck);
-                map.flecks.CreateFleck(dataStatic);
             }
         }
 

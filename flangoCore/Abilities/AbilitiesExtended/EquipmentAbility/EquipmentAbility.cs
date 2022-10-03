@@ -31,7 +31,7 @@ namespace flangoCore
 
         public int MaxCastingTicks => def.overrideGroupCooldown ? def.cooldownTicksRange.RandomInRange : def.groupDef.cooldownTicks;
 
-        private int TicksUntilCasting = -5;
+        private int TicksUntilCasting = -1;
         public int CooldownTicksLeft
         {
             get => TicksUntilCasting;
@@ -51,12 +51,12 @@ namespace flangoCore
                     gizmo.Disable(reason);
                 }
 
-                if (CooldownTicksLeft == -5)
+                /*if (CooldownTicksLeft == -5)
                 {
                     CooldownTicksLeft = MaxCastingTicks;
                     StartCooldown(MaxCastingTicks);
                     gizmo.Disable("AbilityOnCooldown".Translate(TicksUntilCasting.ToStringSecondsFromTicks()));
-                }
+                }*/
             }
             yield return gizmo;
 
@@ -67,7 +67,7 @@ namespace flangoCore
                     defaultLabel = "Reset cooldown",
                     action = delegate
                     {
-                        TicksUntilCasting = 0;
+                        CooldownTicksLeft = 0;
                     }
                 };
                 yield return command_Action;
@@ -118,7 +118,7 @@ namespace flangoCore
                 {
                     foreach (ThingWithComps thing in sources.OfType<ThingWithComps>().ToList())
                     {
-                        if (((Pawn_EquipmentTracker)thing.ParentHolder).pawn != pawn)
+                        if (pawn.equipment.Primary != thing)
                         {
                             sources.Remove(thing);
                         }
@@ -140,7 +140,7 @@ namespace flangoCore
             }
             else
             {
-                Log.Warning($"{def.defName} lost all sources, removing ability");
+                //Log.Warning($"{def.defName} lost all sources, removing ability");
 
                 pawn.abilities.abilities.Remove(this);
                 pawn.abilities.Notify_TemporaryAbilitiesChanged();
@@ -181,7 +181,7 @@ namespace flangoCore
 
                 Scribe_References.Look(ref sourcePrecept, "sourcePrecept");
                 Scribe_Values.Look(ref TicksUntilCasting, "TicksUntilCasting", -5);
-                Scribe_Collections.Look(ref sources, "sources", LookMode.Value);
+                Scribe_Deep.Look(ref sources, "sources", LookMode.Value);
                 if (Scribe.mode == LoadSaveMode.PostLoadInit)
                 {
                     Initialize();

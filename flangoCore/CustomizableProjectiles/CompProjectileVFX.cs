@@ -10,7 +10,6 @@ namespace flangoCore
         public bool counterClockwise;
         public float rotationSpeed = 10f;
 
-        public bool emitFlecks;
         public List<FleckProps> flecks;
 
         public CompProperties_ProjectileVFX()
@@ -27,16 +26,13 @@ namespace flangoCore
         {
             base.CompTick();
 
-            if (Props.emitFlecks)
+            if (!Props.flecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.flecks)
                 {
                     if (parent.Map != null && Find.TickManager.TicksGame % fleck.intervalTicks == 0)
                     {
-                        Map map = parent.Map;
-                        FleckCreationData dataStatic = FleckMaker.GetDataStatic(parent.DrawPos + fleck.offset, map, fleck.fleckDef, fleck.scaleRange.RandomInRange);
-                        if (fleck.randomRotation) dataStatic.rotation = Rand.Range(0f, 360f);
-                        map.flecks.CreateFleck(dataStatic);
+                        fleck.MakeFleck(parent.Map, parent.DrawPos);
                     }
                 }
             }

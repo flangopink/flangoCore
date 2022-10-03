@@ -18,15 +18,20 @@ namespace flangoCore
         public override void CompPostMake()
         {
             base.CompPostMake();
-            foreach (AbilityDef ab in Props.abilities)
+            if (!Props.abilities.NullOrEmpty())
             {
-                if (!Pawn.abilities.abilities.Any(x => x.def == ab))
+                if (Pawn.abilities == null) Pawn.abilities = new Pawn_AbilityTracker(Pawn);
+
+                foreach (AbilityDef ab in Props.abilities)
                 {
-                    Pawn.abilities.TryGainHediffAbility(ab, parent);
-                }
-                else
-                {
-                    ((EquipmentAbility)Pawn.abilities.abilities.First(x => x.def == ab && x is EquipmentAbility)).sources.Add(parent);
+                    if (!Pawn.abilities.abilities.Any(x => x.def == ab))
+                    {
+                        Pawn.abilities.TryGainHediffAbility(ab, parent);
+                    }
+                    else
+                    {
+                        ((EquipmentAbility)Pawn.abilities.abilities.First(x => x.def == ab && x is EquipmentAbility)).sources.Add(parent);
+                    }
                 }
             }
         }
@@ -34,29 +39,28 @@ namespace flangoCore
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
-            foreach (AbilityDef ab in Props.abilities)
+            if (!Props.abilities.NullOrEmpty())
             {
-                if (!Pawn.abilities.abilities.Any(x => x.def == ab))
+                if (Pawn.abilities == null) Pawn.abilities = new Pawn_AbilityTracker(Pawn);
+
+                foreach (AbilityDef ab in Props.abilities)
                 {
-                    Pawn.abilities.TryGainHediffAbility(ab, parent);
-                }
-                else
-                {
-                    ((EquipmentAbility)Pawn.abilities.abilities.First(x => x.def == ab && x is EquipmentAbility)).sources.Add(parent);
+                    if (!Pawn.abilities.abilities.Any(x => x.def == ab))
+                    {
+                        Pawn.abilities.TryGainHediffAbility(ab, parent);
+                    }
+                    else
+                    {
+                        ((EquipmentAbility)Pawn.abilities.abilities.First(x => x.def == ab && x is EquipmentAbility)).sources.Add(parent);
+                    }
                 }
             }
         }
 
-        /*public override void CompPostPostRemoved()
+        public override void CompPostPostRemoved()
         {
             base.CompPostPostRemoved();
-            foreach (Ability ab in Pawn.abilities.abilities)
-            {
-                if (Props.abilities.Any(x => x == ab.def))
-                {
-                    Pawn.abilities.TryRemoveHediffAbility(ab, parent);
-                }
-            }
-        }*/
+            Pawn.abilities = null;
+        }
     }
 }

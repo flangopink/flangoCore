@@ -20,7 +20,9 @@ namespace flangoCore
                 VFEPatches(harmony);
             }
 
-            Log.Message($"<color=#FFC0CB>Launched successfully! Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
+            int num = (from c in System.Reflection.Assembly.GetExecutingAssembly().GetTypes() where c.Namespace == "flangoCore" && c.IsClass select c).ToList().Count();
+
+            Log.Message($"<color=#FFC0CB>Launched successfully! Classes: {num}, Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
         }
 
         static void VFEPatches(Harmony harmony)

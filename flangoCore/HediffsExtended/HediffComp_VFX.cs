@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
-using RimWorld;
 using Verse;
-using UnityEngine;
 
 namespace flangoCore
 {
     public class HediffCompProperties_VFX : HediffCompProperties
     {
-        public bool emitFlecks;
         public List<FleckProps> onAddFlecks;
         public List<FleckProps> onTickFlecks;
         public List<FleckProps> onRemoveFlecks;
@@ -27,14 +24,6 @@ namespace flangoCore
 
         //private Color originalColor;
 
-        public void MakeFleck(FleckProps fleck)
-        {
-            Map map = parent.pawn.Map;
-            FleckCreationData dataStatic = FleckMaker.GetDataStatic(parent.pawn.DrawPos + fleck.offset, map, fleck.fleckDef, fleck.scaleRange.RandomInRange);
-            if (fleck.randomRotation) dataStatic.rotation = Rand.Range(0f, 360f);
-            map.flecks.CreateFleck(dataStatic);
-        }
-
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
@@ -45,13 +34,13 @@ namespace flangoCore
                 parent.pawn.Graphic.color = Props.color;
             }*/
 
-            if (Props.emitFlecks && !Props.onAddFlecks.NullOrEmpty())
+            if (!Props.onAddFlecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.onAddFlecks)
                 {
                     if (parent.pawn.Map != null)
                     {
-                        MakeFleck(fleck);
+                        fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
                     }
                 }
             }
@@ -61,13 +50,13 @@ namespace flangoCore
         {
             base.CompPostTick(ref severityAdjustment);
 
-            if (Props.emitFlecks && !Props.onTickFlecks.NullOrEmpty())
+            if (!Props.onTickFlecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.onTickFlecks)
                 {
                     if (parent.pawn.Map != null && Find.TickManager.TicksGame % fleck.intervalTicks == 0)
                     {
-                        MakeFleck(fleck);
+                        fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
                     }
                 }
             }
@@ -82,13 +71,13 @@ namespace flangoCore
                 parent.pawn.Graphic.color = originalColor;
             }*/
 
-            if (Props.emitFlecks && !Props.onRemoveFlecks.NullOrEmpty())
+            if (!Props.onRemoveFlecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.onRemoveFlecks)
                 {
                     if (parent.pawn.Map != null)
                     {
-                        MakeFleck(fleck);
+                        fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
                     }
                 }
             }

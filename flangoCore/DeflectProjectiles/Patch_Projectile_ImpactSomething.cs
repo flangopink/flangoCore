@@ -53,11 +53,7 @@ namespace flangoCore
 
                     if (ext.deflectFleck != null)
                     {
-                        var fleck = ext.deflectFleck;
-                        Map map = pawn.Map;
-                        FleckCreationData dataStatic = FleckMaker.GetDataStatic(pawn.DrawPos, map, fleck);
-                        if (ext.fleckRandomRotation) dataStatic.rotation = Rand.Range(0f, 360f);
-                        map.flecks.CreateFleck(dataStatic);
+                        ext.deflectFleck.MakeFleck(pawn.Map, pawn.DrawPos);
                     }
 
                     return false;

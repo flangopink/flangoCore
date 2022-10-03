@@ -131,7 +131,7 @@ namespace flangoCore
 		public override void CompPostTick(ref float severityAdjustment)
 		{
 			base.CompPostTick(ref severityAdjustment);
-			if (base.Pawn.IsHashIntervalTick(Props.updateInterval))
+			if (Pawn.IsHashIntervalTick(Props.updateInterval))
 			{
 				float num = SeverityChangePerDay();
 				num *= 0.00333333341f/200*Props.updateInterval;
@@ -148,7 +148,7 @@ namespace flangoCore
 		{
 			StringBuilder stringBuilder = new StringBuilder();
 			stringBuilder.Append(base.CompDebugString());
-			if (!base.Pawn.Dead)
+			if (!Pawn.Dead)
 			{
 				stringBuilder.AppendLine("severity/day: " + SeverityChangePerDay().ToString("F3"));
 			}

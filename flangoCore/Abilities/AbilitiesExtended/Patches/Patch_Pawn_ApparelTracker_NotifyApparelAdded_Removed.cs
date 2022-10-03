@@ -15,7 +15,7 @@ namespace flangoCore
             if (modext != null)
             {
                 Pawn pawn = __instance.pawn;
-                if (!pawn.RaceProps.Humanlike)
+                if (pawn.RaceProps.Humanlike)
                 {
                     return;
                 }

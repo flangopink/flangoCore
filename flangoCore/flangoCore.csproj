@@ -51,7 +51,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abilities\AbilitiesExtended\AbilityEffectDest.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\CompInitialAbilities.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\DashingAbility\AbilityPawnFlyer.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\DashingAbility\CompAbilityEffect_Dash.cs" />
     <Compile Include="Abilities\AbilitiesExtended\CompAbilityEffect_Shoot.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\DashingAbility\DashingPawn.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\AbilityTracker_Extensions.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\EquipmentAbility.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\ModExt_AbilityGiver.cs" />
@@ -82,7 +86,7 @@
     <Compile Include="CustomizableProjectiles\Classes\APWithChance.cs" />
     <Compile Include="CustomizableProjectiles\CompProjectileVFX.cs" />
     <Compile Include="CustomizableProjectiles\Classes\ExtraWithChance.cs" />
-    <Compile Include="CustomizableProjectiles\Classes\FleckProps.cs" />
+    <Compile Include="FleckProps.cs" />
     <Compile Include="CustomizableProjectiles\Classes\HediffWithChance.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ExtraDamageToRace.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_Projectile_get_ExactRotation.cs" />
