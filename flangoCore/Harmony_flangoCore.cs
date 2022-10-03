@@ -1,5 +1,6 @@
 ﻿using Verse;
 using HarmonyLib;
+using System;
 using System.Linq;
 
 namespace flangoCore
@@ -20,9 +21,13 @@ namespace flangoCore
                 VFEPatches(harmony);
             }
 
-            int num = (from c in System.Reflection.Assembly.GetExecutingAssembly().GetTypes() where c.Namespace == "flangoCore" && c.IsClass select c).ToList().Count();
+            if (Controller.settings.enableVCF) EnableVCF(harmony);
 
-            Log.Message($"<color=#FFC0CB>Launched successfully! Classes: {num}, Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
+            //int num = (from c in System.Reflection.Assembly.GetExecutingAssembly().GetTypes() where c.Namespace == "flangoCore" && c.IsClass select c).ToList().Count();
+
+            //Log.Message($"<color=#FFC0CB>Launched successfully! Classes: {num}, Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
+
+            Log.Message($"<color=#FFC0CB>Launched successfully! Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
         }
 
         static void VFEPatches(Harmony harmony)
@@ -31,6 +36,14 @@ namespace flangoCore
             var hoppersPrefix = typeof(Patch_Building_ItemProcessor_CheckTheHoppers).GetMethod("Prefix");
 
             harmony.Patch(hoppersOrig, new HarmonyMethod(hoppersPrefix));
+        }
+
+        static void EnableVCF(Harmony harmony)
+        {
+            var VCFOrig = typeof(VerbProperties).GetMethod("AdjustedCooldown", new Type[] { typeof(Verb), typeof(Pawn) });
+            var VCFPostfix = typeof(Patch_VerbProperties_AdjustedCooldown).GetMethod("Postfix");
+
+            harmony.Patch(VCFOrig, postfix: new HarmonyMethod(VCFPostfix));
         }
     }
 }

@@ -67,12 +67,11 @@
     <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Verb_get_EquipmentSource.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_EquipmentLaunchProjectile.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_UseEquipmentAbility.cs" />
-    <Compile Include="Abilities\TransformCreature\Ability_Transform.cs" />
-    <Compile Include="Abilities\TransformCreature\Ability_TransformDef.cs" />
-    <Compile Include="Abilities\TransformCreature\Command_Transform.cs" />
-    <Compile Include="Abilities\TransformCreature\CompEffect_AbilityTransform.cs" />
-    <Compile Include="Abilities\TransformCreature\CompProperties_AbilityTransform.cs" />
-    <Compile Include="Abilities\TransformCreature\TransformOutcomeOptions.cs" />
+    <Compile Include="Abilities\TransformThing\Ability_Transform.cs" />
+    <Compile Include="Abilities\TransformThing\Ability_TransformDef.cs" />
+    <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
+    <Compile Include="Abilities\TransformThing\CompEffect_AbilityTransform.cs" />
+    <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething.cs" />
     <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
