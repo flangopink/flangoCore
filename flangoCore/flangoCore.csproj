@@ -58,9 +58,9 @@
     <Compile Include="Abilities\AbilitiesExtended\DashingAbility\DashingPawn.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\AbilityTracker_Extensions.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\EquipmentAbility.cs" />
-    <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\ModExt_AbilityGiver.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\ModExt_AbilityGiver.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_ShootEquipment.cs" />
-    <Compile Include="Abilities\AbilitiesExtended\HediffComp_Ability.cs" />
+    <Compile Include="Abilities\AbilitiesExtended\HediffComp_AbilityGiver.cs" />
     <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Pawn_ApparelTracker_NotifyApparelAdded_Removed.cs" />
     <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Pawn_EquipmentTracker_Notify_EquipmentAdded_Removed.cs" />
     <Compile Include="Abilities\AbilitiesExtended\Patches\Patch_Verb_get_HediffSource.cs" />

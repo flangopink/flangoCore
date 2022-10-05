@@ -28,7 +28,7 @@ namespace flangoCore
         public override void CompPostTick(ref float severityAdjustment)
         {
             base.CompPostTick(ref severityAdjustment);
-
+			Log.Message("" + (Props.stunDurationSeconds * 60 - parent.ageTicks));
 			if (Props.stunDurationSeconds * 60 - parent.ageTicks < 0)
             {
 				int ticks;

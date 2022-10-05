@@ -21,7 +21,6 @@ namespace flangoCore
 	public class HediffCompProperties_SeverityPerDayExtra : HediffCompProperties
 	{
 		public float severityPerDay;
-		public bool showTimeToRecover;
 		public bool onlyShowInInfo;
 		public TimeFormat timeFormat = TimeFormat.Hours;
 		public int decimalPlaces = -1;

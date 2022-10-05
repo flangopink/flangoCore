@@ -28,6 +28,9 @@ namespace flangoCore
                 {
                     foreach (AbilityDef def in modext.abilities)
                     {
+                        if (def.abilityClass != typeof(EquipmentAbility)) 
+                            def.abilityClass = typeof(EquipmentAbility);
+
                         if (!__instance.pawn.abilities.abilities.Any(x => x.def == def))
                         {
                             __instance.pawn.abilities.TryGainEquipmentAbility(def, eq);

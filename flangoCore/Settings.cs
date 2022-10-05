@@ -28,8 +28,13 @@ namespace flangoCore
 	public class Settings : ModSettings
 	{
 		public bool enableVFEPatches = true;
+
 		public bool enableDeflectionText = true;
+		public bool deflectionChanceAffectedByMeleeSkill = true;
+		public bool deflectionAccuracyAffectedByMeleeSkill = true;
+
 		public bool enableVCF = false;
+
 		public bool enableAbilityCooldownOnEquipForItems = true;
 		public bool enableAbilityCooldownOnEquipForHediffs = false;
 
@@ -48,6 +53,9 @@ namespace flangoCore
 
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableDeflectionText"), ref enableDeflectionText);
+			listing_Standard.CheckboxLabeled(Translator.Translate("fc_deflectionChanceAffectedByMeleeSkill"), ref deflectionChanceAffectedByMeleeSkill);
+			listing_Standard.CheckboxLabeled(Translator.Translate("fc_deflectionAccuracyAffectedByMeleeSkill"), ref deflectionAccuracyAffectedByMeleeSkill);
+			listing_Standard.Label("fc_deflectionChanceExplained".Translate());
 
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableVCF"), ref enableVCF);
@@ -70,10 +78,16 @@ namespace flangoCore
 		{
 			base.ExposeData();
 			Scribe_Values.Look(ref enableVFEPatches, "enableVFEPatches", true);
+
 			Scribe_Values.Look(ref enableDeflectionText, "enableDeflectionText", true);
+			Scribe_Values.Look(ref deflectionChanceAffectedByMeleeSkill, "deflectionChanceAffectedByMeleeSkill", true);
+			Scribe_Values.Look(ref deflectionAccuracyAffectedByMeleeSkill, "deflectionAccuracyAffectedByMeleeSkill", true);
+
 			Scribe_Values.Look(ref enableVCF, "enableVCF", false);
+
 			Scribe_Values.Look(ref enableAbilityCooldownOnEquipForItems, "enableAbilityCooldownOnEquipForItems", true);
 			Scribe_Values.Look(ref enableAbilityCooldownOnEquipForHediffs, "enableAbilityCooldownOnEquipForHediffs", false);
+
 			Scribe_Values.Look(ref corpseCapacity, "corpseCapacity", 20);
 		}
 	}

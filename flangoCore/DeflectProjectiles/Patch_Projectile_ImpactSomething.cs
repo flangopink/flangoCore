@@ -16,6 +16,18 @@ namespace flangoCore
                 var ext = pawn.equipment.Primary?.def.GetModExtension<ModExt_DeflectProjectiles>();
                 if (ext == null || (ext.cantDeflect != null && ext.cantDeflect.Contains(__instance.def))) return true;
 
+                if (pawn.skills != null)
+                {
+                    if (Controller.settings.deflectionChanceAffectedByMeleeSkill)
+                    {
+                        ext.deflectChance += pawn.skills.GetSkill(SkillDefOf.Melee).Level;
+                    }
+                    if (Controller.settings.deflectionAccuracyAffectedByMeleeSkill)
+                    {
+                        ext.deflectAccuracy += pawn.skills.GetSkill(SkillDefOf.Melee).Level;
+                    }
+                }
+
                 float roll = Rand.Value;
                 if (roll < ext.deflectChance)
                 {

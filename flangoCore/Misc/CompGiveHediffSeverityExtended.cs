@@ -28,6 +28,7 @@ namespace flangoCore
 		public CompProperties_GiveHediffSeverityExtended()
 		{
 			compClass = typeof(CompGiveHediffSeverityExtended);
+			requiredStat = StatDefOf.PsychicSensitivity;
 		}
 	}
 
@@ -79,7 +80,7 @@ namespace flangoCore
 						continue;
 					}
 					Hediff firstHediffOfDef = pawn.health.hediffSet.GetFirstHediffOfDef(Props.hediff);
-					float num2 = Props.severityPerSecond * 1.45f * (Props.scalesWithStat ? pawn.GetStatValue(Props.requiredStat) : 1); // Psych Sens scaling
+					float num2 = Props.severityPerSecond * 1.45f * (Props.scalesWithStat && Props.requiredStat != null ? pawn.GetStatValue(Props.requiredStat) : 1); // Psych Sens scaling
 					if (firstHediffOfDef != null)
 					{
 						firstHediffOfDef.Severity += num2;

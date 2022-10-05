@@ -5,7 +5,7 @@ using System.Text;
 
 namespace flangoCore
 {
-	public class CustomDescriptionDefExtension : DefModExtension
+	public class ModExt_CustomDescription : DefModExtension
 	{
 		public string description;
 		public bool affectVerb = true;
@@ -18,8 +18,8 @@ namespace flangoCore
 		[HarmonyPostfix]
 		public static void Postfix(ref Command_VerbTarget __result, Thing ownerThing)
 		{
-			if (ownerThing.def.HasModExtension<CustomDescriptionDefExtension>() && ownerThing.def.GetModExtension<CustomDescriptionDefExtension>().affectVerb)
-				__result.defaultDesc = ownerThing.LabelCap + ": " + ownerThing.def.GetModExtension<CustomDescriptionDefExtension>().description.CapitalizeFirst();
+			if (ownerThing.def.HasModExtension<ModExt_CustomDescription>() && ownerThing.def.GetModExtension<ModExt_CustomDescription>().affectVerb)
+				__result.defaultDesc = ownerThing.LabelCap + ": " + ownerThing.def.GetModExtension<ModExt_CustomDescription>().description.CapitalizeFirst();
 		}
 	}
 
@@ -29,12 +29,12 @@ namespace flangoCore
 		[HarmonyPrefix]
 		public static bool Prefix(ThingDef __instance, ref string __result)
 		{
-			if (__instance.HasModExtension<CustomDescriptionDefExtension>() && __instance.GetModExtension<CustomDescriptionDefExtension>().affectInventory)
+			if (__instance.HasModExtension<ModExt_CustomDescription>() && __instance.GetModExtension<ModExt_CustomDescription>().affectInventory)
             {
 				if (__instance.descriptionDetailedCached == null)
 				{
 					StringBuilder stringBuilder = new StringBuilder();
-					stringBuilder.Append(__instance.GetModExtension<CustomDescriptionDefExtension>().description);
+					stringBuilder.Append(__instance.GetModExtension<ModExt_CustomDescription>().description);
 					if (__instance.IsApparel)
 					{
 						stringBuilder.AppendLine();
