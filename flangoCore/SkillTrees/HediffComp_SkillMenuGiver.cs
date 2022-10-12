@@ -1,50 +1,29 @@
-﻿using System.Collections.Generic;
+﻿/*using System.Collections.Generic;
+using RimWorld;
 using Verse;
 
 namespace flangoCore
 {
-    public class HediffCompProperties_VFX : HediffCompProperties
+    public class HediffCompProperties_SkillMenuGiver : HediffCompProperties
     {
-        public List<FleckProps> onAddFlecks;
-        public List<FleckProps> onTickFlecks;
-        public List<FleckProps> onRemoveFlecks;
+        public SkillTreeDef tree;
 
-        //public bool canColor;
-        //public Color color = Color.white; // doesn't work
-
-        public HediffCompProperties_VFX()
+        public HediffCompProperties_SkillMenuGiver()
         {
-            compClass = typeof(HediffComp_VFX);
+            compClass = typeof(HediffComp_SkillMenuGiver);
         }
     }
 
-    public class HediffComp_VFX : HediffComp
+    public class HediffComp_SkillMenuGiver : HediffComp
     {
-        public HediffCompProperties_VFX Props => (HediffCompProperties_VFX)props;
-
-        //private Color originalColor;
+        public HediffCompProperties_SkillMenuGiver Props => (HediffCompProperties_SkillMenuGiver)props;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
-            if (parent.pawn.Dead) return;
+            if (parent.pawn.Dead || Props.tree == null || parent.pawn.def.HasComp(typeof(HediffComp_SkillMenuGiver))) return;
 
-            /*if (Props.canColor)
-            {
-                originalColor = parent.pawn.Graphic.color;
-                parent.pawn.Graphic.color = Props.color;
-            }*/
-
-            if (!Props.onAddFlecks.NullOrEmpty())
-            {
-                foreach (FleckProps fleck in Props.onAddFlecks)
-                {
-                    if (parent.pawn.Map != null)
-                    {
-                        fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
-                    }
-                }
-            }
+            parent.pawn.def.comps.Add(Props.thingComp.props);
         }
 
         public override void CompPostTick(ref float severityAdjustment)
@@ -69,11 +48,6 @@ namespace flangoCore
             base.CompPostPostRemoved();
             if (parent.pawn.Dead) return;
 
-            /*if (Props.canColor)
-            {
-                parent.pawn.Graphic.color = originalColor;
-            }*/
-
             if (!Props.onRemoveFlecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.onRemoveFlecks)
@@ -87,3 +61,4 @@ namespace flangoCore
         }
     }
 }
+*/

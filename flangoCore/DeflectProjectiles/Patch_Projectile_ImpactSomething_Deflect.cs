@@ -6,7 +6,7 @@ using Verse.Sound;
 namespace flangoCore
 {
     [HarmonyPatch(typeof(Projectile), "ImpactSomething")]
-    public static class Patch_Projectile_ImpactSomething
+    public static class Patch_Projectile_ImpactSomething_Deflect
     {
         [HarmonyPrefix]
         public static bool Prefix(Projectile __instance)

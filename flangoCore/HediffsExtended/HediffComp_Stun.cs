@@ -26,10 +26,10 @@ namespace flangoCore
 		}
 
         public override void CompPostTick(ref float severityAdjustment)
-        {
-            base.CompPostTick(ref severityAdjustment);
-			Log.Message("" + (Props.stunDurationSeconds * 60 - parent.ageTicks));
-			if (Props.stunDurationSeconds * 60 - parent.ageTicks < 0)
+		{
+			if (parent.pawn.Dead) parent.pawn.health.RemoveHediff(parent);
+			base.CompPostTick(ref severityAdjustment);
+			if (parent != null && parent.pawn != null && !parent.pawn.stances.stunner.Stunned)
             {
 				int ticks;
 				if (parent.def.HasComp(typeof(HediffComp_SeverityPerDay)))

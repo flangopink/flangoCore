@@ -31,6 +31,7 @@ namespace flangoCore
 				effecter.Trigger(new TargetInfo(base.Position, map), new TargetInfo(base.Position, map));
 				effecter.Cleanup();
 			}
+
 			switch (Def.ExplosionShape) 
 			{
 				case ExplosionShape.Normal:

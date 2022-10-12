@@ -45,6 +45,14 @@
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.IMGUIModule.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.TextRenderingModule.dll</HintPath>
+    </Reference>
     <Reference Include="VFECore">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\workshop\content\294100\2023507013\1.3\Assemblies\VFECore.dll</HintPath>
     </Reference>
@@ -73,9 +81,11 @@
     <Compile Include="Abilities\TransformThing\CompEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
-    <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething.cs" />
+    <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
+    <Compile Include="SkillTrees\HediffComp_SkillMenuGiver.cs" />
     <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
     <Compile Include="HediffsExtended\HediffComp_Stun.cs" />
+    <Compile Include="Misc\CompMoteEmitterOptimized.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="HediffsExtended\HediffComp_HediffOverTime.cs" />
     <Compile Include="HediffsExtended\HediffComp_HealOverTime.cs" />
@@ -89,7 +99,7 @@
     <Compile Include="CustomizableProjectiles\Classes\HediffWithChance.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ExtraDamageToRace.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_Projectile_get_ExactRotation.cs" />
-    <Compile Include="CustomizableProjectiles\Patches\Patch_get_RandomArmorPen.cs" />
+    <Compile Include="CustomizableProjectiles\Patches\Patch_get_ArmorPenetration_RandomAP.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_Thing_TakeDamage_CustomizableProjectiles.cs" />
     <Compile Include="CustomizableProjectiles\Proj_ThingDef_ExplosiveShaped.cs" />
     <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomAPBullet.cs" />
@@ -106,6 +116,12 @@
     <Compile Include="Misc\Building_FlickableTexture.cs" />
     <Compile Include="Misc\CustomDescriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SkillTrees\CompSkills.cs" />
+    <Compile Include="SkillTrees\InitializeSkillsComp.cs" />
+    <Compile Include="SkillTrees\ITab_Pawn_Skills.cs" />
+    <Compile Include="SkillTrees\SkillDef.cs" />
+    <Compile Include="SkillTrees\SkillTreeDef.cs" />
+    <Compile Include="Stats\Patch_Projectile_ImpactSomething_Dodge.cs" />
     <Compile Include="Stats\StatDefOf_flangoCore.cs" />
     <Compile Include="Stats\Patch_VerbProperties_AdjustedCooldown.cs" />
     <Compile Include="VanillaExpanded\Patch_Building_ItemProcessor_CheckTheHoppers.cs" />

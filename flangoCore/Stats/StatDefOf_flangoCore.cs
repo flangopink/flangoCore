@@ -6,5 +6,6 @@ namespace flangoCore
     public static class StatDefOf_flangoCore
     {
         public static StatDef VerbCooldownFactor;
+        public static StatDef RangedDodgeChance;
     }
 }

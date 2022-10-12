@@ -52,6 +52,7 @@ namespace flangoCore
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
+            if (parent.pawn.Dead) parent.pawn.health.RemoveHediff(parent);
             base.CompPostPostAdd(dinfo);
 
             Pawn_HealthTracker pawn = parent.pawn.health;

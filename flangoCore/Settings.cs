@@ -41,6 +41,20 @@ namespace flangoCore
 		private int corpseCapacity = 20;
 		public int CorpseCapacity => corpseCapacity;
 
+		private float baseDodgeChance = 0;
+		public float BaseDodgeChance
+		{
+			get
+			{
+				StatDefOf_flangoCore.RangedDodgeChance.defaultBaseValue = baseDodgeChance/100;
+				return baseDodgeChance;
+			}
+            set => baseDodgeChance = value;
+		}
+
+		public float skillTreeUIScale = 1f;
+
+
 		public void DoWindowContents(Rect canvas)
 		{
             Listing_Standard listing_Standard = new Listing_Standard
@@ -49,13 +63,23 @@ namespace flangoCore
 
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableVFEPatches"), ref enableVFEPatches);
+			listing_Standard.Indent();
 			listing_Standard.Label("fc_VFEPatchesExplained".Translate());
+			listing_Standard.Outdent();
 
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableDeflectionText"), ref enableDeflectionText);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_deflectionChanceAffectedByMeleeSkill"), ref deflectionChanceAffectedByMeleeSkill);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_deflectionAccuracyAffectedByMeleeSkill"), ref deflectionAccuracyAffectedByMeleeSkill);
+			listing_Standard.Gap(8f);
+			listing_Standard.Indent();
 			listing_Standard.Label("fc_deflectionChanceExplained".Translate());
+			listing_Standard.Outdent();
+
+
+			listing_Standard.Gap(16f);
+			string bDodge = baseDodgeChance.ToString();
+			listing_Standard.TextFieldNumericLabeled("fc_baseDodgeChance".Translate(), ref baseDodgeChance, ref bDodge, 0, 100);
 
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableVCF"), ref enableVCF);
@@ -64,12 +88,17 @@ namespace flangoCore
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableAbilityCooldownOnEquipForItems"), ref enableAbilityCooldownOnEquipForItems);
 			listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableAbilityCooldownOnEquipForHediffs"), ref enableAbilityCooldownOnEquipForHediffs);
 
-			//listing_Standard.NewColumn();
+			listing_Standard.Gap(16f);
+			string bCorpses = corpseCapacity.ToString();
+			listing_Standard.TextFieldNumericLabeled("fc_MassGrave_Capacity".Translate(), ref corpseCapacity, ref bCorpses, 1f);
+
+
+			listing_Standard.NewColumn();
 
 			listing_Standard.Gap(16f);
-			listing_Standard.Label("fc_MassGrave_Capacity".Translate());
-			string b1 = corpseCapacity.ToString();
-			listing_Standard.TextFieldNumeric(ref corpseCapacity, ref b1, 1f);
+			listing_Standard.Label("fc_SkillTreeUIScale".Translate());
+			listing_Standard.Slider(skillTreeUIScale, 0.5f, 2f);
+
 
 			listing_Standard.End();
 		}
@@ -89,6 +118,7 @@ namespace flangoCore
 			Scribe_Values.Look(ref enableAbilityCooldownOnEquipForHediffs, "enableAbilityCooldownOnEquipForHediffs", false);
 
 			Scribe_Values.Look(ref corpseCapacity, "corpseCapacity", 20);
+			Scribe_Values.Look(ref baseDodgeChance, "baseDodgeChance", 0);
 		}
 	}
 }
