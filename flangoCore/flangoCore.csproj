@@ -121,6 +121,8 @@
     <Compile Include="SkillTrees\ITab_Pawn_Skills.cs" />
     <Compile Include="SkillTrees\SkillDef.cs" />
     <Compile Include="SkillTrees\SkillTreeDef.cs" />
+    <Compile Include="SkillTrees\SkillTreeLevel.cs" />
+    <Compile Include="SkillTrees\XPSourceFlags.cs" />
     <Compile Include="Stats\Patch_Projectile_ImpactSomething_Dodge.cs" />
     <Compile Include="Stats\StatDefOf_flangoCore.cs" />
     <Compile Include="Stats\Patch_VerbProperties_AdjustedCooldown.cs" />

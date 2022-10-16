@@ -6,13 +6,7 @@ using UnityEngine;
 
 namespace flangoCore
 {
-	public class SkillTreeLevel
-	{
-		public int level = 0;
-		public List<SkillDef> skills;
-    }
-
-    public class SkillTreeDef : Def
+	public class SkillTreeDef : Def
 	{
 		public static SkillDef BlankSkill;
 
@@ -24,7 +18,7 @@ namespace flangoCore
 
 		public string iconPath;
 
-		public List<string> columnIconPaths;
+		//public List<string> columnIconPaths;
 
 		public int order;
 
@@ -34,8 +28,8 @@ namespace flangoCore
 		[Unsaved(false)]
 		public Texture2D icon;
 
-		[Unsaved(false)]
-		public List<Texture2D> columnIcons;
+		//[Unsaved(false)]
+		//public List<Texture2D> columnIcons;
 
 		[Unsaved(false)]
 		public bool HasSkills;
@@ -43,7 +37,7 @@ namespace flangoCore
 		public List<SkillTreeLevel> levels;
 		public List<SkillDef> skillDefs;
 
-		public List<string> columnNames;
+		//public List<string> columnNames;
 		public List<string> rowNames;
 
 		[Unsaved(false)]
@@ -60,14 +54,11 @@ namespace flangoCore
 				{
 					icon = ContentFinder<Texture2D>.Get(iconPath);
 				}
-				if (!columnIconPaths.NullOrEmpty())
+
+				foreach (SkillTreeLevel level in levels)
                 {
-					columnIcons = new List<Texture2D>();
-					foreach (string icon in columnIconPaths)
-                    {
-						columnIcons.Add(ContentFinder<Texture2D>.Get(icon));
-                    }
-                }
+					level.icon = ContentFinder<Texture2D>.Get(level.iconPath);
+				}
 			});
 		}
 
@@ -90,14 +81,6 @@ namespace flangoCore
 					skillDefs.Add(skill);
 				}
             }
-			/*
-			foreach (SkillDef skill in DefDatabase<SkillDef>.AllDefsListForReading)
-			{
-				if (skill.tree == this)
-				{
-					skills.Add(skill);
-				}
-			}*/
 
 			MaxLevel = skillDefs.Max((SkillDef s) => s.reqLevel);
 			TotalPoints += skillDefs.Count;
@@ -133,12 +116,6 @@ namespace flangoCore
 					skillLevelsInOrder[i] = new SkillDef[0];
 				}
 			}
-
-			/*if (branches.NullOrEmpty() || branches.Any(x => x.skills.NullOrEmpty()))
-			{
-				Log.Error("Skill Tree branches not defined or at least one branch is empty.");
-				return;
-			}*/
 		}
 	}
 }

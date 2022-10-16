@@ -24,13 +24,11 @@ namespace flangoCore
 		private int pathsPerRow;
 		private Vector2 pathsScrollPos;
 
-		private static readonly float[][] skillTreeYOffsets;
+		private CompSkills compSkills;
 		public static CompSkills CompSkills;
 
 		private readonly Dictionary<SkillDef, Vector2> skillPos = new Dictionary<SkillDef, Vector2>();
-
-		private CompSkills compSkills;
-
+		private static readonly float[][] skillTreeYOffsets;
 		public Vector2 Size => size;
 
 		static ITab_Pawn_Skills()
@@ -224,20 +222,37 @@ namespace flangoCore
 				}
 			}
 
-			for (int i = 0; i < tree.skillLevelsInOrder.Length; i++)
+			for (int i = -1; i < tree.skillLevelsInOrder.Length; i++)
 			{
+
 				Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / tree.MaxLevel, inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
 
+				// Tree icon
+				if (i == -1)
+				{
+					if (tree.icon != null)
+					{
+						Rect treeIconRect = new Rect(rect.x, rect.y - 100f, 32f, 32f);
+						GUI.DrawTexture(treeIconRect, tree.icon);
+						TipSignal treeIconTip = new TipSignal
+						{
+							text = tree.description
+						};
+						TooltipHandler.TipRegion(treeIconRect, treeIconTip);
+						Widgets.DrawHighlightIfMouseover(treeIconRect);
+					}
+					continue;
+				}
 				SkillDef[] array = tree.skillLevelsInOrder[i];
 
 				// Column icons
-				if (!tree.columnIcons.NullOrEmpty())
+				if (!tree.levels.NullOrEmpty())
 				{
 					Rect columnIconRect = new Rect(rect.x, rect.y - 100f, 32f, 32f);
-					GUI.DrawTexture(columnIconRect, tree.columnIcons[i]);
+					GUI.DrawTexture(columnIconRect, tree.levels[i].icon);
                     TipSignal tip = new TipSignal
                     {
-                        text = tree.columnNames[i],
+                        text = tree.levels[i].label,
                     };
 					TooltipHandler.TipRegion(columnIconRect, tip);
 					Widgets.DrawHighlightIfMouseover(columnIconRect);

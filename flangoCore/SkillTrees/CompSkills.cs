@@ -6,7 +6,14 @@ using Verse;
 
 namespace flangoCore
 {
-    public class CompProperties_Skills : CompProperties 
+	public class SkillTreeWithXP
+	{
+		public SkillTreeDef tree;
+		public int unlockedLevels;
+		public float xp;
+	}
+
+	public class CompProperties_Skills : CompProperties 
 	{ 
 		public CompProperties_Skills() => compClass = typeof(CompSkills);
 	}
@@ -15,15 +22,19 @@ namespace flangoCore
 	{
 		private List<SkillDef> learnedSkills = new List<SkillDef>();
 		public List<SkillDef> LearnedSkills => learnedSkills;
+
+		//private List<SkillTreeWithXP> trees = new List<SkillTreeWithXP>();
+		//public List<SkillTreeWithXP> Trees => trees;
+
 		private Pawn Pawn => (Pawn)parent;
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			if (learnedSkills == null)
+			/*if (learnedSkills == null)
 			{
 				learnedSkills = new List<SkillDef>();
-			}
+			}*/
 		}
 
 		public void GiveSkill(SkillDef skillDef)
@@ -86,11 +97,12 @@ namespace flangoCore
 		{
 			base.PostExposeData();
 			Scribe_Collections.Look(ref learnedSkills, "learnedSkills", LookMode.Deep);
-			
-			if (learnedSkills == null)
+			//Scribe_Collections.Look(ref trees, "trees", LookMode.Deep);
+
+			/*if (learnedSkills == null)
 			{
 				learnedSkills = new List<SkillDef>();
-			}
+			}*/
 		}
 	}
 }
