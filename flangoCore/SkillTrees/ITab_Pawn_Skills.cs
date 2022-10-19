@@ -14,9 +14,9 @@ namespace flangoCore
 		private readonly Settings settings;
 		private Pawn pawn;
 
-		private bool devMode;
+		private bool devMode = true;
 
-		private readonly Dictionary<string, List<SkillTreeDef>> treesByTab; 
+		private readonly Dictionary<string, List<SkillTreeDef>> treesByTab;
 		private readonly List<TabRecord> tabs;
 		private string curTab;
 
@@ -24,12 +24,15 @@ namespace flangoCore
 		private int pathsPerRow;
 		private Vector2 pathsScrollPos;
 
-		private CompSkills compSkills;
+		//private CompSkills compSkills;
 		public static CompSkills CompSkills;
 
 		private readonly Dictionary<SkillDef, Vector2> skillPos = new Dictionary<SkillDef, Vector2>();
 		private static readonly float[][] skillTreeYOffsets;
 		public Vector2 Size => size;
+
+		public static Texture2D EmptyBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.03f, 0.035f, 0.05f));
+		public static Texture2D BarTex = SolidColorMaterials.NewSolidColorTexture(new Color(.518f, .427f, .239f));
 
 		static ITab_Pawn_Skills()
 		{
@@ -82,7 +85,8 @@ namespace flangoCore
 
 		private void InitCache()
 		{
-			CompSkills = compSkills = pawn.GetComp<CompSkills>();
+			CompSkills = pawn.GetComp<CompSkills>();
+
 			skillPos.Clear();
 		}
 
@@ -90,7 +94,7 @@ namespace flangoCore
 		{
 			base.CloseTab();
 			pawn = null;
-			CompSkills = compSkills = null;
+			CompSkills = null;
 			skillPos.Clear();
 		}
 
@@ -101,6 +105,28 @@ namespace flangoCore
 			return result;
 		}
 
+		public static void FillableBarWithLabelTex(Rect rect, float fillPercent, int labelWidth, string label, Texture2D fillTex, Texture2D bgTex, bool doBorder)
+		{
+			if (doBorder)
+			{
+				GUI.DrawTexture(rect, BaseContent.BlackTex);
+				rect = rect.ContractedBy(3f);
+			}
+
+			if (bgTex != null)
+			{
+				GUI.DrawTexture(rect, bgTex);
+			}
+
+			rect.width *= fillPercent;
+			GUI.DrawTexture(rect, fillTex);
+			Rect rect2 = rect;
+			rect2.width = labelWidth;
+			rect2.x += 10f;
+			Widgets.Label(rect2, label);
+		}
+
+
 		protected override void FillTab()
 		{
 			if (Find.Selector.SingleSelectedThing is Pawn pawn && this.pawn != pawn)
@@ -108,33 +134,44 @@ namespace flangoCore
 				this.pawn = pawn;
 				InitCache();
 			}
-			if (devMode && !Prefs.DevMode)
-			{
-				devMode = false;
-			}
+			
+			devMode &= Prefs.DevMode;
 
 			GameFont font = Text.Font;
 			TextAnchor anchor = Text.Anchor;
 
 			Rect rectMain = new Rect(Vector2.one * 20f, size - Vector2.one * 40f);
-			Rect rectTree = rectMain.ContractedBy(5f);
+			Rect rectTree = rectMain.ContractedBy(5f).TopPart(0.85f);
 
 			if (treesByTab.NullOrEmpty())
 			{
 				Text.Anchor = TextAnchor.MiddleCenter;
 				Text.Font = GameFont.Medium;
 				Widgets.DrawMenuSection(rectTree);
-				Widgets.Label(rectTree, "No Paths");
+				Widgets.Label(rectTree, "fc_noSkillTrees".Translate());
 			}
 			else
 			{
 				TabDrawer.DrawTabs(new Rect(rectTree.x, rectTree.y + 40f, rectTree.width, rectTree.height), tabs);
 				rectTree.yMin += 40f;
 				Widgets.DrawMenuSection(rectTree);
-				Rect rect8 = new Rect(0f, 0f, rectTree.width - 20f, lastPathsHeight);
-				Widgets.BeginScrollView(rectTree, ref pathsScrollPos, rect8);
-				DoTrees(rect8);
+
+				Rect rectTrees = new Rect(0f, 0f, rectTree.width - 20f, lastPathsHeight);
+
+				Widgets.BeginScrollView(rectTree, ref pathsScrollPos, rectTrees);
+
+				DoTrees(rectTrees);
+
 				Widgets.EndScrollView();
+
+
+				Rect xpRect = rectMain.BottomPart(0.1f).LeftPart(0.4f);
+				xpRect.height = 50f;
+				float xp = (float)Math.Round(CompSkills.GetXP(), 2);
+				float xpVisible = xp < 1 ? xp : xp % 1;
+				string xpLabel = "XP: " + xp;
+
+				FillableBarWithLabelTex(xpRect, xpVisible, 100, xpLabel, BarTex, EmptyBarTex, true);
 			}
 
 			Text.Font = font;
@@ -152,10 +189,25 @@ namespace flangoCore
 				Texture2D texture2D = def.icon;
 				float num4 = num / texture2D.width * texture2D.height + 30f;
 				Rect rect = new Rect(position, new Vector2(num, num4));
-				
+
+				if (devMode)
+				{
+					Rect db = rect.ScaledBy(0.1f).AtZero();
+					if (Widgets.ButtonText(new Rect(db.x, db.y + 5f, 40, 20), "+1 XP"))
+					{
+						CompSkills.GiveXPToCurrentTree(1f);
+						Log.Message(CompSkills.GetXP().ToString());
+					}
+					if (Widgets.ButtonText(new Rect(db.x, db.y + 30f, 40, 20), "+0.1 XP"))
+					{
+						CompSkills.GiveXPToCurrentTree(0.1f);
+						Log.Message(CompSkills.GetXP().ToString());
+					}
+				}
+
 				//if (hediff.unlockedPaths.Contains(def))
 				//{
-					if (def.HasSkills)
+				if (def.HasSkills)
 					{
 						DoTreeSkills(rect, def, skillPos, DoSkill);
 					}
@@ -163,30 +215,6 @@ namespace flangoCore
 				else
 				{
 					Widgets.DrawRectFast(rect, new Color(0f, 0f, 0f, 0.55f));
-					/*if (devMode)
-					{
-						Vector2 size = new Vector2(140f, 30f);
-						Rect rect2 = new Rect (rect.center - size / 2f, size);
-						if (devMode || def.CanPawnUnlock(pawn))
-						{
-							if (Widgets.ButtonText(rect2, "fc_UnlockTree".Translate()))
-							{
-								if (!devMode)
-								{
-									hediff.SpentPoints();
-								}
-								hediff.UnlockPath(def);
-							}
-						}
-						else
-						{
-							GUI.color = Color.grey;
-							string text = "fc_skillsList".Translate().Resolve() + ": " + def.lockedReason;
-							rect2.width = Mathf.Max(rect2.width, Text.CalcSize(text).x + 10f);
-							Widgets.ButtonText(rect2, text, drawBackground: true, doMouseoverSound: true, active: false);
-							GUI.color = Color.white;
-						}
-					}*/
 					TooltipHandler.TipRegion(rect, () => def.tooltip + "\n\n" + "fc_skillsList".Translate() + "\n" + def.skillDefs.Select((SkillDef s) => s.label).ToLineList("  ", capitalizeItems: true), def.GetHashCode());
 				}
 				num2 = Mathf.Max(num2, num4 + 10f);
@@ -261,7 +289,12 @@ namespace flangoCore
 				// Row text
 				if (!tree.rowNames.NullOrEmpty() && i == 0)
 				{
-					SkillDef[] awms = tree.skillLevelsInOrder.First(x => x.Length == tree.MaxLevel); // Find an array with most skills
+					// Find an array with most skills
+
+					//int max = tree.skillLevelsInOrder.Max(x => x.Length);
+					//SkillDef[] awms = tree.skillLevelsInOrder.FirstOrDefault(x => x.Length == max);
+					SkillDef[] awms = tree.skillLevelsInOrder.Aggregate((x, y) => x.Length > y.Length ? x : y);
+
 					Text.Font = GameFont.Medium;
 					Text.Anchor = TextAnchor.MiddleRight;
 
@@ -296,11 +329,13 @@ namespace flangoCore
                     {
 						if (ex is IndexOutOfRangeException)
                         {
-							Log.Error("Error while constructing skill tree: There cannot be more than 4 rows. Check XML for incorrect <reqLevel> values.");
+							Log.Error("Error while constructing skill tree: There cannot be more than 4 rows.");
 							return;
                         }
                     }
 				}
+
+				CompSkills.selectedTree = tree;
 			}
 		}
 
@@ -318,9 +353,9 @@ namespace flangoCore
 		{
 			bool unlockable = false;
 			bool flag = false;
-			if (!compSkills.HasSkill(skill))
+			if (!CompSkills.HasSkill(skill))
 			{
-				if (skill.prerequisites.NullOrEmpty() || compSkills.LearnedSkills.Intersect(skill.prerequisites).Count() == skill.prerequisites.Count()) // TODO: this shit
+				if (CompSkills.GetXP() >= skill.cost && (skill.prerequisites.NullOrEmpty() || CompSkills.LearnedSkills.Intersect(skill.prerequisites).Count() == skill.prerequisites.Count()))
 				{
 					unlockable = true;
 				}
@@ -338,14 +373,14 @@ namespace flangoCore
 			{
 				Widgets.DrawRectFast(inRect, new Color(0f, 0f, 0f, 0.6f));
 			}
-			TooltipHandler.TipRegion(inRect, () => string.Format("{0}\n\n{1}{2}", skill.LabelCap, skill.description, unlockable ? ("\n\n" + "fc_clickToUnlock".Translate().Resolve().ToUpper()) : ""), skill.GetHashCode());
+			TooltipHandler.TipRegion(inRect, () => string.Format("{0}\n\n{1}\n\n{2}\n\n{3}", skill.LabelCap, skill.description, "fc_skillCost".Translate(skill.cost).Resolve(), unlockable ? ("fc_clickToUnlock".Translate().Resolve().ToUpper()) : ""), skill.GetHashCode());
 			if (unlockable && Widgets.ButtonInvisible(inRect))
 			{
 				/*if (!devMode)
 				{
 					hediff.SpentPoints();
 				}*/
-				compSkills.GiveSkill(skill);
+				CompSkills.GiveSkill(skill);
 			}
 		}
 	}

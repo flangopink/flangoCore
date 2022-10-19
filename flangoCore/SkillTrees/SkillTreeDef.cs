@@ -12,6 +12,10 @@ namespace flangoCore
 
 		public static int TotalPoints;
 
+		public bool unlockWholeLevels;
+
+		public XPSourceFlags xpSources;
+
 		public string tab;
 
 		public string tooltip;

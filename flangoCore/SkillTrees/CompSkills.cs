@@ -6,12 +6,13 @@ using Verse;
 
 namespace flangoCore
 {
-	public class SkillTreeWithXP
+	/*public class SkillTreeWithXP
 	{
 		public SkillTreeDef tree;
 		public int unlockedLevels;
 		public float xp;
-	}
+		public float xpMultiplier = 1;
+	}*/
 
 	public class CompProperties_Skills : CompProperties 
 	{ 
@@ -23,23 +24,86 @@ namespace flangoCore
 		private List<SkillDef> learnedSkills = new List<SkillDef>();
 		public List<SkillDef> LearnedSkills => learnedSkills;
 
-		//private List<SkillTreeWithXP> trees = new List<SkillTreeWithXP>();
-		//public List<SkillTreeWithXP> Trees => trees;
+		//public float currentXP;
+		public float xpMultiplier = 1;
+
+		public Dictionary<SkillTreeDef, float> treeXPs = new Dictionary<SkillTreeDef, float>();
+		public SkillTreeDef selectedTree;
 
 		private Pawn Pawn => (Pawn)parent;
 
 		public override void PostSpawnSetup(bool respawningAfterLoad)
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
-			/*if (learnedSkills == null)
+
+			//temp
+			foreach (SkillTreeDef tree in DefDatabase<SkillTreeDef>.AllDefs)
 			{
-				learnedSkills = new List<SkillDef>();
-			}*/
+				GiveTree(tree);
+			}
+			//selectedTree = treeXPs.FirstOrDefault().Key;
+
+			Log.Message(string.Join(", ", treeXPs));
+			Log.Message(selectedTree.ToString());
 		}
+
+		public float GetXP()
+        {
+			return treeXPs[selectedTree];
+        }
+
+		public void GiveXPToTree(float xp, SkillTreeDef tree, bool ignoreMultiplier = false)
+        {
+			//currentXP += xp * xpMultiplier;
+
+			/*if (selectedTree != null)
+            {
+				treeXPs[selectedTree] += xp * xpMultiplier;
+            }*/
+			if (treeXPs.ContainsKey(tree))
+			{
+				treeXPs[tree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+			}
+        }
+		public void GiveXPToCurrentTree(float xp, bool ignoreMultiplier = false)
+		{
+			treeXPs[selectedTree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+		}
+
+		public void GiveXPToAllTrees(float xp, bool ignoreMultiplier = false)
+		{
+			foreach (SkillTreeDef tree in treeXPs.Keys)
+			{
+				treeXPs[tree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+			}
+		}
+
+		public void GiveXPFlagged(float xp, XPSourceFlags flags, bool ignoreMultiplier = false)
+		{
+			foreach (SkillTreeDef tree in treeXPs.Keys)
+			{
+				if (tree.xpSources.HasFlag(flags))
+				{
+					treeXPs[tree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+				}
+			}
+		}
+
+		public void GiveTree(SkillTreeDef tree)
+        {
+			if (!treeXPs.ContainsKey(tree))
+            {
+				treeXPs.Add(tree, 0);
+				if (selectedTree == null)
+                {
+					selectedTree = tree;
+                }
+            }
+        }
 
 		public void GiveSkill(SkillDef skillDef)
 		{
-			Log.Message("Trying to give " + skillDef.LabelCap + " to " + Pawn.LabelCap);
+			//Log.Message("Trying to give " + skillDef.LabelCap + " to " + Pawn.LabelCap);
 
 			if (!learnedSkills.Any((SkillDef s) => s == skillDef))
 			{
@@ -72,20 +136,20 @@ namespace flangoCore
 						}
 					}
 				}
-				learnedSkills.Add(skillDef);
+				learnedSkills.Add(skillDef); 
+
+				treeXPs[selectedTree] -= skillDef.cost;
 			}
 		}
 
 		public bool HasSkill(SkillDef skillDef)
 		{
-			foreach (SkillDef learnedSkill in learnedSkills)
-			{
-				if (learnedSkill == skillDef)
-				{
-					return true;
-				}
-			}
-			return false;
+			return learnedSkills.Contains(skillDef);
+		}
+
+		public bool HasTree(SkillTreeDef treeDef)
+		{
+			return treeXPs.ContainsKey(treeDef);
 		}
 
 		public override string CompInspectStringExtra()
@@ -96,8 +160,11 @@ namespace flangoCore
 		public override void PostExposeData()
 		{
 			base.PostExposeData();
+			//Scribe_Values.Look(ref currentXP, "currentXP", 0);
+			Scribe_Values.Look(ref xpMultiplier, "xpMultiplier", 1);
+			Scribe_Defs.Look(ref selectedTree, "selectedTree");
 			Scribe_Collections.Look(ref learnedSkills, "learnedSkills", LookMode.Deep);
-			//Scribe_Collections.Look(ref trees, "trees", LookMode.Deep);
+			Scribe_Collections.Look(ref treeXPs, "treeXPs", LookMode.Deep);
 
 			/*if (learnedSkills == null)
 			{

@@ -2,7 +2,7 @@
 using RimWorld;
 using Verse;
 
-namespace flangoCore.SkillTrees
+namespace flangoCore
 {
     [StaticConstructorOnStartup]
     public static class InitializeAbilityComp

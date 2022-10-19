@@ -13,6 +13,7 @@ namespace flangoCore
         public List<AbilityDef> abilities;
         public List<HediffDef> hediffs;
 		public int reqLevel = 0;
+		public float cost = 1;
 		public bool spaceAfter; // whatever that means
 		public override void PostLoad()
 		{
