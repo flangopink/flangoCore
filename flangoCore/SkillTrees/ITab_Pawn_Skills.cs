@@ -28,6 +28,7 @@ namespace flangoCore
 		public static CompSkills CompSkills;
 
 		private readonly Dictionary<SkillDef, Vector2> skillPos = new Dictionary<SkillDef, Vector2>();
+		private static readonly float[] skillTreeXOffsets;
 		private static readonly float[][] skillTreeYOffsets;
 		public Vector2 Size => size;
 
@@ -43,6 +44,8 @@ namespace flangoCore
 				new float[3] { -50f, 10f, 70f },
 				new float[4] { -50f, 10f, 70f, 130f }
 			};
+
+			skillTreeXOffsets = new float[3] { 0.5f, 0.8f, 1};
 
 			foreach (ThingDef allDef in DefDatabase<ThingDef>.AllDefs)
 			{
@@ -196,12 +199,10 @@ namespace flangoCore
 					if (Widgets.ButtonText(new Rect(db.x, db.y + 5f, 40, 20), "+1 XP"))
 					{
 						CompSkills.GiveXPToCurrentTree(1f);
-						Log.Message(CompSkills.GetXP().ToString());
 					}
 					if (Widgets.ButtonText(new Rect(db.x, db.y + 30f, 40, 20), "+0.1 XP"))
 					{
 						CompSkills.GiveXPToCurrentTree(0.1f);
-						Log.Message(CompSkills.GetXP().ToString());
 					}
 				}
 
@@ -235,7 +236,6 @@ namespace flangoCore
 		{
 			GameFont font = Text.Font;
 			TextAnchor anchor = Text.Anchor;
-			//skillTreeYOffsets[1][0] = tree.MaxLevel % 2 == 0 ? 40f : 10f;
 
 			foreach (SkillDef skill in tree.skillDefs)
 			{
@@ -252,9 +252,9 @@ namespace flangoCore
 
 			for (int i = -1; i < tree.skillLevelsInOrder.Length; i++)
 			{
-
-				Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / tree.MaxLevel, inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
-
+				float xOffset = tree.MaxLevel > 4 ? skillTreeXOffsets[3] : skillTreeXOffsets[tree.MaxLevel-1];
+				Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / (tree.MaxLevel * xOffset), inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
+				Log.Message(rect.ToString());
 				// Tree icon
 				if (i == -1)
 				{
@@ -291,20 +291,16 @@ namespace flangoCore
 				{
 					// Find an array with most skills
 
-					//int max = tree.skillLevelsInOrder.Max(x => x.Length);
-					//SkillDef[] awms = tree.skillLevelsInOrder.FirstOrDefault(x => x.Length == max);
-					SkillDef[] awms = tree.skillLevelsInOrder.Aggregate((x, y) => x.Length > y.Length ? x : y);
-
 					Text.Font = GameFont.Medium;
 					Text.Anchor = TextAnchor.MiddleRight;
 
-					for (int n = 0; n < awms.Length; n++)
+					for (int n = 0; n < tree.arrayWithMostSkills.Length; n++)
 					{
 						//float textWidth = Text.CalcSize(tree.rowNames[i]).x;
 						var textWidth = tree.textWidth;
 						float textHeight = Text.CalcHeight(tree.rowNames[n], textWidth);
 
-						Rect rowNameRect = new Rect(rect.x - rect.width / 2.25f, rect.y + skillTreeYOffsets[awms.Length - 1][n], textWidth, textHeight);
+						Rect rowNameRect = new Rect(rect.x - rect.width / 2.25f, rect.y + skillTreeYOffsets[tree.arrayWithMostSkills.Length - 1][n], textWidth, textHeight);
 
 						Widgets.Label(rowNameRect, tree.rowNames[n]);
 					}
@@ -329,7 +325,7 @@ namespace flangoCore
                     {
 						if (ex is IndexOutOfRangeException)
                         {
-							Log.Error("Error while constructing skill tree: There cannot be more than 4 rows.");
+							Log.Error("Error while constructing skill tree named " + tree.LabelCap + ". There cannot be more than 4 rows.");
 							return;
                         }
                     }

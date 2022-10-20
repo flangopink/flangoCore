@@ -46,8 +46,10 @@ namespace flangoCore
 
 		[Unsaved(false)]
 		public SkillDef[][] skillLevelsInOrder;
+		public SkillDef[] arrayWithMostSkills;
 
 		public float textWidth = 100f;
+		public float xOffsetMultiplier = 1f;
 
 		public override void PostLoad()
 		{
@@ -119,6 +121,23 @@ namespace flangoCore
 				{
 					skillLevelsInOrder[i] = new SkillDef[0];
 				}
+			}
+			arrayWithMostSkills = skillLevelsInOrder.Aggregate((x, y) => x.Length > y.Length ? x : y);
+		}
+
+		public override IEnumerable<string> ConfigErrors()
+		{
+			foreach (string item in base.ConfigErrors())
+			{
+				yield return item;
+			}
+			if (MaxLevel < 2)
+			{
+				yield return $"Skill tree named {LabelCap} must have at least 2 levels defined. Current max level: {MaxLevel}";
+			}
+			if (arrayWithMostSkills.Length > 4)
+			{
+				yield return $"Skill tree named {LabelCap} must not have more than 4 rows defined. Current max skill count: {arrayWithMostSkills.Length}";
 			}
 		}
 	}

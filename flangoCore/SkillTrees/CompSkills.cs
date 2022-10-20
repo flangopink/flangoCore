@@ -65,6 +65,7 @@ namespace flangoCore
 				treeXPs[tree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
 			}
         }
+		
 		public void GiveXPToCurrentTree(float xp, bool ignoreMultiplier = false)
 		{
 			treeXPs[selectedTree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
@@ -164,7 +165,7 @@ namespace flangoCore
 			Scribe_Values.Look(ref xpMultiplier, "xpMultiplier", 1);
 			Scribe_Defs.Look(ref selectedTree, "selectedTree");
 			Scribe_Collections.Look(ref learnedSkills, "learnedSkills", LookMode.Deep);
-			Scribe_Collections.Look(ref treeXPs, "treeXPs", LookMode.Deep);
+			Scribe_Collections.Look(ref treeXPs, "treeXPs", LookMode.Def);
 
 			/*if (learnedSkills == null)
 			{
