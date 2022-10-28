@@ -13,10 +13,12 @@ namespace flangoCore
 
 		public float altitudeMultiplier = 1.5f;
 
-		public SoundDef dashSoundDef;
+		public SoundDef startSound;
+		public SoundDef endSound;
 
 		public bool rope;
 
+		public EffecterDef effecter;
 		public List<FleckProps> onStartFlecks;
 		public List<FleckProps> onDashingFlecks;
 		public List<FleckProps> onFinishFlecks;
@@ -29,7 +31,7 @@ namespace flangoCore
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
 			Map map = Caster.Map;
-			DashingPawn dashingPawn = (DashingPawn)PawnFlyer.MakeFlyer(DefDatabase<ThingDef>.GetNamed("DashingPawn"), CasterPawn, target.Cell);
+			DashingPawn dashingPawn = (DashingPawn)PawnFlyer.MakeFlyer(DefDatabase<ThingDef>.GetNamed("DashingPawn"), CasterPawn, target.Cell, CompProp.effecter, CompProp.endSound);
 			dashingPawn.ability = parent;
 
 			dashingPawn.target = target.Thing == null ? target.CenterVector3 : target.Thing.InteractionCell.ToVector3();

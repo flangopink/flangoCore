@@ -80,8 +80,18 @@
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
+    <Compile Include="Beams\ModExt_BeamExtension.cs" />
+    <Compile Include="Beams\Verb_ShootBeamBurst.cs" />
+    <Compile Include="CustomizableProjectiles\ModExt_ArmorShredding.cs" />
+    <Compile Include="CustomizableProjectiles\ModExt_ProjectileExplosiveShaped.cs" />
+    <Compile Include="CustomizableProjectiles\ModExt_ProjectileRandomEffect.cs" />
+    <Compile Include="CustomizableProjectiles\ModExt_ShotgunSpread.cs" />
+    <Compile Include="CustomizableProjectiles\Patches\Patch_ArmorUtility_ApplyArmor_Shred.cs" />
+    <Compile Include="CustomizableProjectiles\Verb_ShootShotgun.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
+    <Compile Include="Misc\ModExt_FlickableTexture.cs" />
+    <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
     <Compile Include="SkillTrees\HediffComp_SkillMenuGiver.cs" />
     <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
     <Compile Include="HediffsExtended\HediffComp_Stun.cs" />
@@ -92,20 +102,13 @@
     <Compile Include="Misc\Building_MassGrave.cs" />
     <Compile Include="Misc\Bullet_Beam.cs" />
     <Compile Include="Misc\CompGiveHediffSeverityExtended.cs" />
-    <Compile Include="CustomizableProjectiles\Classes\APWithChance.cs" />
     <Compile Include="CustomizableProjectiles\CompProjectileVFX.cs" />
-    <Compile Include="CustomizableProjectiles\Classes\ExtraWithChance.cs" />
     <Compile Include="FleckProps.cs" />
-    <Compile Include="CustomizableProjectiles\Classes\HediffWithChance.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ExtraDamageToRace.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_Projectile_get_ExactRotation.cs" />
-    <Compile Include="CustomizableProjectiles\Patches\Patch_get_ArmorPenetration_RandomAP.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_Thing_TakeDamage_CustomizableProjectiles.cs" />
-    <Compile Include="CustomizableProjectiles\Proj_ThingDef_ExplosiveShaped.cs" />
-    <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomAPBullet.cs" />
-    <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomExtraBullet.cs" />
-    <Compile Include="CustomizableProjectiles\Proj_ThingDef_RandomHediffBullet.cs" />
-    <Compile Include="FastGetComps.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_ExplosiveShaped.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_RandomEffectBullet.cs" />
     <Compile Include="Harmony_flangoCore.cs" />
     <Compile Include="HediffsExtended\HediffComp_Combos.cs" />
     <Compile Include="HediffsExtended\HediffComp_DamageOverTime.cs" />
@@ -136,6 +139,7 @@
     <Publicize Include="Assembly-CSharp:Verse.ThingDef.descriptionDetailedCached" />
     <Publicize Include="Assembly-CSharp:Verse.Projectile.ImpactSomething" />
     <Publicize Include="Assembly-CSharp:Verse.GraphicData.cachedGraphic" />
+    <Publicize Include="Assembly-CSharp:Verse.Thing.graphicInt" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

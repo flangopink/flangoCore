@@ -34,11 +34,11 @@ namespace flangoCore
 				int ticks;
 				if (parent.def.HasComp(typeof(HediffComp_SeverityPerDay)))
 				{
-					ticks = (int)(parent.Severity / parent.TryGetCompFast<HediffComp_SeverityPerDay>().SeverityChangePerDay() * 60000);
+					ticks = (int)(parent.Severity / parent.TryGetComp<HediffComp_SeverityPerDay>().SeverityChangePerDay() * 60000);
 				}
 				else if (parent.def.HasComp(typeof(HediffComp_SeverityPerDayExtra)))
 				{
-					ticks = (int)(parent.Severity / parent.TryGetCompFast<HediffComp_SeverityPerDayExtra>().SeverityChangePerDay() * 60000);
+					ticks = (int)(parent.Severity / parent.TryGetComp<HediffComp_SeverityPerDayExtra>().SeverityChangePerDay() * 60000);
 				}
 				else return;
 				parent.pawn.stances.stunner.StunFor(ticks, parent.pawn, false, Props.showStunMote);

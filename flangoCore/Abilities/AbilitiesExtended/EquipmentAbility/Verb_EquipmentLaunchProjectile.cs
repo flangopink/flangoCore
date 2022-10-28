@@ -51,14 +51,14 @@ namespace flangoCore
 
             if (eq != null && eq is ThingWithComps twc1)
             {
-                twc1.TryGetCompFast<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
-                twc1.TryGetCompFast<CompReloadable>()?.UsedOnce();
+                twc1.TryGetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
+                twc1.TryGetComp<CompReloadable>()?.UsedOnce();
             }
 
             Thing attackOwner = caster;
             Thing attackWeapon = eq is ThingWithComps twc2 ? twc2 : caster;
 
-            CompMannable mannable = caster.TryGetCompFast<CompMannable>();
+            CompMannable mannable = caster.TryGetComp<CompMannable>();
             if (mannable != null && mannable.ManningPawn != null)
             {
                 attackOwner = mannable.ManningPawn;

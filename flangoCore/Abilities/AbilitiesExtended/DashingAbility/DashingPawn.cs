@@ -50,7 +50,7 @@ namespace flangoCore
 				pawnCanFireAtWill = dashingPawn.drafter.FireAtWill;
 			}
 			base.RespawnPawn();
-			comp.dashSoundDef.PlayOneShot(dashingPawn);
+			comp.startSound.PlayOneShot(dashingPawn);
 
 			if (MapHeld != null && !comp.onFinishFlecks.NullOrEmpty())
 			{

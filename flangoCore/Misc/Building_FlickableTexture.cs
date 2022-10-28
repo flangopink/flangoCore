@@ -12,7 +12,7 @@ namespace flangoCore
 		public override void SpawnSetup(Map map, bool respawningAfterLoad)
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
-			flickableComp = this.TryGetCompFast<CompFlickable>();
+			flickableComp = GetComp<CompFlickable>();
 		}
 
 		public override void ExposeData()
@@ -22,7 +22,7 @@ namespace flangoCore
 			{
 				if (flickableComp == null)
 				{
-					flickableComp = this.TryGetCompFast<CompFlickable>();
+					flickableComp = GetComp<CompFlickable>();
 				}
 			}
 		}

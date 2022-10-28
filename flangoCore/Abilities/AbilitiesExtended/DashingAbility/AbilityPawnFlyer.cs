@@ -25,7 +25,7 @@ namespace flangoCore
 		{
 			base.SpawnSetup(map, respawningAfterLoad);
 			direction = (startVec.x > target.ToIntVec3().x) ? Rot4.West : ((startVec.x < target.ToIntVec3().x) ? Rot4.East : ((startVec.y < target.ToIntVec3().y) ? Rot4.North : Rot4.South));
-			comp = ability.TryGetCompFast<CompAbilityEffect_Dash>().CompProp;
+			comp = ability.CompOfType<CompAbilityEffect_Dash>().CompProp;
 		}
 
 		public override void Tick()

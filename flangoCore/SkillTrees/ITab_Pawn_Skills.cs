@@ -362,7 +362,7 @@ namespace flangoCore
 			}
 			if (unlockable)
 			{
-				QuickSearchWidget.DrawStrongHighlight(inRect.ExpandedBy(10f));
+				Widgets.DrawStrongHighlight(inRect.ExpandedBy(10f));
 			}
 			DrawSkill(inRect, skill);
 			if (flag)

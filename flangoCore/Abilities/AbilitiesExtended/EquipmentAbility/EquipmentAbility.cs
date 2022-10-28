@@ -43,7 +43,7 @@ namespace flangoCore
             if (gizmo == null)
             {
                 gizmo = (Command)Activator.CreateInstance(def.gizmoClass, this);
-                gizmo.order = def.uiOrder;
+                //gizmo.order = def.uiOrder;
 
 
                 if (!CanCastPowerCheck("Player", out var reason))

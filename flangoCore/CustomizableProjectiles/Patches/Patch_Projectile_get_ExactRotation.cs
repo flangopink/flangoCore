@@ -13,7 +13,7 @@ namespace flangoCore
         {
             if (__instance.def.HasComp(typeof(CompProjectileVFX)))
             {
-                CompProperties_ProjectileVFX props = __instance.TryGetCompFast<CompProjectileVFX>().Props;
+                CompProperties_ProjectileVFX props = __instance.TryGetComp<CompProjectileVFX>().Props;
 
                 if (props.rotating)
                 {

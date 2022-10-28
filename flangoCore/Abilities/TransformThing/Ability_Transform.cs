@@ -54,7 +54,7 @@ namespace flangoCore
                 var command = new Command_Transform(this)
                 {
                     defaultLabel = AbilityDef.LabelCap,
-                    order = def.uiOrder,
+                    //order = def.uiOrder,
                     curTicks = CooldownTicksLeft
                 };
 
@@ -72,14 +72,14 @@ namespace flangoCore
             yield return gizmo;
 
             // Swapping ability with another from floating menu
-            if (this.TryGetCompFast<CompEffect_AbilityTransform>().Props.transformOptions is List<TransformOutcomeOptions> options && options.Count > 1)
+            if (CompOfType<CompEffect_AbilityTransform>().Props.transformOptions is List<TransformOutcomeOptions> options && options.Count > 1)
             {
                 yield return new Command_Action()
                 {
                     defaultLabel = "fc_TransformOptions".Translate(),
                     defaultDesc = "fc_TransformOptionsDesc".Translate(),
                     icon = OptionsIcon,
-                    order = def.uiOrder + 1,
+                    //order = def.uiOrder + 1,
                     action = () =>
                     {
                         List<FloatMenuOption> list = new List<FloatMenuOption>();
@@ -90,7 +90,7 @@ namespace flangoCore
                             {
                                 gizmo.defaultLabel = option.label;
                                 gizmo.icon = option.Icon;
-                                this.TryGetCompFast<CompEffect_AbilityTransform>().Props.thingToSpawn = option.thingDef;
+                                CompOfType<CompEffect_AbilityTransform>().Props.thingToSpawn = option.thingDef;
                             }));
                         }
                         Find.WindowStack.Add(new FloatMenu(list));
@@ -104,7 +104,7 @@ namespace flangoCore
                 Command_Action command_Action = new Command_Action
                 {
                     defaultLabel = "DEV: Reset cooldown",
-                    order = def.uiOrder + 2,
+                    //order = def.uiOrder + 2,
                     icon = ResetIcon,
                     action = delegate
                     {
