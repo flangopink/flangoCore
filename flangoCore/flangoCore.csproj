@@ -90,7 +90,6 @@
     <Compile Include="CustomizableProjectiles\Verb_ShootShotgun.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
-    <Compile Include="Misc\ModExt_FlickableTexture.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
     <Compile Include="SkillTrees\HediffComp_SkillMenuGiver.cs" />
     <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
@@ -116,7 +115,6 @@
     <Compile Include="Immunities\CompDamageImmunities.cs" />
     <Compile Include="Immunities\CompHediffImmunities.cs" />
     <Compile Include="Immunities\Patch_Thing_TakeDamage_Immunities.cs" />
-    <Compile Include="Misc\Building_FlickableTexture.cs" />
     <Compile Include="Misc\CustomDescriptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SkillTrees\CompSkills.cs" />

@@ -4,6 +4,9 @@ using HarmonyLib;
 
 namespace flangoCore
 {
+    public class ModExt_FlickableTexture : DefModExtension {}
+
+
     [HarmonyPatch(typeof(CompFlickable), "DoFlick")]
     public static class Patch_CompFlickable_DoFlick
     {
