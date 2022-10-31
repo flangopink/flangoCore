@@ -72,7 +72,7 @@ namespace flangoCore
             yield return gizmo;
 
             // Swapping ability with another from floating menu
-            if (CompOfType<CompEffect_AbilityTransform>().Props.transformOptions is List<TransformOutcomeOptions> options && options.Count > 1)
+            if (CompOfType<CompAbilityEffect_AbilityTransform>().Props.transformOptions is List<TransformOutcomeOptions> options && options.Count > 1)
             {
                 yield return new Command_Action()
                 {
@@ -90,7 +90,7 @@ namespace flangoCore
                             {
                                 gizmo.defaultLabel = option.label;
                                 gizmo.icon = option.Icon;
-                                CompOfType<CompEffect_AbilityTransform>().Props.thingToSpawn = option.thingDef;
+                                CompOfType<CompAbilityEffect_AbilityTransform>().Props.thingToSpawn = option.thingDef;
                             }));
                         }
                         Find.WindowStack.Add(new FloatMenu(list));

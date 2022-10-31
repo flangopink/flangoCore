@@ -10,7 +10,7 @@ namespace flangoCore
 	{
 		public CompProperties_AbilityTransform()
 		{
-			compClass = typeof(CompEffect_AbilityTransform);
+			compClass = typeof(CompAbilityEffect_AbilityTransform);
 		}
 
 		public bool appliesToPawns;
@@ -22,7 +22,7 @@ namespace flangoCore
 		public List<FleckProps> flecks;
 	}
 
-	public class CompEffect_AbilityTransform : CompAbilityEffect
+	public class CompAbilityEffect_AbilityTransform : CompAbilityEffect
     {
 		public new CompProperties_AbilityTransform Props => (CompProperties_AbilityTransform)props;
 

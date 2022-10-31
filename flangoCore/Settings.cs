@@ -55,6 +55,9 @@ namespace flangoCore
 		public float skillTreeUIScale = 1f;
 
 
+		public bool optionalPatchTest = true;
+
+
 		public void DoWindowContents(Rect canvas)
 		{
             Listing_Standard listing_Standard = new Listing_Standard
@@ -99,6 +102,8 @@ namespace flangoCore
 			listing_Standard.Label("fc_SkillTreeUIScale".Translate());
 			listing_Standard.Slider(skillTreeUIScale, 0.5f, 2f);
 
+			listing_Standard.Gap(16f);
+			listing_Standard.CheckboxLabeled("Optional Patch Test", ref optionalPatchTest);
 
 			listing_Standard.End();
 		}
@@ -119,6 +124,8 @@ namespace flangoCore
 
 			Scribe_Values.Look(ref corpseCapacity, "corpseCapacity", 20);
 			Scribe_Values.Look(ref baseDodgeChance, "baseDodgeChance", 0);
+
+			Scribe_Values.Look(ref optionalPatchTest, "optionalPatchTest", true);
 		}
 	}
 }

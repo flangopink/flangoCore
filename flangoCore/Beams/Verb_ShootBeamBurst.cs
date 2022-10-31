@@ -9,37 +9,19 @@ namespace flangoCore
 {
     public class Verb_ShootBeamBurst : Verb
     {
-		private List<Vector3> path = new List<Vector3>();
-
-		private int ticksToNextPathStep;
-
-		private Vector3 initialTargetPosition;
-
-		private MoteDualAttached mote;
+		private List<Vector3> beamHitLocations = new List<Vector3>();
 
 		private Effecter endEffecter;
 
 		private Sustainer sustainer;
 
+		private MoteDualAttached mote;
+
 		protected override int ShotsPerBurst => verbProps.burstShotCount;
 
-		public float ShotProgress => ticksToNextPathStep / modext.ticksToNextPathStep;
+		public int currentShot;
 
-		private ModExt_BeamExtension modext;
-
-		private Vector3 MissOffset => new Vector3(Rand.Range(-modext.missRadius, modext.missRadius), 0, Rand.Range(-modext.missRadius, modext.missRadius));
-        
-		private Vector3 resultOffset;
-
-
-		public Vector3 InterpolatedPosition
-		{
-			get
-			{
-				Vector3 vector = base.CurrentTarget.CenterVector3 - initialTargetPosition;
-				return Vector3.Lerp(path[modext.pathSteps], path[Mathf.Min(modext.pathSteps + 1, path.Count - 1)], ShotProgress) + vector;
-			}
-		}
+		private Vector3 currentTargetTruePos;
 
 		public override float? AimAngleOverride
 		{
@@ -49,7 +31,7 @@ namespace flangoCore
 				{
 					return null;
 				}
-				return (InterpolatedPosition - caster.DrawPos).AngleFlat();
+				return (beamHitLocations[currentShot] - caster.DrawPos).AngleFlat();
 			}
 		}
 
@@ -59,28 +41,26 @@ namespace flangoCore
 			{
 				return false;
 			}
-            bool flag = TryFindShootLineFromTo(caster.Position, currentTarget, out ShootLine resultingLine);
+            bool flag = TryFindShootLineFromTo(caster.Position, currentTarget, out ShootLine _);
             if (verbProps.stopBurstWithoutLos && !flag)
 			{
 				return false;
 			}
-			if (base.EquipmentSource != null)
+			if (EquipmentSource != null)
 			{
-				base.EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
-				base.EquipmentSource.GetComp<CompReloadable>()?.UsedOnce();
+				EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
+				EquipmentSource.GetComp<CompReloadable>()?.UsedOnce();
 			}
 
 			lastShotTick = Find.TickManager.TicksGame;
-			ticksToNextPathStep = modext.ticksToNextPathStep;
-			IntVec3 intVec = InterpolatedPosition.Yto0().ToIntVec3();
-			IntVec3 intVec2 = GenSight.LastPointOnLineOfSight(caster.Position, intVec, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), skipFirstCell: true);
-			HitCell((intVec2.IsValid ? intVec2 : intVec) + resultOffset.ToIntVec3());
+
+			HitCell(beamHitLocations[currentShot].ToIntVec3());
 
 			if (CasterIsPawn)
 			{
 				CasterPawn.records.Increment(RecordDefOf.ShotsFired);
 			}
-
+			currentShot++;
 			return true;
 		}
 
@@ -91,27 +71,33 @@ namespace flangoCore
 
 		public override void BurstingTick()
 		{
-			ticksToNextPathStep--;
-			Vector3 vector = InterpolatedPosition;
+			Vector3 vector = beamHitLocations[currentShot];
+			Vector3 vector2 = vector - caster.Position.ToVector3Shifted();
+			Vector3 normalized = vector2.Yto0().normalized;
 			IntVec3 intVec = vector.ToIntVec3();
-			Vector3 vector2 = InterpolatedPosition - caster.Position.ToVector3Shifted();
+			IntVec3 intVec2 = GenSight.LastPointOnLineOfSight(caster.Position, intVec, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), true);
+			Vector3 vector3 = vector - intVec.ToVector3Shifted();
 			float num = vector2.MagnitudeHorizontal();
-			Vector3 normalized = vector2.Yto0().normalized + resultOffset;
-			IntVec3 intVec2 = GenSight.LastPointOnLineOfSight(caster.Position, intVec, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), skipFirstCell: true);
+
 			if (intVec2.IsValid)
 			{
 				num -= (intVec - intVec2).LengthHorizontal;
-				vector = (caster.Position.ToVector3Shifted() + normalized * num);
+				vector = caster.Position.ToVector3Shifted() + normalized * num;
 				intVec = vector.ToIntVec3();
 			}
 
 			Vector3 offsetA = normalized * verbProps.beamStartOffset;
-			Vector3 vector3 = vector - intVec.ToVector3Shifted();
+
+			if (verbProps.beamMoteDef != null)
+			{
+				mote = MoteMaker.MakeInteractionOverlay(verbProps.beamMoteDef, caster, new TargetInfo(beamHitLocations[currentShot].ToIntVec3(), caster.Map));
+			}
 			if (mote != null)
 			{
 				mote.UpdateTargets(new TargetInfo(caster.Position, caster.Map), new TargetInfo(intVec, caster.Map), offsetA, vector3);
 				mote.Maintain();
 			}
+
 			if (verbProps.beamGroundFleckDef != null && Rand.Chance(verbProps.beamFleckChancePerTick))
 			{
 				FleckMaker.Static(vector, caster.Map, verbProps.beamGroundFleckDef);
@@ -126,6 +112,7 @@ namespace flangoCore
 				endEffecter.EffectTick(new TargetInfo(intVec, caster.Map), TargetInfo.Invalid);
 				endEffecter.ticksLeft--;
 			}
+
 			if (verbProps.beamLineFleckDef != null)
 			{
 				float num2 = 1f * num;
@@ -143,51 +130,22 @@ namespace flangoCore
 
 		public override void WarmupComplete()
 		{
-			modext = base.EquipmentSource.def.GetModExtension<ModExt_BeamExtension>();
-
-			if (modext == null)
-			{
-				Log.Error($"{base.EquipmentSource.def.LabelCap} uses {GetType().Name}, but is missing ModExt_BeamExtension. Adding one with default values...");
-				base.EquipmentSource.def.modExtensions.Add(new ModExt_BeamExtension());
-				modext = base.EquipmentSource.def.GetModExtension<ModExt_BeamExtension>();
-			}
+			currentShot = 0;
+			beamHitLocations.Clear();
 			burstShotsLeft = ShotsPerBurst;
 			state = VerbState.Bursting;
-			initialTargetPosition = currentTarget.CenterVector3;
-			path.Clear();
+			currentTargetTruePos = currentTarget.CenterVector3.Yto0();
+			
+			SetupStaticTargets();
 
-			for (int c = 0; c < burstShotsLeft; c++)
-			{
-				resultOffset = MissOffset;
-				Log.Message(resultOffset.ToString());
+			TryCastNextBurstShot();
+			endEffecter?.Cleanup();
 
-				Vector3 vector = (currentTarget.CenterVector3 - caster.Position.ToVector3Shifted()).Yto0();
-				float magnitude = vector.magnitude;
-				Vector3 normalized = vector.normalized;
-				Vector3 vector2 = normalized.RotatedBy(-90f);
-				float num = (verbProps.beamFullWidthRange > 0f) ? Mathf.Min(magnitude / verbProps.beamFullWidthRange, 1f) : 1f;
-				float num2 = (verbProps.beamWidth + 1f) * num / modext.pathSteps;
-				Vector3 vector3 = currentTarget.CenterVector3.Yto0() - vector2 * verbProps.beamWidth / 2f * num + resultOffset;
-				path.Add(vector3);
-				for (int i = 0; i < modext.pathSteps; i++)
-				{
-					Vector3 vector4 = normalized * (Rand.Value * verbProps.beamMaxDeviation) - normalized / 2f;
-					Vector3 vector5 = Mathf.Sin((i / modext.pathSteps + 0.5f) * (float)Math.PI * 57.29578f) * verbProps.beamCurvature * -normalized - normalized * verbProps.beamMaxDeviation / 2f;
-					path.Add(vector3 + (vector4 + vector5) * num);
-					vector3 += vector2 * num2;
-				}
-				if (verbProps.beamMoteDef != null)
-				{
-					mote = MoteMaker.MakeInteractionOverlay(verbProps.beamMoteDef, caster, new TargetInfo(path[0].ToIntVec3(), caster.Map));
-				}
-				TryCastNextBurstShot();
-				ticksToNextPathStep = modext.ticksToNextPathStep;
-				endEffecter?.Cleanup();
-				if (verbProps.soundCastBeam != null)
-				{
-					sustainer = verbProps.soundCastBeam.TrySpawnSustainer(SoundInfo.InMap(caster, MaintenanceType.PerTick));
-				}
+			if (verbProps.soundCastBeam != null)
+            {
+				sustainer = verbProps.soundCastBeam.TrySpawnSustainer(SoundInfo.InMap(caster, MaintenanceType.PerTick));
 			}
+
 			if (currentTarget.Thing is Pawn pawn && !pawn.Downed && CasterIsPawn && CasterPawn.skills != null)
 			{
 				float snum = (pawn.HostileTo(caster) ? 170f : 20f);
@@ -212,7 +170,7 @@ namespace flangoCore
 
 		private void ApplyDamage(Thing thing)
 		{
-			IntVec3 intVec = InterpolatedPosition.Yto0().ToIntVec3();
+			IntVec3 intVec = beamHitLocations[currentShot].ToIntVec3();
 			IntVec3 intVec2 = GenSight.LastPointOnLineOfSight(caster.Position, intVec, (IntVec3 c) => c.CanBeSeenOverFast(caster.Map), skipFirstCell: true);
 			if (intVec2.IsValid)
 			{
@@ -224,7 +182,7 @@ namespace flangoCore
 				return;
 			}
 			float angleFlat = (currentTarget.Cell - caster.Position).AngleFlat;
-			BattleLogEntry_RangedImpact log = new BattleLogEntry_RangedImpact(base.EquipmentSource, thing, currentTarget.Thing, base.EquipmentSource.def, null, null);
+			BattleLogEntry_RangedImpact log = new BattleLogEntry_RangedImpact(EquipmentSource, thing, currentTarget.Thing, EquipmentSource.def, null, null);
 			DamageInfo dinfo = new DamageInfo(verbProps.beamDamageDef, verbProps.beamDamageDef.defaultDamage, verbProps.beamDamageDef.defaultArmorPenetration, angleFlat, base.EquipmentSource, null, base.EquipmentSource.def, DamageInfo.SourceCategory.ThingOrUnknown, currentTarget.Thing);
 			thing.TakeDamage(dinfo).AssociateWithLog(log);
 			if (thing.CanEverAttachFire())
@@ -240,16 +198,35 @@ namespace flangoCore
 			}
 		}
 
+		private void SetupStaticTargets()
+        {
+			for (int i = 0; i <= ShotsPerBurst; i++)
+			{
+				_ = TryFindShootLineFromTo(caster.Position, currentTarget, out var shootLine);
+				ShotReport shotReport = ShotReport.HitReportFor(caster, this, currentTarget);
+				Thing randomCoverToMissInto = shotReport.GetRandomCoverToMissInto();
+				Vector3 finalStaticShotTarget = currentTargetTruePos;
+				if (verbProps.canGoWild && !Rand.Chance(shotReport.AimOnTargetChance_IgnoringPosture))
+				{
+					shootLine.ChangeDestToMissWild(shotReport.AimOnTargetChance_StandardTarget);
+					finalStaticShotTarget = shootLine.Dest.ToVector3Shifted().Yto0();
+				}
+				if (currentTarget.Thing != null && currentTarget.Thing.def.CanBenefitFromCover && !Rand.Chance(shotReport.PassCoverChance))
+				{
+					finalStaticShotTarget = randomCoverToMissInto.TrueCenter().Yto0();
+				}
+				beamHitLocations.Add(finalStaticShotTarget);
+			}
+        }
+
 		public override void ExposeData()
 		{
 			base.ExposeData();
-			Scribe_Collections.Look(ref path, "path", LookMode.Value);
-			Scribe_Values.Look(ref ticksToNextPathStep, "ticksToNextPathStep", 0);
-			Scribe_Values.Look(ref initialTargetPosition, "initialTargetPosition");
-			Scribe_Values.Look(ref initialTargetPosition, "initialTargetPosition");
-			if (Scribe.mode == LoadSaveMode.PostLoadInit && path == null)
+			Scribe_Collections.Look(ref beamHitLocations, "beamHitLocations", LookMode.Value);
+			Scribe_Values.Look(ref currentShot, "currentShot", 0);
+			if (Scribe.mode == LoadSaveMode.PostLoadInit && beamHitLocations == null)
 			{
-				path = new List<Vector3>();
+				beamHitLocations = new List<Vector3>();
 			}
 		}
 	}

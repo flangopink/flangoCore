@@ -13,10 +13,8 @@ namespace flangoCore
         [HarmonyPostfix]
         public static void FlickTexture_Postfix(CompFlickable __instance)
         {
-            Log.Message(__instance.CurrentGraphic.path);
             if (__instance.parent.def.HasModExtension<ModExt_FlickableTexture>())
             {
-                Log.Message("boop");
                 __instance.parent.graphicInt = __instance.CurrentGraphic;
             }
         }

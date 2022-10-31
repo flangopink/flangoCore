@@ -42,6 +42,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
     </Reference>
@@ -78,9 +79,8 @@
     <Compile Include="Abilities\TransformThing\Ability_Transform.cs" />
     <Compile Include="Abilities\TransformThing\Ability_TransformDef.cs" />
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
-    <Compile Include="Abilities\TransformThing\CompEffect_AbilityTransform.cs" />
+    <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
-    <Compile Include="Beams\ModExt_BeamExtension.cs" />
     <Compile Include="Beams\Verb_ShootBeamBurst.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ArmorShredding.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ProjectileExplosiveShaped.cs" />
@@ -90,7 +90,9 @@
     <Compile Include="CustomizableProjectiles\Verb_ShootShotgun.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
+    <Compile Include="Misc\CompFleckEmitter.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
+    <Compile Include="Misc\XMLOptionalPatch.cs" />
     <Compile Include="SkillTrees\HediffComp_SkillMenuGiver.cs" />
     <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
     <Compile Include="HediffsExtended\HediffComp_Stun.cs" />
@@ -107,7 +109,7 @@
     <Compile Include="CustomizableProjectiles\Patches\Patch_Projectile_get_ExactRotation.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_Thing_TakeDamage_CustomizableProjectiles.cs" />
     <Compile Include="CustomizableProjectiles\Proj_ExplosiveShaped.cs" />
-    <Compile Include="CustomizableProjectiles\Proj_RandomEffectBullet.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_RandomEffect.cs" />
     <Compile Include="Harmony_flangoCore.cs" />
     <Compile Include="HediffsExtended\HediffComp_Combos.cs" />
     <Compile Include="HediffsExtended\HediffComp_DamageOverTime.cs" />
