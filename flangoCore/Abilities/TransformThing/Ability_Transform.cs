@@ -16,7 +16,7 @@ namespace flangoCore
         public Ability_Transform(Pawn pawn, Precept sourcePrecept, AbilityDef def) : base(pawn, sourcePrecept, def) {}
 
         public CompProperties_AbilityTransform Props => ((CompAbilityEffect_AbilityTransform)comps.Find(x => x.GetType() == typeof(CompAbilityEffect_AbilityTransform))).Props;
-        public Texture2D OptionsIcon => ContentFinder<Texture2D>.Get(Props.optionsIconPath);
+        public Texture2D OptionsIcon => ContentFinder<Texture2D>.Get(Props.optionsIconPath) ?? BaseContent.BadTex;
         public Texture2D ResetIcon => ContentFinder<Texture2D>.Get(Props.resetIconPath) ?? BaseContent.BadTex;
 
         public int MaxCastingTicks => def.cooldownTicksRange.RandomInRange;// * GenTicks.TicksPerRealSecond;

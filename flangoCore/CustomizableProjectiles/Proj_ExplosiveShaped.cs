@@ -8,10 +8,10 @@ namespace flangoCore
 	{
 		public ModExt_ProjectileExplosiveShaped ModExt => def.GetModExtension<ModExt_ProjectileExplosiveShaped>();
 
-		void DoExplosion(IntVec3 pos, Map map)
+		/*void DoExplosion(IntVec3 pos, Map map)
         {
 			GenExplosion.DoExplosion(pos, map, 0.9f, def.projectile.damageDef, launcher, base.DamageAmount, base.ArmorPenetration, def.projectile.soundExplode, equipmentDef, def, intendedTarget.Thing, def.projectile.postExplosionSpawnThingDef, def.projectile.postExplosionSpawnChance, def.projectile.postExplosionSpawnThingCount, preExplosionSpawnThingDef: def.projectile.preExplosionSpawnThingDef, preExplosionSpawnChance: def.projectile.preExplosionSpawnChance, preExplosionSpawnThingCount: def.projectile.preExplosionSpawnThingCount, applyDamageToExplosionCellsNeighbors: def.projectile.applyDamageToExplosionCellsNeighbors, chanceToStartFire: def.projectile.explosionChanceToStartFire, damageFalloff: def.projectile.explosionDamageFalloff, direction: origin.AngleToFlat(destination));
-		}
+		}*/
 
 		protected override void Explode()
 		{
@@ -24,7 +24,9 @@ namespace flangoCore
 				effecter.Cleanup();
 			}
 
-			IntVec3 offset;
+			this.DoExplosion(def.projectile.explosionRadius, ModExt.shape);
+
+			/*IntVec3 offset;
 			switch (ModExt.shape) 
 			{
 				case ExplosionShape.Normal:
@@ -102,7 +104,7 @@ namespace flangoCore
 				default:
 					Log.Warning("ExplosionShape not set for " + def.defName + ". Defaulting to Normal.");
 					break;
-			}
+			}*/
 		}
 	}
 }

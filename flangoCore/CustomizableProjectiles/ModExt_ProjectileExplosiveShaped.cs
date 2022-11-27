@@ -7,13 +7,4 @@ namespace flangoCore
     {
         public ExplosionShape shape = 0;
 	}
-	public enum ExplosionShape
-	{
-		Normal,
-		Star,
-		CrossPlus,
-		CrossX,
-		Ring,
-		RandomAdjacent
-	}
 }

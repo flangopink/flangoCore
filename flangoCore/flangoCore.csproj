@@ -90,8 +90,11 @@
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
     <Compile Include="Misc\CompAnimatedTexture.cs" />
+    <Compile Include="Misc\CompAudioSource.cs" />
     <Compile Include="Misc\CompFleckEmitter.cs" />
     <Compile Include="Misc\CompFleckEmitterEquipment.cs" />
+    <Compile Include="Misc\CompIgnoreMovementPenalty.cs" />
+    <Compile Include="Misc\CompRemoteExplosive.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
@@ -146,6 +149,10 @@
     <Publicize Include="Assembly-CSharp:Verse.ThingDef.verbs" />
     <Publicize Include="Assembly-CSharp:Verse.ThingDef.EmptyVerbPropertiesList" />
     <Publicize Include="Assembly-CSharp:Verse.Graphic_Collection.subGraphics" />
+    <Publicize Include="Assembly-CSharp:Verse.Projectile.launcher" />
+    <Publicize Include="Assembly-CSharp:Verse.Projectile.equipmentDef" />
+    <Publicize Include="Assembly-CSharp:Verse.Projectile.origin" />
+    <Publicize Include="Assembly-CSharp:Verse.Projectile.destination" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
