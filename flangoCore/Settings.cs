@@ -27,6 +27,9 @@ namespace flangoCore
 
 	public class Settings : ModSettings
 	{
+		public bool optionalPatchTest = true;
+
+
 		public bool enableVFEPatches = true;
 
 		public bool enableDeflectionText = true;
@@ -54,8 +57,6 @@ namespace flangoCore
 
 		public float skillTreeUIScale = 1f;
 
-
-		public bool optionalPatchTest = true;
 
 
 		public void DoWindowContents(Rect canvas)

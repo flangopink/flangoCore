@@ -77,7 +77,6 @@
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_EquipmentLaunchProjectile.cs" />
     <Compile Include="Abilities\AbilitiesExtended\EquipmentAbility\Verb_UseEquipmentAbility.cs" />
     <Compile Include="Abilities\TransformThing\Ability_Transform.cs" />
-    <Compile Include="Abilities\TransformThing\Ability_TransformDef.cs" />
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
@@ -90,9 +89,12 @@
     <Compile Include="CustomizableProjectiles\Verb_ShootShotgun.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
+    <Compile Include="Misc\CompAnimatedTexture.cs" />
     <Compile Include="Misc\CompFleckEmitter.cs" />
+    <Compile Include="Misc\CompFleckEmitterEquipment.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
-    <Compile Include="Misc\XMLOptionalPatch.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="XML\XMLToggleablePatch.cs" />
     <Compile Include="SkillTrees\HediffComp_SkillMenuGiver.cs" />
     <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
     <Compile Include="HediffsExtended\HediffComp_Stun.cs" />
@@ -131,6 +133,7 @@
     <Compile Include="Stats\Patch_VerbProperties_AdjustedCooldown.cs" />
     <Compile Include="VanillaExpanded\Patch_Building_ItemProcessor_CheckTheHoppers.cs" />
     <Compile Include="VanillaExpanded\ModExt_AcceptedHoppers.cs" />
+    <Compile Include="XML\XMLRandomPatch.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -140,6 +143,9 @@
     <Publicize Include="Assembly-CSharp:Verse.Projectile.ImpactSomething" />
     <Publicize Include="Assembly-CSharp:Verse.GraphicData.cachedGraphic" />
     <Publicize Include="Assembly-CSharp:Verse.Thing.graphicInt" />
+    <Publicize Include="Assembly-CSharp:Verse.ThingDef.verbs" />
+    <Publicize Include="Assembly-CSharp:Verse.ThingDef.EmptyVerbPropertiesList" />
+    <Publicize Include="Assembly-CSharp:Verse.Graphic_Collection.subGraphics" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

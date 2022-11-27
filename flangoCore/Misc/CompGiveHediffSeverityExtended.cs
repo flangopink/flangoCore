@@ -28,6 +28,11 @@ namespace flangoCore
 		public CompProperties_GiveHediffSeverityExtended()
 		{
 			compClass = typeof(CompGiveHediffSeverityExtended);
+		}
+
+        public override void ResolveReferences(ThingDef def)
+        {
+            base.ResolveReferences(def);
 			requiredStat = StatDefOf.PsychicSensitivity;
 		}
 	}
@@ -117,5 +122,5 @@ namespace flangoCore
 				}
 			}
 		}
-	}
+    }
 }

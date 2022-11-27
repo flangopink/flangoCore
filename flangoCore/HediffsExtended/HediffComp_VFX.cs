@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Verse;
+using UnityEngine;
 
 namespace flangoCore
 {
@@ -8,6 +9,7 @@ namespace flangoCore
         public List<FleckProps> onAddFlecks;
         public List<FleckProps> onTickFlecks;
         public List<FleckProps> onRemoveFlecks;
+        //public Color skinColor;
 
         //public bool canColor;
         //public Color color = Color.white; // doesn't work
@@ -22,17 +24,18 @@ namespace flangoCore
     {
         public HediffCompProperties_VFX Props => (HediffCompProperties_VFX)props;
 
-        //private Color originalColor;
+        //private Color? originalColor;
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
             base.CompPostPostAdd(dinfo);
             if (parent.pawn.Dead) return;
 
-            /*if (Props.canColor)
+            /*if (Props.skinColor != null)
             {
-                originalColor = parent.pawn.Graphic.color;
-                parent.pawn.Graphic.color = Props.color;
+                originalColor = parent.pawn.story.SkinColor;
+                parent.pawn.story.skinColorOverride = Props.skinColor;
+                _ = parent.pawn.story.SkinColor;
             }*/
 
             if (!Props.onAddFlecks.NullOrEmpty())
@@ -69,9 +72,9 @@ namespace flangoCore
             base.CompPostPostRemoved();
             if (parent.pawn.Dead) return;
 
-            /*if (Props.canColor)
+            /*if (Props.skinColor != null)
             {
-                parent.pawn.Graphic.color = originalColor;
+                parent.pawn.story.skinColorOverride = originalColor;
             }*/
 
             if (!Props.onRemoveFlecks.NullOrEmpty())

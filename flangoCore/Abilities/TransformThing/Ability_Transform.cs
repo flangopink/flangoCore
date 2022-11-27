@@ -7,7 +7,7 @@ namespace flangoCore
 {
     public class Ability_Transform : Ability
     {
-        Ability_TransformDef AbilityDef => (Ability_TransformDef)def;
+        //Ability_TransformDef AbilityDef => (Ability_TransformDef)def;
 
         public Ability_Transform() : base() {}
         public Ability_Transform(Pawn pawn) : base(pawn) {}
@@ -15,10 +15,11 @@ namespace flangoCore
         public Ability_Transform(Pawn pawn, Precept sourcePrecept) : base(pawn, sourcePrecept) {}
         public Ability_Transform(Pawn pawn, Precept sourcePrecept, AbilityDef def) : base(pawn, sourcePrecept, def) {}
 
-        public Texture2D OptionsIcon => ContentFinder<Texture2D>.Get(AbilityDef.optionsIconPath);
-        public Texture2D ResetIcon => ContentFinder<Texture2D>.Get(AbilityDef.resetIconPath) ?? BaseContent.BadTex;
+        public CompProperties_AbilityTransform Props => ((CompAbilityEffect_AbilityTransform)comps.Find(x => x.GetType() == typeof(CompAbilityEffect_AbilityTransform))).Props;
+        public Texture2D OptionsIcon => ContentFinder<Texture2D>.Get(Props.optionsIconPath);
+        public Texture2D ResetIcon => ContentFinder<Texture2D>.Get(Props.resetIconPath) ?? BaseContent.BadTex;
 
-        public int MaxCastingTicks => (int)(AbilityDef.cooldown * GenTicks.TicksPerRealSecond);
+        public int MaxCastingTicks => def.cooldownTicksRange.RandomInRange;// * GenTicks.TicksPerRealSecond;
         private int TicksUntilCasting = -5;
         public int CooldownTicksLeft
         {
@@ -53,21 +54,20 @@ namespace flangoCore
                 //var command = (Command_EquipmentAbility)Activator.CreateInstance(def.gizmoClass, this);
                 var command = new Command_Transform(this)
                 {
-                    defaultLabel = AbilityDef.LabelCap,
+                    defaultLabel = def.LabelCap,
                     //order = def.uiOrder,
                     curTicks = CooldownTicksLeft
                 };
 
-                if (!CanCastPowerCheck("Player", out string reason))
-                    command.Disable(reason);
+                if (!CanCastPowerCheck("Player", out string reason)) command.Disable(reason);
                 gizmo = command;
 
-                if (CooldownTicksLeft == -5) // Min is -1, but this will do a one-time cooldown upon equipping
+                /*if (CooldownTicksLeft == -5) // Min is -1, but this will do a one-time cooldown upon equipping
                 {
                     CooldownTicksLeft = MaxCastingTicks;
                     StartCooldown(MaxCastingTicks);
                     gizmo.Disable("AbilityOnCooldown".Translate(TicksUntilCasting.ToStringSecondsFromTicks()));
-                }
+                }*/
             }
             yield return gizmo;
 
@@ -90,7 +90,7 @@ namespace flangoCore
                             {
                                 gizmo.defaultLabel = option.label;
                                 gizmo.icon = option.Icon;
-                                CompOfType<CompAbilityEffect_AbilityTransform>().Props.thingToSpawn = option.thingDef;
+                                CompOfType<CompAbilityEffect_AbilityTransform>().option = option;
                             }));
                         }
                         Find.WindowStack.Add(new FloatMenu(list));
@@ -99,12 +99,11 @@ namespace flangoCore
             }
 
             // Reset cooldown if devmode is on
-            if (Prefs.DevMode && CooldownTicksLeft > 0)
+            if (DebugSettings.ShowDevGizmos && CooldownTicksLeft > 0 && CanCooldown)
             {
                 Command_Action command_Action = new Command_Action
                 {
                     defaultLabel = "DEV: Reset cooldown",
-                    //order = def.uiOrder + 2,
                     icon = ResetIcon,
                     action = delegate
                     {
@@ -126,7 +125,7 @@ namespace flangoCore
                 reason = "CannotOrderNonControlled".Translate();
                 return false;
             }
-            if (pawn.story.DisabledWorkTagsBackstoryAndTraits.HasFlag(WorkTags.Violent) && AbilityDef.verbProperties.violent)
+            if (pawn.story.DisabledWorkTagsBackstoryAndTraits.HasFlag(WorkTags.Violent) && def.verbProperties.violent)
             {
                 reason = "AbilityDisabled_IncapableOfWorkTag".Translate(pawn.Named("PAWN"), WorkTags.Violent.LabelTranslated());
                 return false;
@@ -147,11 +146,10 @@ namespace flangoCore
             return true;
         }
 
-        public override void QueueCastingJob(LocalTargetInfo target, LocalTargetInfo destination)
+        protected override void PreActivate(LocalTargetInfo? target)
         {
-            base.QueueCastingJob(target, destination);
+            base.PreActivate(target);
             CooldownTicksLeft = MaxCastingTicks;
-            StartCooldown(MaxCastingTicks);
         }
 
         public override void AbilityTick()
@@ -163,7 +161,7 @@ namespace flangoCore
             if (CooldownTicksLeft > -1 && !Find.TickManager.Paused)
             {
                 CooldownTicksLeft--;
-                //Log.Error("fuck you");
+                //Log.Message(CooldownTicksLeft.ToString());
 
                 if (!gizmo.disabled)
                 {

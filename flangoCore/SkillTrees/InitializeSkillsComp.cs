@@ -9,6 +9,8 @@ namespace flangoCore
     {
         static InitializeAbilityComp()
         {
+            if (DefDatabase<SkillTreeDef>.AllDefsListForReading.NullOrEmpty()) return;
+
             for (int i = 0; i < DefDatabase<ThingDef>.AllDefsListForReading.Count; i++)
             {
                 ThingDef def = DefDatabase<ThingDef>.AllDefsListForReading[i];

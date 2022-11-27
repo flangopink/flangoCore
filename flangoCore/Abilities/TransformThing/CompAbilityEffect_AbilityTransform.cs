@@ -3,6 +3,7 @@ using Verse;
 using Verse.Sound;
 using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace flangoCore
 {
@@ -13,12 +14,11 @@ namespace flangoCore
 			compClass = typeof(CompAbilityEffect_AbilityTransform);
 		}
 
-		public bool appliesToPawns;
-		public bool resultIsPawn;
+		public string optionsIconPath;
+		public string resetIconPath;
+
 		public List<ThingDef> canApplyTo;
 		public List<TransformOutcomeOptions> transformOptions;
-		public ThingDef thingToSpawn;
-		public int resultStackCount = -1;
 		public List<FleckProps> flecks;
 	}
 
@@ -26,15 +26,31 @@ namespace flangoCore
     {
 		public new CompProperties_AbilityTransform Props => (CompProperties_AbilityTransform)props;
 
-		public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
+		public TransformOutcomeOptions option;
+
+        public override void Initialize(AbilityCompProperties props)
+        {
+            base.Initialize(props);
+			if (option == null) option = Props.transformOptions[0];
+		}
+
+        public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			if (target.Thing == null || !Props.canApplyTo.Any(x => target.Thing.def == x))
+			var itemsOnCell = target.Cell.GetThingList(parent.pawn.Map);
+			if (itemsOnCell.NullOrEmpty() || !itemsOnCell.Select(x => x.def).Intersect(Props.canApplyTo).Any())
 			{
 				Messages.Message("MessageTransportPodsDestinationIsInvalid".Translate(), MessageTypeDefOf.RejectInput);
 				return false;
 			}
+            else if (option != null && target.Cell.GetThingList(parent.pawn.Map).First(x => Props.canApplyTo.Contains(x.def)) is Thing thing && !(thing is Pawn) && thing.stackCount < option.requiredStackCount)
+            {
+				// Did not meet the stack count requirement.
+				Messages.Message("fc_MessageRequiredItemStackCountIs".Translate(option.requiredStackCount), MessageTypeDefOf.RejectInput);
+				return false;
+			}
 
-			if (Props.appliesToPawns && !Props.availableWhenTargetIsWounded && (target.Pawn.health.hediffSet.BleedRateTotal > 0f || target.Pawn.health.HasHediffsNeedingTend()))
+			//if (Props.appliesToPawns && !Props.availableWhenTargetIsWounded && (target.Pawn.health.hediffSet.BleedRateTotal > 0f || target.Pawn.health.HasHediffsNeedingTend()))
+			if (target.Thing is Pawn pawn && !Props.availableWhenTargetIsWounded && (pawn.health.hediffSet.BleedRateTotal > 0f || pawn.health.HasHediffsNeedingTend()))
 			{
 				return false;
 			}
@@ -44,17 +60,20 @@ namespace flangoCore
 
 		public override void Apply(LocalTargetInfo target, LocalTargetInfo dest)
 		{
-			var targetThing = Props.appliesToPawns && (Thing)target is Pawn ? target.Pawn : target.Thing;
-
-			var resultThing = Props.resultIsPawn ? new Pawn() : new Thing();
-
-			if (Props.transformOptions == null) 
-			{ 
-				Log.Error("transformOptions are empty"); 
+			if (Props.transformOptions == null)
+			{
+				Log.Error("<transformOptions> are empty.");
 				return;
 			}
 
-			if (Props.thingToSpawn == null) Props.thingToSpawn = Props.transformOptions[0].thingDef;
+			var thingToSpawn = option.thingDef;
+
+			//var targetThing = Props.appliesToPawns && (Thing)target is Pawn ? target.Pawn : target.Thing;
+			var targetThing = target.Thing != null && target.Thing.GetType() == typeof(Pawn) ? (Pawn)target : target.Cell.GetThingList(parent.pawn.Map).First(x => Props.canApplyTo.Contains(x.def));
+
+			//var resultThing = Props.resultIsPawn ? new Pawn() : new Thing();
+			var resultThing = DefDatabase<PawnKindDef>.GetNamedSilentFail(thingToSpawn.defName) != null ? new Pawn() : new Thing();
+			resultThing.def = thingToSpawn;
 
 			SoundDef soundDef;
 			switch (parent.pawn.gender)
@@ -71,54 +90,83 @@ namespace flangoCore
 			}
 			soundDef?.PlayOneShot(new TargetInfo(target.Cell, parent.pawn.Map));
 
-			resultThing.def = Props.thingToSpawn;
-
-			if (Props.resultIsPawn && resultThing is Pawn resultPawn)
+			//if (Props.resultIsPawn && resultThing is Pawn resultPawn)
+			if (resultThing is Pawn resultPawn)
 			{
-				resultPawn.kindDef = PawnKindDef.Named(Props.thingToSpawn.ToString());
+				resultPawn.kindDef = PawnKindDef.Named(thingToSpawn.defName);
 				//Log.Message($"Trying to spawn {resultPawn.def}, kind: {resultPawn.kindDef}");
 
 				if (resultPawn.def == null || resultPawn.kindDef == null)
 				{
 					resultPawn.def = ThingDef.Named("Rat");
 					resultPawn.kindDef = PawnKindDef.Named("Rat");
-					Log.Error("Transform things's thingDef or kindDef was null.");
+					Log.Error("Transform result thingDef or kindDef was null.");
 					return;
 				}
 
-				Pawn targetPawn = (Pawn)targetThing;
+				Faction faction = null;
+                switch (option.faction)
+                {
+                    case ResultFaction.Current:
+                        faction = targetThing.Faction;
+                        break;
+                    case ResultFaction.Neutral:
+                        faction = null;
+                        break;
+                    case ResultFaction.Player:
+                        faction = Faction.OfPlayer;
+                        break;
+                    case ResultFaction.Enemy:
+                        faction = Faction.OfPirates;
+                        break;
+                    default:
+                        break;
+                }
 
-				PawnGenerationRequest req = new PawnGenerationRequest(resultPawn.kindDef, targetPawn.Faction, PawnGenerationContext.NonPlayer, -1);
+                PawnGenerationRequest req = new PawnGenerationRequest(resultPawn.kindDef, faction, PawnGenerationContext.NonPlayer, -1);
 				var reqPawn = PawnGenerator.GeneratePawn(req);
 
-				reqPawn.Name = targetPawn.Name ?? targetPawn.Name;
+				if (targetThing is Pawn pawn)
+				{
+					reqPawn.Name = pawn.Name ?? new NameTriple("New", targetThing.LabelCap, "Creature");
+					reqPawn.gender = pawn.gender != Gender.None ? pawn.gender : Gender.None;
+				}
+                else
+                {
+					reqPawn.Name = new NameTriple("New", targetThing.LabelCap, "Creature");
+					reqPawn.gender = reqPawn.RaceProps.hasGenders ? (Gender)Rand.Range(1, 2) : 0;
+				}
 
-				reqPawn.gender = targetPawn.gender != Gender.None ? targetPawn.gender : Gender.None;
-
-				GenSpawn.Spawn(reqPawn, target.Cell, target.Pawn.Map);
+				GenSpawn.Spawn(reqPawn, target.Cell, targetThing.Map);
 
 				if (reqPawn.kindDef != resultPawn.kindDef)
 					Log.Error($"Something went wrong while spawning a pawn of kind {resultPawn.kindDef}. Instead spawned of kind {reqPawn.kindDef}");
+
+				targetThing.DeSpawn();
 			}
             else
             {
 				if (resultThing.def == null)
 				{
-					resultThing.def = ThingDef.Named("Wood");
-					Log.Error("Transform result things's thingDef was null.");
+					resultThing.def = ThingDefOf.WoodLog;
+					Log.Error("Transform result thingDef was null.");
 					return;
 				}
 
-				if (DefDatabase<PawnKindDef>.GetNamedSilentFail(resultThing.def.defName) != null)
+				/*if (DefDatabase<PawnKindDef>.GetNamedSilentFail(resultThing.def.defName) != null)
 				{
-					resultThing.def = ThingDef.Named("Wood");
+					resultThing.def = ThingDefOf.WoodLog;
 					Log.Error("Transform result thing is a Pawn, but <resultIsPawn> is false.");
 					return;
-				}
+				}*/
 
-				Thing thing = ThingMaker.MakeThing(resultThing.def, targetThing.Stuff ?? null);
-				thing.stackCount = Props.resultStackCount == -1 ? targetThing.stackCount : Props.resultStackCount;
-				GenPlace.TryPlaceThing(thing, target.Cell, target.Thing.Map, ThingPlaceMode.Near);
+				Thing thing = ThingMaker.MakeThing(resultThing.def, targetThing.Stuff);
+				thing.stackCount = option.resultStackCount == -1 ? targetThing.stackCount : option.resultStackCount;
+
+				if (targetThing.stackCount - option.requiredStackCount == 0) targetThing.DeSpawn();
+				else targetThing.stackCount -= option.requiredStackCount;
+
+				GenPlace.TryPlaceThing(thing, target.Cell, parent.pawn.Map, ThingPlaceMode.Near);
 			}
 
 			if (!Props.flecks.NullOrEmpty())
@@ -128,8 +176,6 @@ namespace flangoCore
 					fleck.MakeFleck(parent.pawn.Map, targetThing.Position.ToVector3());
 				}
 			}
-
-			targetThing.DeSpawn();
-		}
-	}
+        }
+    }
 }

@@ -6,7 +6,7 @@ using System.Reflection;
 
 namespace flangoCore
 {
-	public class XMLOptionalPatch : PatchOperation
+	public class XMLToggleablePatch : PatchOperation
 	{
         public string settingsPath;
 
@@ -27,7 +27,7 @@ namespace flangoCore
             string classPath = string.Join(".", pathSplit.Take(pathSplit.Length - 1)); // flangoCore.Controller
             string settingsClass = pathSplit.Last(); // settings
 
-            Log.Message(classPath + " " + settingsClass);
+            //Log.Message(classPath + " " + settingsClass);
 
             for (int i = 0; i < mods.Count; i++)
             {
@@ -47,7 +47,7 @@ namespace flangoCore
             {
                 bool b = (bool)field.GetValue(settings.GetValue(null));
 
-                Log.Message(b.ToString());
+                //Log.Message(b.ToString());
 
                 if (b && trueOperation != null)
                     return trueOperation.Apply(xml);
