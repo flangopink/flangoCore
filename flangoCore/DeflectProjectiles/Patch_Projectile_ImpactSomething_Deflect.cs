@@ -18,11 +18,11 @@ namespace flangoCore
 
                 if (pawn.skills != null)
                 {
-                    if (Controller.settings.deflectionChanceAffectedByMeleeSkill)
+                    if (FlangoCore.settings.deflectionChanceAffectedByMeleeSkill)
                     {
                         ext.deflectChance += pawn.skills.GetSkill(SkillDefOf.Melee).Level;
                     }
-                    if (Controller.settings.deflectionAccuracyAffectedByMeleeSkill)
+                    if (FlangoCore.settings.deflectionAccuracyAffectedByMeleeSkill)
                     {
                         ext.deflectAccuracy += pawn.skills.GetSkill(SkillDefOf.Melee).Level;
                     }
@@ -53,12 +53,12 @@ namespace flangoCore
                     {
                         Projectile obj = (Projectile)GenSpawn.Spawn(__instance.def, pawn.Position, pawn.Map);
                         obj.Launch(pawn, pawn.Position.ToVector3(), new LocalTargetInfo(other.Position), other, projectileHitFlags, false, equipment);
-                        if (Controller.settings.enableDeflectionText)
+                        if (FlangoCore.settings.enableDeflectionText)
                         {
                             MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.Map, "fc_projectileDeflected".Translate());
                         }
                     }
-                    else if (Controller.settings.enableDeflectionText)
+                    else if (FlangoCore.settings.enableDeflectionText)
                     {
                         MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.Map, "fc_projectileBlocked".Translate());
                     }

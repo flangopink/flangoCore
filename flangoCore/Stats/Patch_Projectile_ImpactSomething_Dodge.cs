@@ -13,7 +13,7 @@ namespace flangoCore
         {
             if (__instance.usedTarget.Thing is Pawn pawn)
             {
-                _ = Controller.settings.BaseDodgeChance;
+                _ = FlangoCore.settings.BaseDodgeChance;
                 if (__instance.def.projectile.explosionRadius != 0 && pawn.GetStatValue(StatDefOf_flangoCore.RangedDodgeChance) is float dodgeChance && dodgeChance != 0)
                 {
                     float roll = Rand.Value;

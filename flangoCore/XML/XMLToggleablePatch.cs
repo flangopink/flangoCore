@@ -23,8 +23,8 @@ namespace flangoCore
 
             var mods = typeof(Mod).AllSubclasses();
 
-            string[] pathSplit = settingsPath.Split('.'); // flangoCore.Controller.settings
-            string classPath = string.Join(".", pathSplit.Take(pathSplit.Length - 1)); // flangoCore.Controller
+            string[] pathSplit = settingsPath.Split('.'); // flangoCore.FlangoCore.settings
+            string classPath = string.Join(".", pathSplit.Take(pathSplit.Length - 1)); // flangoCore.FlangoCore
             string settingsClass = pathSplit.Last(); // settings
 
             //Log.Message(classPath + " " + settingsClass);

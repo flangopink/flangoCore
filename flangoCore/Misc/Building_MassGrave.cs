@@ -9,11 +9,11 @@ namespace flangoCore
 {
 	public class Building_MassGrave : Building_Grave
 	{
-		public bool CanAcceptCorpses => CorpseCount < Controller.settings.CorpseCapacity;
+		public bool CanAcceptCorpses => CorpseCount < FlangoCore.settings.CorpseCapacity;
 
 		public int CorpseCount => innerContainer.Count;
 
-		public int MaxAssignedPawnsCount => Math.Max(1, Controller.settings.CorpseCapacity - CorpseCount);
+		public int MaxAssignedPawnsCount => Math.Max(1, FlangoCore.settings.CorpseCapacity - CorpseCount);
 
 		public override bool StorageTabVisible => CanAcceptCorpses;
 
@@ -62,7 +62,7 @@ namespace flangoCore
 			};
 			array[2] = CorpseCount.ToString();
 			array[3] = "/";
-			array[4] = Controller.settings.CorpseCapacity.ToString();
+			array[4] = FlangoCore.settings.CorpseCapacity.ToString();
 			stringBuilder.Append(string.Concat(array));
 			return stringBuilder.ToString();
 		}

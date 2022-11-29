@@ -15,13 +15,13 @@ namespace flangoCore
             var harmony = new Harmony("com.flangopink.flangoCore");
             harmony.PatchAll();
 
-            if (ModLister.HasActiveModWithName("Vanilla Expanded Framework") && Controller.settings.enableVFEPatches)
+            if (ModLister.HasActiveModWithName("Vanilla Expanded Framework") && FlangoCore.settings.enableVFEPatches)
             {
                 Log.Message("<color=#FFC0CB>Vanilla Expanded Framework detected. Patching...</color>");
                 VFEPatches(harmony);
             }
 
-            if (Controller.settings.enableVCF) EnableVCF(harmony);
+            if (FlangoCore.settings.enableVCF) EnableVCF(harmony);
 
             Log.Message($"<color=#FFC0CB>Launched successfully! Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
         }

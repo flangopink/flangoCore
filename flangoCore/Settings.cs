@@ -5,11 +5,11 @@ using UnityEngine;
 
 namespace flangoCore
 {
-	public class Controller : Mod
+	public class FlangoCore : Mod
 	{
 		public static Settings settings;
 
-		public Controller(ModContentPack content) : base(content)
+		public FlangoCore(ModContentPack content) : base(content)
 		{
 			settings = GetSettings<Settings>();
 		}

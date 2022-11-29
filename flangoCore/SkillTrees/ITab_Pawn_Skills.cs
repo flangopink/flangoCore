@@ -60,7 +60,7 @@ namespace flangoCore
 
 		public ITab_Pawn_Skills()
 		{
-			settings = Controller.settings;
+			settings = FlangoCore.settings;
 			labelKey = "fc_skills".Translate();
 			size = new Vector2(650f * settings.skillTreeUIScale, 450f * settings.skillTreeUIScale);
 

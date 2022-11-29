@@ -12,16 +12,16 @@ namespace flangoCore
         public EquipmentAbility(Pawn pawn) : base(pawn) {}
         public EquipmentAbility(Pawn pawn, AbilityDef def) : base(pawn, def) 
         {
-            if ((Controller.settings.enableAbilityCooldownOnEquipForItems && !sources.NullOrEmpty() && sources.First() is ThingWithComps) 
-             || (Controller.settings.enableAbilityCooldownOnEquipForHediffs && !sources.NullOrEmpty() && sources.First() is Hediff))
+            if ((FlangoCore.settings.enableAbilityCooldownOnEquipForItems && !sources.NullOrEmpty() && sources.First() is ThingWithComps) 
+             || (FlangoCore.settings.enableAbilityCooldownOnEquipForHediffs && !sources.NullOrEmpty() && sources.First() is Hediff))
             {
                 CooldownTicksLeft = MaxCastingTicks;
             }
         }
         public EquipmentAbility(Pawn pawn, Precept sourcePrecept, AbilityDef def) : base(pawn, sourcePrecept, def)
         {
-            if ((Controller.settings.enableAbilityCooldownOnEquipForItems && !sources.NullOrEmpty() && sources.First() is ThingWithComps)
-             || (Controller.settings.enableAbilityCooldownOnEquipForHediffs && !sources.NullOrEmpty() && sources.First() is Hediff))
+            if ((FlangoCore.settings.enableAbilityCooldownOnEquipForItems && !sources.NullOrEmpty() && sources.First() is ThingWithComps)
+             || (FlangoCore.settings.enableAbilityCooldownOnEquipForHediffs && !sources.NullOrEmpty() && sources.First() is Hediff))
             {
                 CooldownTicksLeft = MaxCastingTicks;
             }
@@ -185,8 +185,8 @@ namespace flangoCore
                 if (Scribe.mode == LoadSaveMode.PostLoadInit)
                 {
                     Initialize();
-                    if ((Controller.settings.enableAbilityCooldownOnEquipForItems && !sources.NullOrEmpty() && sources.First() is ThingWithComps)
-                     || (Controller.settings.enableAbilityCooldownOnEquipForHediffs && !sources.NullOrEmpty() && sources.First() is Hediff))
+                    if ((FlangoCore.settings.enableAbilityCooldownOnEquipForItems && !sources.NullOrEmpty() && sources.First() is ThingWithComps)
+                     || (FlangoCore.settings.enableAbilityCooldownOnEquipForHediffs && !sources.NullOrEmpty() && sources.First() is Hediff))
                     {
                         CooldownTicksLeft = MaxCastingTicks;
                     }
