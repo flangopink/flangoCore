@@ -90,7 +90,7 @@ namespace flangoCore
                 if (soundSustainer == null) StartSustainer();
                 else soundSustainer.Maintain();
 
-                if (Props.fleck != null) Props.fleck.MakeFleck(parent.Map, parent.Position);
+                Props.fleck?.MakeFleck(parent.Map, parent.Position);
 
                 timer--;
 

@@ -86,16 +86,21 @@
     <Compile Include="CustomizableProjectiles\ModExt_ProjectileRandomEffect.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ShotgunSpread.cs" />
     <Compile Include="CustomizableProjectiles\Patches\Patch_ArmorUtility_ApplyArmor_Shred.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_ThingSpawner.cs" />
+    <Compile Include="CustomizableProjectiles\Verb_LaunchProjectileOneUse.cs" />
     <Compile Include="CustomizableProjectiles\Verb_ShootShotgun.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
     <Compile Include="Misc\CompAnimatedTexture.cs" />
     <Compile Include="Misc\CompAudioSource.cs" />
+    <Compile Include="Misc\CompDecoy.cs" />
     <Compile Include="Misc\CompFleckEmitter.cs" />
     <Compile Include="Misc\CompFleckEmitterEquipment.cs" />
     <Compile Include="Misc\CompIgnoreMovementPenalty.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
+    <Compile Include="SkillTrees\Dev\SkillTreeEditor.cs" />
+    <Compile Include="SkillTrees\Patches\Patch_Transpiler_DebugWindowsOpener.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
     <Compile Include="SkillTrees\HediffComp_SkillMenuGiver.cs" />
@@ -144,6 +149,7 @@
   <ItemGroup>
     <Publicize Include="Assembly-CSharp:Verse.ThingDef.descriptionDetailedCached" />
     <Publicize Include="Assembly-CSharp:Verse.Projectile.ImpactSomething" />
+    <Publicize Include="Assembly-CSharp:Verse.Projectile.landed" />
     <Publicize Include="Assembly-CSharp:Verse.GraphicData.cachedGraphic" />
     <Publicize Include="Assembly-CSharp:Verse.Thing.graphicInt" />
     <Publicize Include="Assembly-CSharp:Verse.ThingDef.verbs" />
@@ -153,6 +159,7 @@
     <Publicize Include="Assembly-CSharp:Verse.Projectile.equipmentDef" />
     <Publicize Include="Assembly-CSharp:Verse.Projectile.origin" />
     <Publicize Include="Assembly-CSharp:Verse.Projectile.destination" />
+    <Publicize Include="Assembly-CSharp:Verse.DamageDef.externalViolenceForMechanoids" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

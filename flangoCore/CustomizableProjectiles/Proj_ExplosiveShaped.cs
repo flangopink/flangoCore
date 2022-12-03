@@ -16,15 +16,14 @@ namespace flangoCore
 		protected override void Explode()
 		{
 			Map map = Map;
-			Destroy();
-			if (def.projectile.explosionEffect != null)
-			{
-				Effecter effecter = def.projectile.explosionEffect.Spawn();
-				effecter.Trigger(new TargetInfo(Position, map), new TargetInfo(Position, map));
-				effecter.Cleanup();
-			}
-
-			this.DoExplosion(def.projectile.explosionRadius, ModExt.shape);
+            if (def.projectile.explosionEffect != null)
+            {
+                Effecter effecter = def.projectile.explosionEffect.Spawn();
+                effecter.Trigger(new TargetInfo(Position, map), new TargetInfo(Position, map));
+                effecter.Cleanup();
+            }
+            this.DoExplosion(def.projectile.explosionRadius, ModExt.shape);
+            Destroy();
 
 			/*IntVec3 offset;
 			switch (ModExt.shape) 

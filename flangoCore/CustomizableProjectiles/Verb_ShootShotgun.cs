@@ -20,7 +20,7 @@ namespace flangoCore
 
 		bool TryCastShotBase()
         {
-            if (currentTarget.HasThing && currentTarget.Thing.Map != base.caster.Map)
+            if (currentTarget.HasThing && currentTarget.Thing.Map != caster.Map)
             {
                 return false;
             }
@@ -31,34 +31,34 @@ namespace flangoCore
                 return false;
             }
 
-            bool flag = TryFindShootLineFromTo(base.caster.Position, currentTarget, out ShootLine resultingLine);
+            bool flag = TryFindShootLineFromTo(caster.Position, currentTarget, out ShootLine resultingLine);
             if (verbProps.stopBurstWithoutLos && !flag)
             {
                 return false;
             }
 
-            if (base.EquipmentSource != null)
+            if (EquipmentSource != null)
             {
-                base.EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
-                base.EquipmentSource.GetComp<CompReloadable>()?.UsedOnce();
+                EquipmentSource.GetComp<CompChangeableProjectile>()?.Notify_ProjectileLaunched();
+                EquipmentSource.GetComp<CompReloadable>()?.UsedOnce();
             }
 
             lastShotTick = Find.TickManager.TicksGame;
-            Thing thing = base.caster;
-            Thing equipment = base.EquipmentSource;
-            CompMannable compMannable = base.caster.TryGetComp<CompMannable>();
+            Thing thing = caster;
+            Thing equipment = EquipmentSource;
+            CompMannable compMannable = caster.TryGetComp<CompMannable>();
             if (compMannable != null && compMannable.ManningPawn != null)
             {
                 thing = compMannable.ManningPawn;
-                equipment = base.caster;
+                equipment = caster;
             }
 
-            Vector3 drawPos = base.caster.DrawPos;
+            Vector3 drawPos = caster.DrawPos;
 
             var modext = equipment.def.GetModExtension<ModExt_ShotgunSpread>();
             for (int i = 0; i < modext.pelletCount; i++)
             {
-                Projectile projectile2 = (Projectile)GenSpawn.Spawn(projectile, resultingLine.Source, base.caster.Map);
+                Projectile projectile2 = (Projectile)GenSpawn.Spawn(projectile, resultingLine.Source, caster.Map);
 
                 if (verbProps.ForcedMissRadius > 0.5f)
                 {
@@ -94,7 +94,7 @@ namespace flangoCore
                     }
                 }
 
-                ShotReport shotReport = ShotReport.HitReportFor(base.caster, this, currentTarget);
+                ShotReport shotReport = ShotReport.HitReportFor(caster, this, currentTarget);
                 Thing randomCoverToMissInto = shotReport.GetRandomCoverToMissInto();
                 ThingDef targetCoverDef = randomCoverToMissInto?.def;
                 if (!Rand.Chance(shotReport.AimOnTargetChance_IgnoringPosture))

@@ -9,6 +9,7 @@ namespace flangoCore
         public bool rotating;
         public bool counterClockwise;
         public float rotationSpeed = 10f;
+        public bool stopRotatingOnImpact = true;
 
         public List<FleckProps> flecks;
 
