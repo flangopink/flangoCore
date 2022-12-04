@@ -10,7 +10,7 @@ namespace flangoCore
 {
     public class Patch_Transpiler_DebugWindowsOpener
     {
-        [HarmonyPatch(typeof(DebugWindowsOpener))]
+        /*[HarmonyPatch(typeof(DebugWindowsOpener))]
         [HarmonyPatch("DrawButtons")]
         internal class DebugWindowsOpener_Patch
         {
@@ -94,6 +94,6 @@ namespace flangoCore
                 }
                 return num;
             }
-        }
+        }*/
     }
 }

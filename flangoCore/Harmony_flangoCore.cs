@@ -36,10 +36,10 @@ namespace flangoCore
 
         static void EnableVCF(Harmony harmony)
         {
-            var VCFOrig = typeof(VerbProperties).GetMethod("AdjustedCooldown", new Type[] { typeof(Verb), typeof(Pawn) });
-            var VCFPostfix = typeof(Patch_VerbProperties_AdjustedCooldown).GetMethod("Postfix");
+            var VCFOrig = typeof(VerbProperties).GetMethod("AdjustedCooldown", new Type[] { typeof(Tool), typeof(Pawn), typeof(Thing) });
+            var VCFPrefix = typeof(Patch_VerbProperties_AdjustedCooldown).GetMethod("Prefix");
 
-            harmony.Patch(VCFOrig, postfix: new HarmonyMethod(VCFPostfix));
+            harmony.Patch(VCFOrig, new HarmonyMethod(VCFPrefix));
         }
     }
 }

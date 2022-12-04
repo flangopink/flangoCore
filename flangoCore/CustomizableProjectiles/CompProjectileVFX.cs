@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace flangoCore
@@ -26,12 +26,13 @@ namespace flangoCore
         public override void CompTick()
         {
             base.CompTick();
+            int curTick = Find.TickManager.TicksGame;
 
             if (!Props.flecks.NullOrEmpty())
             {
                 foreach (FleckProps fleck in Props.flecks)
                 {
-                    if (parent.Map != null && Find.TickManager.TicksGame % fleck.intervalTicks == 0)
+                    if (parent.Map != null && curTick % fleck.intervalTicks == 0)
                     {
                         fleck.MakeFleck(parent.Map, parent.DrawPos);
                     }

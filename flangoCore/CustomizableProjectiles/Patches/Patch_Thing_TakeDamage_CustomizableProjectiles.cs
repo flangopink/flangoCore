@@ -11,9 +11,11 @@ namespace flangoCore
         [HarmonyPrefix]
         public static bool TakeDamage_Prefix(Thing __instance, ref DamageInfo dinfo)
         {
+            if (!(__instance is Pawn)) return true;
+
             ModExt_ExtraDamageToRace mExt = dinfo.Def.GetModExtension<ModExt_ExtraDamageToRace>();
 
-            if (mExt != null && __instance is Pawn)
+            if (mExt != null)
             {
                 foreach (FleshTypeMultipliers f in mExt.fleshTypes)
                 {

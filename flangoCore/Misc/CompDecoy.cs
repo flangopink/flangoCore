@@ -6,6 +6,7 @@ using System.Linq;
 using System;
 using static UnityEngine.Scripting.GarbageCollector;
 using Verse.Noise;
+using VFECore;
 
 namespace flangoCore
 {
@@ -37,6 +38,7 @@ namespace flangoCore
         public CompProperties_Decoy() => compClass = typeof(CompDecoy);
     }
 
+    [HotSwap.HotSwappable]
     public class CompDecoy : ThingComp
     {
         public CompProperties_Decoy Props => (CompProperties_Decoy)props;
@@ -94,9 +96,10 @@ namespace flangoCore
         public void AggroNearbyPawns()
         {
             if (parent == null || parent.Position == null || parent.Map == null) return; // Just in case
-            List<Pawn> pawns = GenRadial.RadialCellsAround(parent.Position, Props.range, true).Where(cell => cell.InBounds(parent.Map)).SelectMany(cell => cell.GetThingList(parent.Map)).OfType<Pawn>().ToList();
 
-            foreach (Pawn pawn in pawns)
+            //List<Pawn> pawns = GenRadial.RadialCellsAround(parent.Position, Props.range, true).Where(cell => cell.InBounds(parent.Map)).SelectMany(cell => cell.GetThingList(parent.Map)).OfType<Pawn>().ToList();
+
+            foreach (Pawn pawn in Utils.GetPawnsInRange(parent.Position, parent.Map, Props.range, Props.requireLOS))
             {
                 if (pawn.CurJob == null || pawn.CurJob.AnyTargetIs(parent) || (Props.ignoredByOtherDecoys && pawn.CurJob?.targetA.Thing?.TryGetComp<CompDecoy>() != null)) return;
 
@@ -111,10 +114,10 @@ namespace flangoCore
                         if (pawn.Faction == Faction.OfPlayer) break;
                         else continue;
                     case DecoyTargetFlags.Neutral:
-                        if (pawn.Faction != Faction.OfPlayer && pawn.Faction.HostileTo(Faction.OfPlayer)) break;
+                        if (pawn.Faction != Faction.OfPlayer && !pawn.Faction.HostileTo(Faction.OfPlayer)) break;
                         else continue;
                     case DecoyTargetFlags.NeutralNoNonFaction:
-                        if (pawn.Faction != null && pawn.Faction != Faction.OfPlayer && pawn.Faction.HostileTo(Faction.OfPlayer)) break;
+                        if (pawn.Faction != null && pawn.Faction != Faction.OfPlayer && !pawn.Faction.HostileTo(Faction.OfPlayer)) break;
                         else continue;
                     case DecoyTargetFlags.Hostile:
                         if (pawn.Faction.HostileTo(Faction.OfPlayer)) break;

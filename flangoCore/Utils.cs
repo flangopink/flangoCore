@@ -115,5 +115,27 @@ namespace flangoCore
             ThingDef def = p.def;
             p.DoExplosion(radius, shape, def.projectile.damageDef, p.launcher, p.DamageAmount, p.ArmorPenetration, def.projectile.soundExplode, p.equipmentDef, def, p.intendedTarget.Thing, def.projectile.preExplosionSpawnThingDef, def.projectile.preExplosionSpawnChance, def.projectile.preExplosionSpawnThingCount, def.projectile.postExplosionSpawnThingDef, def.projectile.postExplosionSpawnChance, def.projectile.postExplosionSpawnThingCount, def.projectile.applyDamageToExplosionCellsNeighbors, def.projectile.explosionChanceToStartFire, def.projectile.explosionDamageFalloff, p.origin.AngleToFlat(p.destination));
         }
+
+        // Thank you smartkar!
+        // Whoever reads this should check out his Athena framework:
+        // https://github.com/SmArtKar/AthenaFramework
+        public static List<Pawn> GetPawnsInRange(IntVec3 cell, Map map, float maxRange, bool requireLOS = false, bool affectDowned = false)
+        {
+            List<Pawn> list = new List<Pawn>();
+            float range = maxRange * maxRange;
+            foreach (Pawn pawn in map.mapPawns.AllPawnsSpawned)
+            {
+                if (pawn.Spawned && (!pawn.Dead || (affectDowned && pawn.Downed)))
+                {
+                    float pawnDist = pawn.Position.DistanceToSquared(cell);
+                    if (pawnDist <= range) 
+                    {
+                        if (requireLOS && !GenSight.LineOfSight(cell, pawn.Position, map)) continue;
+                        list.Add(pawn); 
+                    }
+                }
+            }
+            return list;
+        }
     }
 }

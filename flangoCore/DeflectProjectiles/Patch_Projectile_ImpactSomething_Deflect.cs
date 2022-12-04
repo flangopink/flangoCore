@@ -63,10 +63,7 @@ namespace flangoCore
                         MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.Map, "fc_projectileBlocked".Translate());
                     }
 
-                    if (ext.deflectFleck != null)
-                    {
-                        ext.deflectFleck.MakeFleck(pawn.Map, pawn.DrawPos);
-                    }
+                    ext.deflectFleck?.MakeFleck(pawn.Map, pawn.DrawPos);
 
                     return false;
                 }
