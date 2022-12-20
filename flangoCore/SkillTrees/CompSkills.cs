@@ -43,8 +43,8 @@ namespace flangoCore
 			}
 			//selectedTree = treeXPs.FirstOrDefault().Key;
 
-			Log.Message(string.Join(", ", treeXPs));
-			Log.Message(selectedTree.ToString());
+			//Log.Message(string.Join(", ", treeXPs));
+			//Log.Message(selectedTree.ToString());
 		}
 
 		public float GetXP()

@@ -2,6 +2,8 @@
 using Verse;
 using RimWorld;
 using UnityEngine;
+using System.Linq;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace flangoCore
 {
@@ -12,16 +14,34 @@ namespace flangoCore
         public static bool TakeDamage_Prefix(Thing __instance, ref DamageInfo dinfo)
         {
             if (!(__instance is Pawn)) return true;
+            Pawn pawn = (Pawn)__instance;
 
             ModExt_ExtraDamageToRace mExt = dinfo.Def.GetModExtension<ModExt_ExtraDamageToRace>();
 
             if (mExt != null)
             {
-                foreach (FleshTypeMultipliers f in mExt.fleshTypes)
+                if (!mExt.fleshTypes.NullOrEmpty())
                 {
-                    if (f.fleshTypeDef == __instance.def.race.FleshType)
+                    // foreach
+                    foreach (FleshTypeMultipliers m in mExt.fleshTypes)
                     {
-                        dinfo.SetAmount(Mathf.RoundToInt(dinfo.Amount * f.damageMultiplier));
+                        if (m.fleshTypeDef == pawn.RaceProps.FleshType)
+                        {
+                            dinfo.SetAmount(Mathf.RoundToInt(dinfo.Amount * mExt.globalMultiplier == 0 ? m.multiplier : mExt.globalMultiplier));
+                            return true;
+                        }
+                    }
+                }
+
+                if (!mExt.pawnKinds.NullOrEmpty())
+                {
+                    foreach (PawnKindMultipliers m in mExt.pawnKinds)
+                    {
+                        if (m.pawnKindDef == pawn.RaceProps.AnyPawnKind)
+                        {
+                            dinfo.SetAmount(Mathf.RoundToInt(dinfo.Amount * mExt.globalMultiplier == 0 ? m.multiplier : mExt.globalMultiplier));
+                            return true;
+                        }
                     }
                 }
             }
