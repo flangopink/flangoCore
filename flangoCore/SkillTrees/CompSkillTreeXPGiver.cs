@@ -3,9 +3,12 @@ using Verse;
 
 namespace flangoCore
 {
-    public class CompProperties_SkillTreeXPGiver : CompProperties
+    public class CompProperties_SkillTreeXPGiver : CompProperties_Usable
     {
         public SkillTreeDef tree;
+        public float xpAmount;
+        public bool ignoreMultiplier;
+        public bool giveToAllTrees;
 
         public CompProperties_SkillTreeXPGiver()
         {
@@ -32,17 +35,23 @@ namespace flangoCore
         public override void Initialize(CompProperties props)
         {
             base.Initialize(props);
+            if (parent.TryGetComp<CompUseEffect_XPGiver>() == null)
+            {
+                parent.def.comps.Add(new CompProperties_UseEffect()
+                {
+                    compClass = typeof(CompUseEffect_XPGiver)
+                });
+            }
             CompProperties_SkillTreeXPGiver p = (CompProperties_SkillTreeXPGiver)props;
             tree = p.tree;
-            var xpProps = parent.TryGetComp<CompUseEffect_XPGiver>()?.Props;
-            xpAmount = xpProps.xpAmount;
-            ignoreMultiplier = xpProps.ignoreMultiplier;
-            giveToAllTrees = xpProps.giveToAllTrees;
+            xpAmount = p.xpAmount;
+            ignoreMultiplier = p.ignoreMultiplier;
+            giveToAllTrees = p.giveToAllTrees;
         }
 
         protected override string FloatMenuOptionLabel(Pawn pawn)
         {
-            return string.Format(Props.useLabel, tree.label);
+            return Props.useLabel + ": " + tree.label;
         }
 
         public override bool AllowStackWith(Thing other)

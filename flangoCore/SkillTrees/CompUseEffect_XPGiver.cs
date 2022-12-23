@@ -1,34 +1,21 @@
-﻿using KTrie;
-using RimWorld;
+﻿using RimWorld;
 using Verse;
 
 namespace flangoCore
 {
-    public class CompProperties_UseEffectXPGiver : CompProperties
-    {
-        public float xpAmount;
-        public bool ignoreMultiplier;
-        public bool giveToAllTrees;
-
-        public CompProperties_UseEffectXPGiver()
-        {
-            compClass = typeof(CompUseEffect_XPGiver);
-        }
-    }
-
     public class CompUseEffect_XPGiver : CompUseEffect
     {
-        public CompProperties_UseEffectXPGiver Props => (CompProperties_UseEffectXPGiver)props;
-        private SkillTreeDef Tree => parent.GetComp<CompSkillTreeXPGiver>().tree;
+        private CompSkillTreeXPGiver Comp => parent.GetComp<CompSkillTreeXPGiver>();
+        private SkillTreeDef Tree => Comp.tree;
 
         public override void DoEffect(Pawn user)
         {
             base.DoEffect(user);
             CompSkills skills = user.TryGetComp<CompSkills>();
-            float amount = Props.xpAmount;
-            bool ignoreMult = Props.ignoreMultiplier;
+            float amount = Comp.xpAmount;
+            bool ignoreMult = Comp.ignoreMultiplier;
 
-            if (Props.giveToAllTrees)
+            if (Comp.giveToAllTrees)
             {
                 skills.GiveXPToAllTrees(amount, ignoreMult);
                 if (PawnUtility.ShouldSendNotificationAbout(user))

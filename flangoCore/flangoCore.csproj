@@ -111,9 +111,11 @@
     <Compile Include="Misc\CompIgnoreMovementPenalty.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
+    <Compile Include="SkillTrees\CompUseEffect_TreeGiver.cs" />
     <Compile Include="SkillTrees\CompUseEffect_XPGiver.cs" />
     <Compile Include="SkillTrees\CompSkillTreeXPGiver.cs" />
     <Compile Include="SkillTrees\Dev\SkillTreeEditor.cs" />
+    <Compile Include="SkillTrees\JobDriver_UseItemHold.cs" />
     <Compile Include="SkillTrees\Patches\Patch_Transpiler_DebugWindowsOpener.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
@@ -174,6 +176,8 @@
     <Publicize Include="Assembly-CSharp:Verse.Projectile.origin" />
     <Publicize Include="Assembly-CSharp:Verse.Projectile.destination" />
     <Publicize Include="Assembly-CSharp:Verse.DamageDef.externalViolenceForMechanoids" />
+    <Publicize Include="Assembly-CSharp:RimWorld.JobDriver_UseItem.useDuration" />
+    <Publicize Include="Assembly-CSharp:RimWorld.JobDriver_UseItem.warmupMote" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

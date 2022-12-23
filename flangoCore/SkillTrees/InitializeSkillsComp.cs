@@ -5,9 +5,9 @@ using Verse;
 namespace flangoCore
 {
     [StaticConstructorOnStartup]
-    public static class InitializeAbilityComp
+    public static class InitializeSkillsComp
     {
-        static InitializeAbilityComp()
+        static InitializeSkillsComp()
         {
             if (DefDatabase<SkillTreeDef>.AllDefsListForReading.NullOrEmpty()) return;
 
