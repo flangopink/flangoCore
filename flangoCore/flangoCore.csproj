@@ -111,11 +111,13 @@
     <Compile Include="Misc\CompIgnoreMovementPenalty.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
+    <Compile Include="SkillTrees\CompUseEffect_XPGiver.cs" />
+    <Compile Include="SkillTrees\CompSkillTreeXPGiver.cs" />
     <Compile Include="SkillTrees\Dev\SkillTreeEditor.cs" />
     <Compile Include="SkillTrees\Patches\Patch_Transpiler_DebugWindowsOpener.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
-    <Compile Include="SkillTrees\HediffComp_SkillMenuGiver.cs" />
+    <Compile Include="SkillTrees\CompSkillTreeGiver.cs" />
     <Compile Include="HediffsExtended\HediffComp_SeverityPerDayExtra.cs" />
     <Compile Include="HediffsExtended\HediffComp_Stun.cs" />
     <Compile Include="Misc\CompMoteEmitterOptimized.cs" />

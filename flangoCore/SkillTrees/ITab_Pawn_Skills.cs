@@ -8,6 +8,7 @@ using UnityEngine;
 
 namespace flangoCore
 {
+	[HotSwap.HotSwappable]
 	[StaticConstructorOnStartup]
 	public class ITab_Pawn_Skills : ITab
 	{
@@ -15,9 +16,10 @@ namespace flangoCore
 		private Pawn pawn;
 
 		private bool devMode = true;
+		private bool editorOpen;
 
-		private readonly Dictionary<string, List<SkillTreeDef>> treesByTab;
-		private readonly List<TabRecord> tabs;
+		private Dictionary<string, List<SkillTreeDef>> treesByTab;
+		private List<TabRecord> tabs;
 		private string curTab;
 
 		private float lastPathsHeight;
@@ -28,14 +30,18 @@ namespace flangoCore
 		public static CompSkills CompSkills;
 
 		private readonly Dictionary<SkillDef, Vector2> skillPos = new Dictionary<SkillDef, Vector2>();
-		private static readonly float[] skillTreeXOffsets;
-		private static readonly float[][] skillTreeYOffsets;
-		public Vector2 Size => size;
+		public static float[] skillTreeXOffsets;
+		public static float[][] skillTreeYOffsets;
+		public static float[] absoluteXOffset = new float[1] {210}; // Don't ask why. It just works.
+
+        public Vector2 Size => size;
 
 		public static Texture2D EmptyBarTex = SolidColorMaterials.NewSolidColorTexture(new Color(0.03f, 0.035f, 0.05f));
 		public static Texture2D BarTex = SolidColorMaterials.NewSolidColorTexture(new Color(.518f, .427f, .239f));
 
-		static ITab_Pawn_Skills()
+        public override bool IsVisible => PawnHasSkillTrees();
+
+        static ITab_Pawn_Skills()
 		{
 			skillTreeYOffsets = new float[4][]
 			{
@@ -45,33 +51,48 @@ namespace flangoCore
 				new float[4] { -50f, 10f, 70f, 130f }
 			};
 
-			skillTreeXOffsets = new float[3] { 0.5f, 0.8f, 1};
+			skillTreeXOffsets = new float[3] { 0.5f, 0.5f, 1.5f};
 
-			foreach (ThingDef allDef in DefDatabase<ThingDef>.AllDefs)
-			{
-				RaceProperties race = allDef.race;
-				if (race != null && race.Humanlike)
-				{
-					allDef.inspectorTabs?.Add(typeof(ITab_Pawn_Skills));
-					allDef.inspectorTabsResolved?.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Skills)));
-				}
-			}
-		}
+            foreach (ThingDef allDef in DefDatabase<ThingDef>.AllDefs)
+            {
+                RaceProperties race = allDef.race;
+                if (race != null && race.Humanlike)
+                {
+                    allDef.inspectorTabs?.Add(typeof(ITab_Pawn_Skills));
+                    allDef.inspectorTabsResolved?.Add(InspectTabManager.GetSharedInstance(typeof(ITab_Pawn_Skills)));
+                }
+            }
+        }
 
-		public ITab_Pawn_Skills()
+        public ITab_Pawn_Skills()
 		{
 			settings = FlangoCore.settings;
 			labelKey = "fc_skills".Translate();
 			size = new Vector2(650f * settings.skillTreeUIScale, 450f * settings.skillTreeUIScale);
 
-			treesByTab = (from def in DefDatabase<SkillTreeDef>.AllDefs group def by def.tab).ToDictionary((IGrouping<string, SkillTreeDef> group) => group.Key, (IGrouping<string, SkillTreeDef> group) => group.ToList());
+			/*treesByTab = (from def in DefDatabase<SkillTreeDef>.AllDefs group def by def.tab)
+				.ToDictionary((IGrouping<string, SkillTreeDef> group) => group.Key, (IGrouping<string, SkillTreeDef> group) => group.ToList());
 
-			tabs = treesByTab.Select((KeyValuePair<string, List<SkillTreeDef>> kv) => new TabRecord(kv.Key, delegate
-			{
-				curTab = kv.Key;
-			}, () => curTab == kv.Key)).ToList();
-			curTab = treesByTab.Keys.FirstOrDefault();
+			tabs = treesByTab.Select(
+				(KeyValuePair<string, List<SkillTreeDef>> kv)
+				=> new TabRecord(kv.Key, delegate { curTab = kv.Key; }, () => curTab == kv.Key)).ToList();
+
+			curTab = treesByTab.Keys.FirstOrDefault();*/
 		}
+
+		public bool PawnHasSkillTrees() => SelThing.TryGetComp<CompSkills>().AnyTreesUnlocked();
+
+		public void UpdateTreeTabs(List<SkillTreeDef> trees)
+		{
+            treesByTab = (from def in trees group def by def.tab)
+                .ToDictionary((IGrouping<string, SkillTreeDef> group) => group.Key, (IGrouping<string, SkillTreeDef> group) => group.ToList());
+
+            tabs = treesByTab.Select(
+                (KeyValuePair<string, List<SkillTreeDef>> kv)
+                => new TabRecord(kv.Key, delegate { curTab = kv.Key; }, () => curTab == kv.Key)).ToList();
+
+            curTab = treesByTab.Keys.FirstOrDefault();
+        }
 
 		protected override void UpdateSize()
 		{
@@ -82,7 +103,7 @@ namespace flangoCore
 		public override void OnOpen()
 		{
 			base.OnOpen();
-			pawn = (Pawn)Find.Selector.SingleSelectedThing;
+			pawn = (Pawn)SelThing;
 			InitCache();
 		}
 
@@ -129,10 +150,9 @@ namespace flangoCore
 			Widgets.Label(rect2, label);
 		}
 
-
 		protected override void FillTab()
 		{
-			if (Find.Selector.SingleSelectedThing is Pawn pawn && this.pawn != pawn)
+			if (SelThing is Pawn pawn && this.pawn != pawn)
 			{
 				this.pawn = pawn;
 				InitCache();
@@ -175,6 +195,13 @@ namespace flangoCore
 				string xpLabel = "XP: " + xp;
 
 				FillableBarWithLabelTex(xpRect, xpVisible, 100, xpLabel, BarTex, EmptyBarTex, true);
+
+				if (Widgets.ButtonText(rectMain.BottomPart(0.05f).RightPart(0.2f), "Debug Editor"))
+				{
+					editorOpen = !editorOpen;
+                    if (editorOpen) Find.WindowStack.Add(new Dialog_SkillTreeEditor(this));
+					else Find.WindowStack.TryRemove(typeof(Dialog_SkillTreeEditor));
+                }
 			}
 
 			Text.Font = font;
@@ -252,9 +279,10 @@ namespace flangoCore
 
 			for (int i = -1; i < tree.skillLevelsInOrder.Length; i++)
 			{
-				float xOffset = tree.MaxLevel > 4 ? skillTreeXOffsets[3] : skillTreeXOffsets[tree.MaxLevel-1];
-				Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / (tree.MaxLevel * xOffset), inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
-				Log.Message(rect.ToString());
+				float xOffset = tree.MaxLevel > 4 ? skillTreeXOffsets[2] : skillTreeXOffsets[tree.MaxLevel-1];
+				//Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / (tree.MaxLevel * xOffset), inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
+				Rect rect = new Rect(inRect.x + i * inRect.width / (tree.MaxLevel) * xOffset + absoluteXOffset[0], inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
+				//Log.Message(rect.ToString());
 				// Tree icon
 				if (i == -1)
 				{
@@ -379,5 +407,14 @@ namespace flangoCore
 				CompSkills.GiveSkill(skill);
 			}
 		}
-	}
+
+
+        #region - Editor -
+
+		public float[] GetXOffsets() => skillTreeXOffsets;
+		public float[][] GetYOffsets() => skillTreeYOffsets;
+        public float[] GetAbsX() => absoluteXOffset;
+
+        #endregion
+    }
 }

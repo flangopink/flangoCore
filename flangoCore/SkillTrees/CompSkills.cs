@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime;
 using RimWorld;
 using Verse;
 
@@ -19,6 +20,7 @@ namespace flangoCore
 		public CompProperties_Skills() => compClass = typeof(CompSkills);
 	}
 
+	[HotSwap.HotSwappable]
     public class CompSkills : ThingComp
 	{
 		private List<SkillDef> learnedSkills = new List<SkillDef>();
@@ -36,23 +38,43 @@ namespace flangoCore
 		{
 			base.PostSpawnSetup(respawningAfterLoad);
 
-			//temp
-			foreach (SkillTreeDef tree in DefDatabase<SkillTreeDef>.AllDefs)
-			{
-				GiveTree(tree);
-			}
+			
 			//selectedTree = treeXPs.FirstOrDefault().Key;
 
-			//Log.Message(string.Join(", ", treeXPs));
+			Log.Message(string.Join(", ", treeXPs));
 			//Log.Message(selectedTree.ToString());
 		}
 
-		public float GetXP()
+		public override void CompTick()
+		{
+			if (KeyBindingDefOf.Misc12.JustPressed)
+            {
+				//temp
+                foreach (SkillTreeDef tree in DefDatabase<SkillTreeDef>.AllDefs)
+                {
+                    GiveTree(tree); 
+					Log.Message(string.Join(", ", treeXPs));
+                    break;
+                }
+            }
+		}
+
+        public float GetXP()
         {
 			return treeXPs[selectedTree];
         }
 
-		public void GiveXPToTree(float xp, SkillTreeDef tree, bool ignoreMultiplier = false)
+        public float GetTreeXP(SkillTreeDef tree)
+        {
+            return treeXPs[tree];
+        }
+
+		public float CalculateXP(float xp, bool ignoreMultiplier)
+		{
+			return xp * (ignoreMultiplier ? 1 : xpMultiplier);
+        }
+
+        public void GiveXPToTree(float xp, SkillTreeDef tree, bool ignoreMultiplier = false)
         {
 			//currentXP += xp * xpMultiplier;
 
@@ -62,20 +84,20 @@ namespace flangoCore
             }*/
 			if (treeXPs.ContainsKey(tree))
 			{
-				treeXPs[tree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+				treeXPs[tree] += CalculateXP(xp, ignoreMultiplier);
 			}
         }
 		
 		public void GiveXPToCurrentTree(float xp, bool ignoreMultiplier = false)
 		{
-			treeXPs[selectedTree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+			treeXPs[selectedTree] += CalculateXP(xp, ignoreMultiplier);
 		}
 
 		public void GiveXPToAllTrees(float xp, bool ignoreMultiplier = false)
 		{
 			foreach (SkillTreeDef tree in treeXPs.Keys)
 			{
-				treeXPs[tree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+				treeXPs[tree] += CalculateXP(xp, ignoreMultiplier);
 			}
 		}
 
@@ -85,7 +107,7 @@ namespace flangoCore
 			{
 				if (tree.xpSources.HasFlag(flags))
 				{
-					treeXPs[tree] += xp * (ignoreMultiplier ? 1 : xpMultiplier);
+					treeXPs[tree] += CalculateXP(xp, ignoreMultiplier);
 				}
 			}
 		}
@@ -95,10 +117,8 @@ namespace flangoCore
 			if (!treeXPs.ContainsKey(tree))
             {
 				treeXPs.Add(tree, 0);
-				if (selectedTree == null)
-                {
-					selectedTree = tree;
-                }
+				if (selectedTree == null) selectedTree = tree;
+				((ITab_Pawn_Skills)parent.def.inspectorTabsResolved.FirstOrDefault(x => x is ITab_Pawn_Skills)).UpdateTreeTabs(treeXPs.Keys.ToList());
             }
         }
 
@@ -146,9 +166,14 @@ namespace flangoCore
 		public bool HasSkill(SkillDef skillDef)
 		{
 			return learnedSkills.Contains(skillDef);
-		}
+        }
 
-		public bool HasTree(SkillTreeDef treeDef)
+        public bool AnyTreesUnlocked()
+        {
+            return treeXPs.Count > 0;
+        }
+
+        public bool HasTree(SkillTreeDef treeDef)
 		{
 			return treeXPs.ContainsKey(treeDef);
 		}
