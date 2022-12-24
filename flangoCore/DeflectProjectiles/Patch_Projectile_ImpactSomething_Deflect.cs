@@ -31,7 +31,7 @@ namespace flangoCore
                 float roll = Rand.Value;
                 if (roll < ext.deflectChance)
                 {
-                    ext.deflectSound.PlayOneShot(pawn);
+                    ext.deflectSound?.PlayOneShot(pawn);
                     pawn.Drawer.Notify_DamageDeflected(new DamageInfo(__instance.def.projectile.damageDef, 1f));
 
                     ThingWithComps equipment = null;

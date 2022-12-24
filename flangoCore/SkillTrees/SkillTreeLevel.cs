@@ -5,7 +5,6 @@ namespace flangoCore
 {
 	public class SkillTreeLevel
 	{
-		public int level = 0;
 		public List<SkillDef> skills;
 
 		public string label;

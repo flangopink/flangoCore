@@ -1,81 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using Verse;
 
 namespace flangoCore
 {
-    [StaticConstructorOnStartup]
-    public class SkillTreeEditor
-    {
-        private static Texture2D iconTex;
-
-        internal static void Initialize()
-        {
-            LongEventHandler.ExecuteWhenFinished(delegate
-            {
-                iconTex = ContentFinder<Texture2D>.Get("editorIcon") ?? BaseContent.BadTex;
-            });
-        }
-
-        internal static void DrawDebugToolbarButton(WidgetRow widgets)
-        {
-            if (widgets.ButtonIcon(iconTex, "Open the quickstart settings.\n\nThis lets you automatically generate a map or load an existing save when the game is started.\nShift-click to quick-generate a new map.", (Color?)null))
-            {
-                WindowStack windowStack = Find.WindowStack;
-                if (windowStack.IsOpen<Dialog_SkillTreeEditor>())
-                    windowStack.TryRemove(typeof(Dialog_SkillTreeEditor));
-                else windowStack.Add(new Dialog_SkillTreeEditor());
-            }
-        }
-    }
-
+    //[HotSwap.HotSwappable]
     [StaticConstructorOnStartup]
     public class Dialog_SkillTreeEditor : Window
     {
         private Vector2 windowPosition;
 
-        private static List<DebugActionNode> cachedNodes;
-
-        private int reorderableGroupID = -1;
-
-        private Dictionary<string, string> nameCache = new Dictionary<string, string>();
-
-        private int lastLabelCacheFrame = -1;
-
-        private const string Title = "Dev palette";
-
-        private const float ButtonSize = 24f;
-
-        private const float ButtonSize_Small = 18f;
-
-        private const string NoActionDesc = "<i>To add commands here, open the debug actions menu and click the pin icons.</i>";
-
         public override bool IsDebug => true;
 
         protected override float Margin => 4f;
 
-        private List<DebugActionNode> Nodes
-        {
-            get
-            {
-                if (cachedNodes == null)
-                {
-                    cachedNodes = new List<DebugActionNode>();
-                    for (int i = 0; i < Prefs.DebugActionsPalette.Count; i++)
-                    {
-                        DebugActionNode node = Dialog_Debug.GetNode(Prefs.DebugActionsPalette[i]);
-                        if (node != null)
-                        {
-                            cachedNodes.Add(node);
-                        }
-                    }
-                }
-                return cachedNodes;
-            }
-        }
+        private readonly ITab_Pawn_Skills skillsTab;
 
-        public Dialog_SkillTreeEditor()
+        private static readonly FloatRange XRange = new FloatRange(0f, 10f);
+        private static readonly FloatRange AbsXRange = new FloatRange(0f, 300f);
+
+        public Dialog_SkillTreeEditor(ITab_Pawn_Skills tab)
         {
             draggable = true;
             focusWhenOpened = false;
@@ -86,33 +30,7 @@ namespace flangoCore
             drawInScreenshotMode = false;
             windowPosition = Prefs.DevPalettePosition;
             onlyDrawInDevMode = true;
-            lastLabelCacheFrame = RealTime.frameCount;
-            EnsureAllNodesValid();
-        }
-
-        private void EnsureAllNodesValid()
-        {
-            cachedNodes = null;
-            for (int num = Prefs.DebugActionsPalette.Count - 1; num >= 0; num--)
-            {
-                string text = Prefs.DebugActionsPalette[num];
-                if (Dialog_Debug.GetNode(text) == null)
-                {
-                    Log.Warning("Could not find node from path '" + text + "'. Removing.");
-                    Prefs.DebugActionsPalette.RemoveAt(num);
-                    Prefs.Save();
-                }
-            }
-        }
-
-        public override void WindowUpdate()
-        {
-            base.WindowUpdate();
-            if (RealTime.frameCount >= lastLabelCacheFrame + 30)
-            {
-                nameCache.Clear();
-                lastLabelCacheFrame = RealTime.frameCount;
-            }
+            skillsTab = tab;
         }
 
         public override void DoWindowContents(Rect inRect)
@@ -120,76 +38,18 @@ namespace flangoCore
             Text.Font = GameFont.Small;
             Widgets.Label(new Rect(inRect.x, inRect.y, inRect.width, 24f), "Skill Tree Editor");
             inRect.yMin += 26f;
-            if (Prefs.DebugActionsPalette.Count == 0)
-            {
-                GUI.color = ColoredText.SubtleGrayColor;
-                Widgets.Label(inRect, "<i>amogus</i>");
-                GUI.color = Color.white;
-            }
-            else
-            {
-                if (Event.current.type == EventType.Repaint)
-                {
-                    reorderableGroupID = ReorderableWidget.NewGroup(delegate (int from, int to)
-                    {
-                        string item = Prefs.DebugActionsPalette[from];
-                        Prefs.DebugActionsPalette.Insert(to, item);
-                        Prefs.DebugActionsPalette.RemoveAt((from < to) ? from : (from + 1));
-                        cachedNodes = null;
-                        Prefs.Save();
-                    }, ReorderableDirection.Vertical, inRect, -1f, null, playSoundOnStartReorder: false);
-                }
-                GUI.BeginGroup(inRect);
-                float num = 0f;
-                Text.Font = GameFont.Tiny;
-                for (int i = 0; i < Nodes.Count; i++)
-                {
-                    DebugActionNode debugActionNode = Nodes[i];
-                    float num2 = 0f;
-                    Rect rect = new Rect(num2, num, 18f, 18f);
-                    if (ReorderableWidget.Reorderable(reorderableGroupID, rect.ExpandedBy(4f)))
-                    {
-                        Widgets.DrawRectFast(rect, Widgets.WindowBGFillColor * new Color(1f, 1f, 1f, 0.5f));
-                    }
-                    Widgets.ButtonImage(rect.ContractedBy(1f), TexButton.DragHash);
-                    num2 += 18f;
-                    Rect rect2 = new Rect(num2, num, inRect.width - 36f, 18f);
-                    if (debugActionNode.ActiveNow)
-                    {
-                        if (debugActionNode.settingsField != null)
-                        {
-                            Rect rect3 = rect2;
-                            rect3.xMax -= rect3.height + 4f;
-                            Widgets.Label(rect3, "  " + PrettifyNodeName(debugActionNode));
-                            GUI.DrawTexture(new Rect(rect3.xMax, rect3.y, rect3.height, rect3.height), debugActionNode.On ? Widgets.CheckboxOnTex : Widgets.CheckboxOffTex);
-                            Widgets.DrawHighlightIfMouseover(rect2);
-                            if (Widgets.ButtonInvisible(rect2))
-                            {
-                                debugActionNode.Enter(null);
-                            }
-                        }
-                        else if (Widgets.ButtonText(rect2, "  " + PrettifyNodeName(debugActionNode), drawBackground: true, doMouseoverSound: true, active: true, TextAnchor.MiddleLeft))
-                        {
-                            debugActionNode.Enter(Find.WindowStack.WindowOfType<Dialog_Debug>());
-                        }
-                    }
-                    else
-                    {
-                        Widgets.Label(rect2, "  " + PrettifyNodeName(debugActionNode));
-                    }
-                    num2 += rect2.width;
-                    Rect butRect = new Rect(num2, num, 18f, 18f);
-                    if (Widgets.ButtonImage(butRect, Widgets.CheckboxOffTex))
-                    {
-                        Prefs.DebugActionsPalette.RemoveAt(i);
-                        cachedNodes = null;
-                        SetInitialSizeAndPosition();
-                    }
-                    num2 += butRect.width;
-                    num += 20f;
-                }
-                GUI.EndGroup();
-            }
+
+            Rect sliderRect = new Rect(inRect.x, inRect.y+20, inRect.width, 30f);
+            Widgets.HorizontalSlider(sliderRect, ref skillsTab.GetXOffsets()[0], XRange, "X - 1 Column: " + skillsTab.GetXOffsets()[0], 0.1f);
+            sliderRect.y += 36f;
+            Widgets.HorizontalSlider(sliderRect, ref skillsTab.GetXOffsets()[1], XRange, "X - 2 Columns: " + skillsTab.GetXOffsets()[1], 0.1f);
+            sliderRect.y += 36f;
+            Widgets.HorizontalSlider(sliderRect, ref skillsTab.GetXOffsets()[2], XRange, "X - 3+ Columns: " + skillsTab.GetXOffsets()[2], 0.1f);
+            sliderRect.y += 36f;
+            Widgets.HorizontalSlider(sliderRect, ref skillsTab.GetAbsX()[0], AbsXRange, "Abs X Offset: " + skillsTab.GetAbsX()[0], 1f);
+            sliderRect.y += 36f;
+
+
             if (!Mathf.Approximately(windowRect.x, windowPosition.x) || !Mathf.Approximately(windowRect.y, windowPosition.y))
             {
                 windowPosition = new Vector2(windowRect.x, windowRect.y);
@@ -197,63 +57,18 @@ namespace flangoCore
             }
         }
 
-        public static void ToggleAction(string actionLabel)
-        {
-            if (Prefs.DebugActionsPalette.Contains(actionLabel))
-            {
-                Prefs.DebugActionsPalette.Remove(actionLabel);
-            }
-            else
-            {
-                Prefs.DebugActionsPalette.Add(actionLabel);
-            }
-            Prefs.Save();
-            cachedNodes = null;
-            Find.WindowStack.WindowOfType<Dialog_SkillTreeEditor>()?.SetInitialSizeAndPosition();
-        }
-
         protected override void SetInitialSizeAndPosition()
         {
             GameFont font = Text.Font;
             Text.Font = GameFont.Small;
-            Vector2 vector = new Vector2(Text.CalcSize("Dev palette").x + 48f + 10f, 28f);
-            if (!Nodes.Any())
-            {
-                vector.x = Mathf.Max(vector.x, 200f);
-                vector.y += Text.CalcHeight("<i>To add commands here, open the debug actions menu and click the pin icons.</i>", vector.x) + Margin * 2f;
-            }
-            else
-            {
-                Text.Font = GameFont.Tiny;
-                for (int i = 0; i < Nodes.Count; i++)
-                {
-                    vector.x = Mathf.Max(vector.x, Text.CalcSize("  " + PrettifyNodeName(Nodes[i]) + "  ").x + 48f);
-                }
-                vector.y += Nodes.Count * 18f + ((Nodes.Count + 1) * 2) + Margin;
-            }
+            Vector2 vector = new Vector2(Text.CalcSize("Skill Tree Editor").x + 48f + 10f, 200f);
+            Text.Font = GameFont.Tiny;
+            
             windowPosition.x = Mathf.Clamp(windowPosition.x, 0f, UI.screenWidth - vector.x);
             windowPosition.y = Mathf.Clamp(windowPosition.y, 0f, UI.screenHeight - vector.y);
             windowRect = new Rect(windowPosition.x, windowPosition.y, vector.x, vector.y);
             windowRect = windowRect.Rounded();
             Text.Font = font;
-        }
-
-        private string PrettifyNodeName(DebugActionNode node)
-        {
-            string path = node.Path;
-            if (nameCache.TryGetValue(path, out var value))
-            {
-                return value;
-            }
-            DebugActionNode debugActionNode = node;
-            value = debugActionNode.LabelNow.Replace("...", "");
-            while (debugActionNode.parent != null && !debugActionNode.parent.IsRoot && (debugActionNode.parent.parent == null || !debugActionNode.parent.parent.IsRoot))
-            {
-                value = debugActionNode.parent.LabelNow.Replace("...", "") + "\\" + value;
-                debugActionNode = debugActionNode.parent;
-            }
-            nameCache[path] = value;
-            return value;
         }
     }
 }
