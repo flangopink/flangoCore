@@ -7,7 +7,6 @@ using Verse.AI;
 
 namespace flangoCore
 {
-    [HotSwap.HotSwappable]
     public class JobDriver_UseItemHold : JobDriver_UseItem
     {
         protected override IEnumerable<Toil> MakeNewToils()

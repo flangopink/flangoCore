@@ -20,13 +20,13 @@ namespace flangoCore
 		public CompProperties_Skills() => compClass = typeof(CompSkills);
 	}
 
-	[HotSwap.HotSwappable]
+	//[HotSwap.HotSwappable]
     public class CompSkills : ThingComp
 	{
 		private List<SkillDef> learnedSkills = new List<SkillDef>();
 		public List<SkillDef> LearnedSkills => learnedSkills;
 
-		//public float currentXP;
+		public int canUnlockLevel = 1;
 		public float xpMultiplier = 1;
 
 		public Dictionary<SkillTreeDef, float> treeXPs = new Dictionary<SkillTreeDef, float>();
@@ -76,16 +76,20 @@ namespace flangoCore
 
         public void GiveXPToTree(float xp, SkillTreeDef tree, bool ignoreMultiplier = false)
         {
-			//currentXP += xp * xpMultiplier;
-
-			/*if (selectedTree != null)
-            {
-				treeXPs[selectedTree] += xp * xpMultiplier;
-            }*/
 			if (treeXPs.ContainsKey(tree))
 			{
 				treeXPs[tree] += CalculateXP(xp, ignoreMultiplier);
 			}
+        }
+
+		public void TryGiveXPToTree(float xp, SkillTreeDef tree, bool ignoreMultiplier = false, bool warningOnfail = false)
+		{
+			if (!treeXPs.ContainsKey(tree))
+			{
+				if (warningOnfail) Log.Warning("Could not give xp to " + Pawn.Name + ". Skill tree not learned: " + tree.label);
+				return;
+			}
+			else GiveXPToTree(xp, tree, ignoreMultiplier);
         }
 		
 		public void GiveXPToCurrentTree(float xp, bool ignoreMultiplier = false)
@@ -160,6 +164,12 @@ namespace flangoCore
 				learnedSkills.Add(skillDef); 
 
 				treeXPs[selectedTree] -= skillDef.cost;
+				//if (treeXPs.Keys.First(x => x.levels.First(y => y.skills.Contains(skillDef)).level > currentLevel))
+				foreach (SkillTreeDef tree in treeXPs.Keys)
+				{
+					int skillLevel = 1 + tree.levels.IndexOf(tree.levels.First(x => x.skills.Contains(skillDef)));
+					if (skillLevel == canUnlockLevel) canUnlockLevel++;
+				}
 			}
 		}
 

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace flangoCore
 {
-	[HotSwap.HotSwappable]
+	//[HotSwap.HotSwappable]
 	[StaticConstructorOnStartup]
 	public class ITab_Pawn_Skills : ITab
 	{
@@ -379,7 +379,7 @@ namespace flangoCore
 			bool flag = false;
 			if (!CompSkills.HasSkill(skill))
 			{
-				if (CompSkills.GetXP() >= skill.cost && (skill.prerequisites.NullOrEmpty() || CompSkills.LearnedSkills.Intersect(skill.prerequisites).Count() == skill.prerequisites.Count()))
+				if (skill.reqLevel <= CompSkills.canUnlockLevel && CompSkills.GetXP() >= skill.cost && (skill.prerequisites.NullOrEmpty() || CompSkills.LearnedSkills.Intersect(skill.prerequisites).Count() == skill.prerequisites.Count()))
 				{
 					unlockable = true;
 				}

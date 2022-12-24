@@ -4,7 +4,7 @@ using Verse;
 
 namespace flangoCore
 {
-    [HotSwap.HotSwappable]
+    //[HotSwap.HotSwappable]
     [StaticConstructorOnStartup]
     public class Dialog_SkillTreeEditor : Window
     {

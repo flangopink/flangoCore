@@ -78,12 +78,14 @@ namespace flangoCore
 			}
 			TotalPoints++;
 
+			int stilLevel = 0;
 			skillDefs = new List<SkillDef>();
 			foreach (SkillTreeLevel stl in levels)
             {
-				foreach (SkillDef skill in stl.skills)
+				stilLevel++;
+                foreach (SkillDef skill in stl.skills)
                 {
-					skill.reqLevel = stl.level;
+					skill.reqLevel = stilLevel;
 					skillDefs.Add(skill);
 				}
             }

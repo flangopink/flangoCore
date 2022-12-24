@@ -116,8 +116,8 @@
     <Compile Include="SkillTrees\CompUseEffect_XPGiver.cs" />
     <Compile Include="SkillTrees\CompSkillTreeXPGiver.cs" />
     <Compile Include="SkillTrees\Dev\SkillTreeEditor.cs" />
-    <Compile Include="SkillTrees\JobDriver_UseItemHold.cs" />
-    <Compile Include="SkillTrees\Patches\Patch_Transpiler_DebugWindowsOpener.cs" />
+    <Compile Include="SkillTrees\HediffComp_XPOverTime.cs" />
+    <Compile Include="Misc\JobDriver_UseItemHold.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
     <Compile Include="SkillTrees\CompSkillTreeGiver.cs" />
