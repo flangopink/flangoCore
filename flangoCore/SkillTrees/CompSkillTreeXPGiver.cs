@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System.Linq;
 using Verse;
 
 namespace flangoCore
@@ -35,18 +36,13 @@ namespace flangoCore
         public override void Initialize(CompProperties props)
         {
             base.Initialize(props);
-            if (parent.TryGetComp<CompUseEffect_XPGiver>() == null)
-            {
-                parent.def.comps.Add(new CompProperties_UseEffect()
-                {
-                    compClass = typeof(CompUseEffect_XPGiver)
-                });
-            }
             CompProperties_SkillTreeXPGiver p = (CompProperties_SkillTreeXPGiver)props;
             tree = p.tree;
             xpAmount = p.xpAmount;
             ignoreMultiplier = p.ignoreMultiplier;
             giveToAllTrees = p.giveToAllTrees;
+            Log.Message("Init: " + xpAmount);
+            Log.Message("Init Comp Count: " + parent.def.comps.Count);
         }
 
         protected override string FloatMenuOptionLabel(Pawn pawn)
@@ -58,6 +54,7 @@ namespace flangoCore
         {
             if (!base.AllowStackWith(other)) return false;
             CompSkillTreeXPGiver comp = other.TryGetComp<CompSkillTreeXPGiver>();
+            Log.Message("ASW: " + comp.xpAmount + " - " + xpAmount);
             return !(comp == null || comp.tree != tree || comp.xpAmount != xpAmount || comp.ignoreMultiplier != ignoreMultiplier || comp.giveToAllTrees != giveToAllTrees);
         }
 
@@ -71,6 +68,7 @@ namespace flangoCore
                 comp.xpAmount = xpAmount;
                 comp.ignoreMultiplier = ignoreMultiplier;
                 comp.giveToAllTrees = giveToAllTrees;
+                Log.Message("PSO: " + comp.xpAmount + " - " + xpAmount);
             }
         }
     }

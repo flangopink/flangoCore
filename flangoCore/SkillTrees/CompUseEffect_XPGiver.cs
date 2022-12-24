@@ -14,6 +14,7 @@ namespace flangoCore
             CompSkills skills = user.TryGetComp<CompSkills>();
             float amount = Comp.xpAmount;
             bool ignoreMult = Comp.ignoreMultiplier;
+            Log.Message("UseEffect: " + amount);
 
             if (Comp.giveToAllTrees)
             {

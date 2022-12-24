@@ -111,6 +111,7 @@
     <Compile Include="Misc\CompIgnoreMovementPenalty.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
+    <Compile Include="SkillTrees\CompAbilityEffect_GainXP.cs" />
     <Compile Include="SkillTrees\CompUseEffect_TreeGiver.cs" />
     <Compile Include="SkillTrees\CompUseEffect_XPGiver.cs" />
     <Compile Include="SkillTrees\CompSkillTreeXPGiver.cs" />

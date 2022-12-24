@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System.Linq;
 using Verse;
 
 namespace flangoCore
@@ -26,13 +27,6 @@ namespace flangoCore
         public override void Initialize(CompProperties props)
         {
             base.Initialize(props);
-            if (parent.TryGetComp<CompUseEffect_TreeGiver>() == null)
-            {
-                parent.def.comps.Add(new CompProperties_UseEffect()
-                {
-                    compClass = typeof(CompUseEffect_TreeGiver)
-                });
-            }
             CompProperties_SkillTreeGiver p = (CompProperties_SkillTreeGiver)props;
             tree = p.tree;
         }
