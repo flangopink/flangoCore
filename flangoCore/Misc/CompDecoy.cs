@@ -1,12 +1,7 @@
 ﻿using RimWorld;
 using Verse.AI;
 using Verse;
-using System.Collections.Generic;
-using System.Linq;
 using System;
-using static UnityEngine.Scripting.GarbageCollector;
-using Verse.Noise;
-using VFECore;
 
 namespace flangoCore
 {
@@ -38,7 +33,6 @@ namespace flangoCore
         public CompProperties_Decoy() => compClass = typeof(CompDecoy);
     }
 
-    [HotSwap.HotSwappable]
     public class CompDecoy : ThingComp
     {
         public CompProperties_Decoy Props => (CompProperties_Decoy)props;
