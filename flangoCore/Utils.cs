@@ -137,5 +137,9 @@ namespace flangoCore
             }
             return list;
         }
+        public static bool HasComp(this List<CompProperties> defComps, CompProperties comp) => defComps.Contains(comp);
+        public static bool HasComp(this ThingDef def, CompProperties comp) => def.comps.Contains(comp);
+        public static bool HasComp<T>(this List<CompProperties> defComps) => defComps.OfType<T>().Any();
+        public static bool HasComp<T>(this ThingDef def) => def.comps.OfType<T>().Any();
     }
 }

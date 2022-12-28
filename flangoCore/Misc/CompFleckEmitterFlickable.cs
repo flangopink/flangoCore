@@ -4,19 +4,19 @@ using System.Collections.Generic;
 
 namespace flangoCore
 {
-    public class CompProperties_FleckEmitter : CompProperties_Flickable
+    public class CompProperties_FleckEmitterFlickable : CompProperties_Flickable
     {
         public FleckProps fleck;
         public bool toggleable;
 
-        public CompProperties_FleckEmitter()
+        public CompProperties_FleckEmitterFlickable()
         {
-            compClass = typeof(CompFleckEmitter);
+            compClass = typeof(CompFleckEmitterFlickable);
         }
     }
-    public class CompFleckEmitter : CompFlickable
+    public class CompFleckEmitterFlickable : CompFlickable
     {
-        public CompProperties_FleckEmitter Props => (CompProperties_FleckEmitter)props;
+        public CompProperties_FleckEmitterFlickable Props => (CompProperties_FleckEmitterFlickable)props;
 
         public override void CompTick()
         {

@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using RimWorld;
 using Verse;
-using static HarmonyLib.Code;
 
 namespace flangoCore
 {
@@ -15,14 +14,15 @@ namespace flangoCore
             for (int i = 0; i < DefDatabase<ThingDef>.AllDefsListForReading.Count; i++)
             {
                 ThingDef def = DefDatabase<ThingDef>.AllDefsListForReading[i];
+                var comps = def.comps;
 
-                if (def.comps.OfType<CompProperties_SkillTreeGiver>().Any())
+                if (comps.HasComp<CompProperties_SkillTreeGiver>())
                 {
                     CompProperties_UseEffect props = new CompProperties_UseEffect() { compClass = typeof(CompUseEffect_TreeGiver) };
                     def.AddAndResolve(props);
                 }
 
-                if (def.comps.OfType<CompProperties_SkillTreeXPGiver>().Any())
+                if (comps.HasComp<CompProperties_SkillTreeXPGiver>())
                 {
                     CompProperties_UseEffect props = new CompProperties_UseEffect() { compClass = typeof(CompUseEffect_XPGiver) };
                     def.AddAndResolve(props);
@@ -32,10 +32,7 @@ namespace flangoCore
                 {
                     if (!def.comps.Any(cp => typeof(CompProperties_Skills).IsAssignableFrom(cp.compClass)))
                     {
-                        CompProperties_Skills props = new CompProperties_Skills()
-                        {
-                            compClass = typeof(CompSkills)
-                        };
+                        CompProperties_Skills props = new CompProperties_Skills() { compClass = typeof(CompSkills) };
                         def.AddAndResolve(props);
                     }
                 }
