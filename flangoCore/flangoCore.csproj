@@ -10,11 +10,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>flangoCore</RootNamespace>
     <AssemblyName>flangoCore</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <LangVersion>preview</LangVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -101,16 +103,28 @@
     <Compile Include="CustomizableProjectiles\Verb_ShootShotgun.cs" />
     <Compile Include="DeflectProjectiles\ModExt_DeflectProjectiles.cs" />
     <Compile Include="DeflectProjectiles\Patch_Projectile_ImpactSomething_Deflect.cs" />
+    <Compile Include="Draftables\CompDraftable.cs" />
+    <Compile Include="Draftables\Draftables.cs" />
+    <Compile Include="Draftables\Patches_FloatMenuMakerMap.cs" />
+    <Compile Include="Draftables\Patch_Bill_PawnAllowedToStartAnew.cs" />
+    <Compile Include="Draftables\Patch_DamageWorker_AddInjury_FinalizeAndAddInjury.cs" />
+    <Compile Include="Draftables\Patch_EquipmentTracker_DestroyEquipment.cs" />
+    <Compile Include="Draftables\Patch_ITab_Pawn_Gear_ShouldShowEquipment.cs" />
+    <Compile Include="Draftables\Patch_PawnComponentsUtility_AddAndRemoveDynamicComponents.cs" />
+    <Compile Include="Draftables\Patch_PawnRenderer_DrawEquipment.cs" />
+    <Compile Include="Draftables\Patch_Pawn_IsColonistPlayerControlled.cs" />
+    <Compile Include="Draftables\Patch_Pawn_WorkTypeIsDisabled.cs" />
     <Compile Include="Misc\CompAnimatedTexture.cs" />
     <Compile Include="Misc\CompAudioSource.cs" />
     <Compile Include="Misc\CompColorableWithGizmo.cs" />
     <Compile Include="Misc\CompDecoy.cs" />
     <Compile Include="Misc\CompFleckEmitter.cs" />
     <Compile Include="Misc\CompFleckEmitterEquipment.cs" />
-    <Compile Include="Misc\CompGlowerExtra.cs" />
     <Compile Include="Misc\CompIgnoreMovementPenalty.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
+    <Compile Include="Misc\InitializeComps.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
+    <Compile Include="Misc\Patch_Pawn_PathFollower_CostToMoveIntoCell.cs" />
     <Compile Include="SkillTrees\CompAbilityEffect_GainXP.cs" />
     <Compile Include="SkillTrees\CompUseEffect_TreeGiver.cs" />
     <Compile Include="SkillTrees\CompUseEffect_XPGiver.cs" />
