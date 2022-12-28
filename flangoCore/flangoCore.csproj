@@ -122,6 +122,8 @@
     <Compile Include="Misc\CompAudioSource.cs" />
     <Compile Include="Misc\CompColorableWithGizmo.cs" />
     <Compile Include="Misc\CompDecoy.cs" />
+    <Compile Include="Misc\CompFleckEmitterFlickable.cs" />
+    <Compile Include="Misc\CompFleckEmitterItem.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
     <Compile Include="Misc\InitializeComps.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
