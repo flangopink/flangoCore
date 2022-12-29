@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using HarmonyLib;
-using RimWorld;
 using Verse;
 using Verse.AI;
 
@@ -9,7 +9,7 @@ namespace flangoCore
     public class ModExt_IgnoreTerrainMovementPenalty : DefModExtension {}
 
 
-    [HarmonyPatch(typeof(Pawn_PathFollower), "CostToMoveIntoCell")]
+    [HarmonyPatch(typeof(Pawn_PathFollower), "CostToMoveIntoCell", new Type[] { typeof(Pawn), typeof(IntVec3) })]
     public static class Patch_Pawn_PathFollower_CostToMoveIntoCell
     {
         [HarmonyPostfix]

@@ -8,7 +8,7 @@ namespace flangoCore
 
         public CompProperties_Draftable() 
         {
-            compClass = typeof(CompProperties_Draftable);
+            compClass = typeof(CompDraftable);
         }
     }
 

@@ -114,6 +114,7 @@
     <Compile Include="Draftables\Patch_DamageWorker_AddInjury_FinalizeAndAddInjury.cs" />
     <Compile Include="Draftables\Patch_EquipmentTracker_DestroyEquipment.cs" />
     <Compile Include="Draftables\Patch_ITab_Pawn_Gear_ShouldShowEquipment.cs" />
+    <Compile Include="Draftables\Patch_MechanitorUtility_EverControllable.cs" />
     <Compile Include="Draftables\Patch_PawnComponentsUtility_AddAndRemoveDynamicComponents.cs" />
     <Compile Include="Draftables\Patch_PawnRenderer_DrawEquipment.cs" />
     <Compile Include="Draftables\Patch_Pawn_IsColonistPlayerControlled.cs" />
@@ -128,6 +129,7 @@
     <Compile Include="Misc\InitializeComps.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
     <Compile Include="Misc\Patch_Pawn_PathFollower_CostToMoveIntoCell.cs" />
+    <Compile Include="Misc\ThingWithComps_NoStyle.cs" />
     <Compile Include="SkillTrees\CompAbilityEffect_GainXP.cs" />
     <Compile Include="SkillTrees\CompUseEffect_TreeGiver.cs" />
     <Compile Include="SkillTrees\CompUseEffect_XPGiver.cs" />

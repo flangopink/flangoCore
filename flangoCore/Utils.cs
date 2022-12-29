@@ -26,7 +26,7 @@ namespace flangoCore
         // Main
         public static void DoExplosionOnCell(IntVec3 cell, Map map, float radius = 0.9f, DamageDef damageDef = null, Thing instigator = null, int damage = -1, float armorPen = -1, SoundDef soundDef = null, ThingDef weapon = null, ThingDef projectile = null, Thing intendedTarget = null, ThingDef preExpSpawnThingDef = null, float preExpSpawnChance = 0, int preExpSpawnThingCount = 0, ThingDef postExpSpawnThingDef = null, float postExpSpawnChance = 0, int postExpSpawnThingCount = 0, bool applyDamageToExpCellsNeighbors = false, float chanceToStartFire = 0, bool damageFalloff = false, float? direction = null)
         {
-            if (damageDef == null) damageDef = DamageDefOf.Bomb;
+            damageDef ??= DamageDefOf.Bomb;
             GenExplosion.DoExplosion(cell, map, radius, damageDef, instigator, damage, armorPen, soundDef, weapon, projectile, intendedTarget, postExpSpawnThingDef, postExpSpawnChance, postExpSpawnThingCount, null, applyDamageToExpCellsNeighbors, preExpSpawnThingDef, preExpSpawnChance, preExpSpawnThingCount, chanceToStartFire, damageFalloff, direction);
         }
 
@@ -35,8 +35,8 @@ namespace flangoCore
             IntVec3 pos = t.Position;
             Map map = t.Map;
 
-            if (damageDef == null) damageDef = DamageDefOf.Bomb;
-            if (instigator == null) instigator = t;
+            damageDef ??= DamageDefOf.Bomb;
+            instigator ??= t;
 
             void Kaboom(IntVec3 c, float r = 0.9f) => DoExplosionOnCell(c, map, r, damageDef, instigator, damage, armorPen, soundDef, weapon, projectile, intendedTarget, preExpSpawnThingDef, preExpSpawnChance, preExpSpawnThingCount, postExpSpawnThingDef, postExpSpawnChance, postExpSpawnThingCount, applyDamageToExpCellsNeighbors, chanceToStartFire, damageFalloff, direction);
 
@@ -121,7 +121,7 @@ namespace flangoCore
         // https://github.com/SmArtKar/AthenaFramework
         public static List<Pawn> GetPawnsInRange(IntVec3 cell, Map map, float maxRange, bool requireLOS = false, bool affectDowned = false)
         {
-            List<Pawn> list = new List<Pawn>();
+            List<Pawn> list = new();
             float range = maxRange * maxRange;
             foreach (Pawn pawn in map.mapPawns.AllPawnsSpawned)
             {

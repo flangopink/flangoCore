@@ -15,7 +15,11 @@ namespace flangoCore
         [HarmonyPostfix]
         public static void MakePawnControllable(Pawn pawn, ref bool __result)
         {
-            if (pawn.IsDraftable() && (pawn.Faction?.IsPlayer ?? false)) __result = true;
+            if (pawn.IsDraftable() && pawn.Faction != null && (pawn.Faction?.IsPlayer ?? false))
+            {
+                Log.Warning("" + pawn.IsColonist + pawn.IsColonistPlayerControlled + pawn.IsColonyMech);
+                __result = true;
+            }
         }
     }
 
