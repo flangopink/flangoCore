@@ -82,7 +82,7 @@ namespace flangoCore
                     //order = def.uiOrder + 1,
                     action = () =>
                     {
-                        List<FloatMenuOption> list = new List<FloatMenuOption>();
+                        List<FloatMenuOption> list = new();
 
                         foreach(var option in options)
                         {
@@ -101,7 +101,7 @@ namespace flangoCore
             // Reset cooldown if devmode is on
             if (DebugSettings.ShowDevGizmos && CooldownTicksLeft > 0 && CanCooldown)
             {
-                Command_Action command_Action = new Command_Action
+                Command_Action command_Action = new()
                 {
                     defaultLabel = "DEV: Reset cooldown",
                     icon = ResetIcon,

@@ -32,7 +32,7 @@ namespace flangoCore
 			IEnumerable<Gizmo> gizmos = buildingMassGrave.GetGizmos();
 			foreach (Gizmo gizmo1 in gizmos)
 			{
-				string str = ((!(gizmo1 is Command_Action commandAction)) ? null : commandAction.defaultLabel);
+				string str = ((gizmo1 is not Command_Action commandAction) ? null : commandAction.defaultLabel);
 				if (!(str == "fc_CommandGraveAssignColonistLabel".Translate()))
 				{
 					yield return gizmo1;
@@ -50,7 +50,7 @@ namespace flangoCore
 
 		public override string GetInspectString()
 		{
-			StringBuilder stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			stringBuilder.Append(InspectStringPartsFromComps());
 			string[] array = new string[5]
 			{

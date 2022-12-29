@@ -96,6 +96,9 @@
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
+    <Compile Include="ApparelRestrictor\ModExt_Requirements.cs" />
+    <Compile Include="ApparelRestrictor\Patch_EquipmentUtility_CanEquip.cs" />
+    <Compile Include="ApparelRestrictor\Patch_Pawn_ApparelTracker_Notify_ApparelRemoved.cs" />
     <Compile Include="Beams\Verb_ShootBeamBurst.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ArmorShredding.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ProjectileExplosiveShaped.cs" />
@@ -126,6 +129,7 @@
     <Compile Include="Misc\CompFleckEmitterFlickable.cs" />
     <Compile Include="Misc\CompFleckEmitterItem.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
+    <Compile Include="Misc\DebugTools.cs" />
     <Compile Include="Misc\InitializeComps.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
     <Compile Include="Misc\Patch_Pawn_PathFollower_CostToMoveIntoCell.cs" />

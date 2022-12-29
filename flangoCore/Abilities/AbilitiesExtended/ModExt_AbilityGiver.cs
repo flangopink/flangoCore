@@ -6,6 +6,6 @@ namespace flangoCore
 {
     public class ModExt_AbilityGiver : DefModExtension
     {
-        public List<AbilityDef> abilities = new List<AbilityDef>();
+        public List<AbilityDef> abilities = new();
     }
 }

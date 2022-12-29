@@ -61,8 +61,7 @@ namespace flangoCore
 
 		public void DoWindowContents(Rect canvas)
 		{
-            Listing_Standard listing_Standard = new Listing_Standard
-            { ColumnWidth = canvas.width / 2f };
+            Listing_Standard listing_Standard = new() { ColumnWidth = canvas.width / 2f };
             listing_Standard.Begin(canvas);
 
 			listing_Standard.Gap(16f);

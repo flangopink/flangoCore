@@ -126,7 +126,7 @@ namespace flangoCore
         }
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            Command_Action c_detonate = new Command_Action()
+            Command_Action c_detonate = new()
             {
                 defaultLabel = Props.commandLabel + (Props.timerTicks > 0 ? $" ({timer.TicksToSeconds():0}{"LetterSecond".Translate()})" : string.Empty),
                 defaultDesc = Props.commandDescription,
@@ -135,7 +135,7 @@ namespace flangoCore
                 action = delegate
                 {
                     bombHasBeenPlanted = true;
-                    if (Props.showAlert) Messages.Message("fc_ThingWillExplodeInSeconds".Translate(timer.TicksToSeconds()), parent, MessageTypeDefOf.NeutralEvent, false);
+                    if (Props.showAlert) Messages.Message("fc_ThingWillExplodeInSeconds".Translate(parent.LabelCap, timer.TicksToSeconds()), parent, MessageTypeDefOf.NeutralEvent, false);
                     Props.soundActivated?.PlayOneShot(new TargetInfo(parent.Position, parent.Map));
 
                     StartSustainer(); 

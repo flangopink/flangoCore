@@ -29,7 +29,7 @@ namespace flangoCore
 		//private CompSkills compSkills;
 		public static CompSkills CompSkills;
 
-		private readonly Dictionary<SkillDef, Vector2> skillPos = new Dictionary<SkillDef, Vector2>();
+		private readonly Dictionary<SkillDef, Vector2> skillPos = new();
 		public static float[] skillTreeXOffsets;
 		public static float[][] skillTreeYOffsets;
 		public static float[] absoluteXOffset = new float[1] {210}; // Don't ask why. It just works.
@@ -163,7 +163,7 @@ namespace flangoCore
 			GameFont font = Text.Font;
 			TextAnchor anchor = Text.Anchor;
 
-			Rect rectMain = new Rect(Vector2.one * 20f, size - Vector2.one * 40f);
+			Rect rectMain = new(Vector2.one * 20f, size - Vector2.one * 40f);
 			Rect rectTree = rectMain.ContractedBy(5f).TopPart(0.85f);
 
 			if (treesByTab.NullOrEmpty())
@@ -175,11 +175,11 @@ namespace flangoCore
 			}
 			else
 			{
-				TabDrawer.DrawTabs(new Rect(rectTree.x, rectTree.y + 40f, rectTree.width, rectTree.height), tabs);
+				TabDrawer.DrawTabs(new(rectTree.x, rectTree.y + 40f, rectTree.width, rectTree.height), tabs);
 				rectTree.yMin += 40f;
 				Widgets.DrawMenuSection(rectTree);
 
-				Rect rectTrees = new Rect(0f, 0f, rectTree.width - 20f, lastPathsHeight);
+				Rect rectTrees = new(0f, 0f, rectTree.width - 20f, lastPathsHeight);
 
 				Widgets.BeginScrollView(rectTree, ref pathsScrollPos, rectTrees);
 
@@ -210,7 +210,7 @@ namespace flangoCore
 
 		private void DoTrees(Rect inRect)
 		{
-			Vector2 position = new Vector2 (inRect.position.x - inRect.width / 8f, inRect.position.y - inRect.height / 7f);
+			Vector2 position = new(inRect.position.x - inRect.width / 8f, inRect.position.y - inRect.height / 7f);
 			float num = (inRect.width - (pathsPerRow + 1) * 10f) / pathsPerRow;
 			float num2 = 0f;
 			int num3 = pathsPerRow;
@@ -218,16 +218,16 @@ namespace flangoCore
 			{
 				Texture2D texture2D = def.icon;
 				float num4 = num / texture2D.width * texture2D.height + 30f;
-				Rect rect = new Rect(position, new Vector2(num, num4));
+				Rect rect = new(position, new(num, num4));
 
 				if (devMode)
 				{
 					Rect db = rect.ScaledBy(0.1f).AtZero();
-					if (Widgets.ButtonText(new Rect(db.x, db.y + 5f, 40, 20), "+1 XP"))
+					if (Widgets.ButtonText(new(db.x, db.y + 5f, 40, 20), "+1 XP"))
 					{
 						CompSkills.GiveXPToCurrentTree(1f);
 					}
-					if (Widgets.ButtonText(new Rect(db.x, db.y + 30f, 40, 20), "+0.1 XP"))
+					if (Widgets.ButtonText(new(db.x, db.y + 30f, 40, 20), "+0.1 XP"))
 					{
 						CompSkills.GiveXPToCurrentTree(0.1f);
 					}
@@ -242,7 +242,7 @@ namespace flangoCore
 				//}
 				else
 				{
-					Widgets.DrawRectFast(rect, new Color(0f, 0f, 0f, 0.55f));
+					Widgets.DrawRectFast(rect, new(0f, 0f, 0f, 0.55f));
 					TooltipHandler.TipRegion(rect, () => def.tooltip + "\n\n" + "fc_skillsList".Translate() + "\n" + def.skillDefs.Select((SkillDef s) => s.label).ToLineList("  ", capitalizeItems: true), def.GetHashCode());
 				}
 				num2 = Mathf.Max(num2, num4 + 10f);
@@ -271,7 +271,7 @@ namespace flangoCore
 				{
 					continue;
 				}
-				foreach (SkillDef item in list.Where((SkillDef skillDef) => skillPos.ContainsKey(skillDef)))
+				foreach (SkillDef item in list.Where(skillPos.ContainsKey))
 				{
 					Widgets.DrawLine(skillPos[skill], skillPos[item], CompSkills.HasSkill(item) ? Color.white : Color.grey, 2f);
 				}
@@ -281,16 +281,16 @@ namespace flangoCore
 			{
 				float xOffset = tree.MaxLevel > 4 ? skillTreeXOffsets[2] : skillTreeXOffsets[tree.MaxLevel-1];
 				//Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / (tree.MaxLevel * xOffset), inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
-				Rect rect = new Rect(inRect.x + i * inRect.width / (tree.MaxLevel) * xOffset + absoluteXOffset[0], inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
+				Rect rect = new(inRect.x + i * inRect.width / (tree.MaxLevel) * xOffset + absoluteXOffset[0], inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
 				//Log.Message(rect.ToString());
 				// Tree icon
 				if (i == -1)
 				{
 					if (tree.icon != null)
 					{
-						Rect treeIconRect = new Rect(rect.x, rect.y - 100f, 32f, 32f);
+						Rect treeIconRect = new(rect.x, rect.y - 100f, 32f, 32f);
 						GUI.DrawTexture(treeIconRect, tree.icon);
-						TipSignal treeIconTip = new TipSignal
+						TipSignal treeIconTip = new()
 						{
 							text = tree.description
 						};
@@ -304,9 +304,9 @@ namespace flangoCore
 				// Column icons
 				if (!tree.levels.NullOrEmpty())
 				{
-					Rect columnIconRect = new Rect(rect.x, rect.y - 100f, 32f, 32f);
+					Rect columnIconRect = new(rect.x, rect.y - 100f, 32f, 32f);
 					GUI.DrawTexture(columnIconRect, tree.levels[i].icon);
-                    TipSignal tip = new TipSignal
+                    TipSignal tip = new()
                     {
                         text = tree.levels[i].label,
                     };
@@ -328,7 +328,7 @@ namespace flangoCore
 						var textWidth = tree.textWidth;
 						float textHeight = Text.CalcHeight(tree.rowNames[n], textWidth);
 
-						Rect rowNameRect = new Rect(rect.x - rect.width / 2.25f, rect.y + skillTreeYOffsets[tree.arrayWithMostSkills.Length - 1][n], textWidth, textHeight);
+						Rect rowNameRect = new(rect.x - rect.width / 2.25f, rect.y + skillTreeYOffsets[tree.arrayWithMostSkills.Length - 1][n], textWidth, textHeight);
 
 						Widgets.Label(rowNameRect, tree.rowNames[n]);
 					}
@@ -341,7 +341,7 @@ namespace flangoCore
 				{
 					try
 					{
-						Rect arg = new Rect(rect.x, rect.y + skillTreeYOffsets[array.Length - 1][j], 36f, 36f);
+						Rect arg = new(rect.x, rect.y + skillTreeYOffsets[array.Length - 1][j], 36f, 36f);
 						SkillDef skillDef = array[j];
 						if (skillDef != SkillTreeDef.BlankSkill)
 						{

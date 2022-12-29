@@ -23,6 +23,8 @@ namespace flangoCore
 
         public static bool InTheSameRoom(IntVec3 locA, IntVec3 locB, Map map) => locA.GetRoom(map) is Room room && (room == null || room == locB.GetRoom(map));
 
+        #region - Explosions -
+
         // Main
         public static void DoExplosionOnCell(IntVec3 cell, Map map, float radius = 0.9f, DamageDef damageDef = null, Thing instigator = null, int damage = -1, float armorPen = -1, SoundDef soundDef = null, ThingDef weapon = null, ThingDef projectile = null, Thing intendedTarget = null, ThingDef preExpSpawnThingDef = null, float preExpSpawnChance = 0, int preExpSpawnThingCount = 0, ThingDef postExpSpawnThingDef = null, float postExpSpawnChance = 0, int postExpSpawnThingCount = 0, bool applyDamageToExpCellsNeighbors = false, float chanceToStartFire = 0, bool damageFalloff = false, float? direction = null)
         {
@@ -116,6 +118,8 @@ namespace flangoCore
             p.DoExplosion(radius, shape, def.projectile.damageDef, p.launcher, p.DamageAmount, p.ArmorPenetration, def.projectile.soundExplode, p.equipmentDef, def, p.intendedTarget.Thing, def.projectile.preExplosionSpawnThingDef, def.projectile.preExplosionSpawnChance, def.projectile.preExplosionSpawnThingCount, def.projectile.postExplosionSpawnThingDef, def.projectile.postExplosionSpawnChance, def.projectile.postExplosionSpawnThingCount, def.projectile.applyDamageToExplosionCellsNeighbors, def.projectile.explosionChanceToStartFire, def.projectile.explosionDamageFalloff, p.origin.AngleToFlat(p.destination));
         }
 
+        #endregion
+
         // Thank you smartkar!
         // Whoever reads this should check out his Athena framework:
         // https://github.com/SmArtKar/AthenaFramework
@@ -141,5 +145,41 @@ namespace flangoCore
         public static bool HasComp(this ThingDef def, CompProperties comp) => def.comps.Contains(comp);
         public static bool HasComp<T>(this List<CompProperties> defComps) => defComps.OfType<T>().Any();
         public static bool HasComp<T>(this ThingDef def) => def.comps.OfType<T>().Any();
+      
+        /*
+        public static List<T> ListMatches<T>(this List<T> mainList, List<T> subList)
+        {
+            List<T> result = new();
+            for (int i = 0; i < mainList.Count; i++)
+            {
+                for (int j = 0; j < subList.Count; j++)
+                {
+                    if (mainList[i].Equals(subList[j]))
+                    {
+                        result.Add(mainList[i]);
+                        continue;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public static List<T> EnumerableMatches<T>(this IEnumerable<T> mainList, IEnumerable<T> subList)
+        {
+            List<T> result = new();
+            foreach (T i in mainList)
+            {
+                foreach (T j in subList)
+                {
+                    if (i.Equals(j))
+                    {
+                        result.Add(i);
+                        continue;
+                    }
+                }
+            }
+            return result;
+        }
+        */
     }
 }
