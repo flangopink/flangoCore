@@ -1,5 +1,4 @@
-﻿using RimWorld;
-using Verse;
+﻿using Verse;
 using Verse.Sound;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,7 +14,7 @@ namespace flangoCore
         public bool canPlay = true;
         public bool canSwitch = true;
         public bool canStop = true;
-        public IntRange randomIntervalTicks = new IntRange(200, 800);
+        public IntRange randomIntervalTicks = new(200, 800);
         public string commandPlayLabel = "Play";
         public string commandPlayDesc = "Play selected sound.";
         public string commandPlayIcon = "";
@@ -70,7 +69,7 @@ namespace flangoCore
 
             if (Props.canPlay)
             {
-                Command_Action c_play = new Command_Action()
+                Command_Action c_play = new()
                 {
                     defaultLabel = Props.commandPlayLabel,
                     defaultDesc = Props.commandPlayDesc,
@@ -85,7 +84,7 @@ namespace flangoCore
 
             if (Props.canStop)
             {
-                Command_Action c_stop = new Command_Action()
+                Command_Action c_stop = new()
                 {
                     defaultLabel = Props.commandStopLabel,
                     defaultDesc = Props.commandStopDesc,
@@ -100,14 +99,14 @@ namespace flangoCore
 
             if (Props.soundDefs.Count > 1 && Props.canSwitch)
             {
-                Command_Action c_switch = new Command_Action()
+                Command_Action c_switch = new()
                 {
                     defaultLabel = Props.commandSwitchLabel,
                     defaultDesc = Props.commandSwitchDesc,
                     icon = SwitchIcon,
                     action = delegate
                     {
-                        List<FloatMenuOption> list = new List<FloatMenuOption>();
+                        List<FloatMenuOption> list = new();
 
                         foreach (var sound in Props.soundDefs)
                         {

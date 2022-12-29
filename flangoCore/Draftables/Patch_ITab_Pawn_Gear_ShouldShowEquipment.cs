@@ -4,7 +4,7 @@ using Verse;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(ITab_Pawn_Gear), "ShouldShowEquipment")]
+    /*[HarmonyPatch(typeof(ITab_Pawn_Gear), "ShouldShowEquipment")]
     public static class Patch_ITab_Pawn_Gear_ShouldShowEquipment
     {
         [HarmonyPostfix]
@@ -15,5 +15,5 @@ namespace flangoCore
                 __result = false;
             }
         }
-    }
+    }*/
 }

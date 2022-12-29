@@ -19,6 +19,6 @@ namespace flangoCore
 
         public static bool IsDraftable(this Thing thing) => draftables.Contains(thing);
 
-        public static bool IsDraftableControllable(this Pawn pawn) => IsDraftable(pawn) && pawn.Faction.IsPlayer && pawn.MentalState == null;
+        public static bool IsDraftableControllable(this Pawn pawn) => IsDraftable(pawn) && pawn.Faction != null && pawn.Faction.IsPlayer && pawn.MentalState == null;
     }
 }
