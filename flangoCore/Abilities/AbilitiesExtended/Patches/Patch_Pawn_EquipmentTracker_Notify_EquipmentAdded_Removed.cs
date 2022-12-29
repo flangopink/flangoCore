@@ -11,33 +11,29 @@ namespace flangoCore
         [HarmonyPostfix]
         public static void Notify_EquipmentAddedPostfix(Pawn_EquipmentTracker __instance, ThingWithComps eq)
         {
-            if (eq == null || __instance == null)
-            {
-                return;
-            }
+            if (eq == null || __instance == null) return;
 
             ModExt_AbilityGiver modext = eq.def.GetModExtension<ModExt_AbilityGiver>();
             if (modext != null)
             {
                 Pawn pawn = __instance.pawn;
-                if (!pawn.RaceProps.Humanlike)
-                {
-                    return;
-                }
+                if (!pawn.RaceProps.Humanlike) return;
+
                 if (!modext.abilities.NullOrEmpty())
                 {
+                    var ab = __instance.pawn.abilities;
                     foreach (AbilityDef def in modext.abilities)
                     {
                         if (def.abilityClass != typeof(EquipmentAbility)) 
                             def.abilityClass = typeof(EquipmentAbility);
 
-                        if (!__instance.pawn.abilities.abilities.Any(x => x.def == def))
+                        if (!ab.abilities.Any(x => x.def == def))
                         {
-                            __instance.pawn.abilities.TryGainEquipmentAbility(def, eq);
+                            ab.TryGainEquipmentAbility(def, eq);
                         }
                         else
                         {
-                            ((EquipmentAbility)__instance.pawn.abilities.abilities.First(x => x.def == def && x is EquipmentAbility)).sources.Add(eq);
+                            ((EquipmentAbility)ab.abilities.First(x => x.def == def && x is EquipmentAbility)).sources.Add(eq);
                         }
                     }
                 }

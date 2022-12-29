@@ -31,7 +31,7 @@ namespace flangoCore
         public override void Initialize(AbilityCompProperties props)
         {
             base.Initialize(props);
-			if (option == null) option = Props.transformOptions[0];
+			option ??= Props.transformOptions[0];
 		}
 
         public override bool CanApplyOn(LocalTargetInfo target, LocalTargetInfo dest)
@@ -42,7 +42,7 @@ namespace flangoCore
 				Messages.Message("MessageTransportPodsDestinationIsInvalid".Translate(), MessageTypeDefOf.RejectInput);
 				return false;
 			}
-            else if (option != null && target.Cell.GetThingList(parent.pawn.Map).First(x => Props.canApplyTo.Contains(x.def)) is Thing thing && !(thing is Pawn) && thing.stackCount < option.requiredStackCount)
+            else if (option != null && target.Cell.GetThingList(parent.pawn.Map).First(x => Props.canApplyTo.Contains(x.def)) is Thing thing && thing is not Pawn && thing.stackCount < option.requiredStackCount)
             {
 				// Did not meet the stack count requirement.
 				Messages.Message("fc_MessageRequiredItemStackCountIs".Translate(option.requiredStackCount), MessageTypeDefOf.RejectInput);
@@ -74,21 +74,13 @@ namespace flangoCore
 			//var resultThing = Props.resultIsPawn ? new Pawn() : new Thing();
 			var resultThing = DefDatabase<PawnKindDef>.GetNamedSilentFail(thingToSpawn.defName) != null ? new Pawn() : new Thing();
 			resultThing.def = thingToSpawn;
-
-			SoundDef soundDef;
-			switch (parent.pawn.gender)
-			{
-				case Gender.Male:
-					soundDef = Props.soundMale ?? Props.sound;
-					break;
-				case Gender.Female:
-					soundDef = Props.soundFemale ?? Props.sound;
-					break;
-				default:
-					soundDef = Props.sound;
-					break;
-			}
-			soundDef?.PlayOneShot(new TargetInfo(target.Cell, parent.pawn.Map));
+            SoundDef soundDef = parent.pawn.gender switch
+            {
+                Gender.Male => Props.soundMale ?? Props.sound,
+                Gender.Female => Props.soundFemale ?? Props.sound,
+                _ => Props.sound,
+            };
+            soundDef?.PlayOneShot(new TargetInfo(target.Cell, parent.pawn.Map));
 
 			//if (Props.resultIsPawn && resultThing is Pawn resultPawn)
 			if (resultThing is Pawn resultPawn)
@@ -123,7 +115,7 @@ namespace flangoCore
                         break;
                 }
 
-                PawnGenerationRequest req = new PawnGenerationRequest(resultPawn.kindDef, faction, PawnGenerationContext.NonPlayer, -1);
+                PawnGenerationRequest req = new(resultPawn.kindDef, faction, PawnGenerationContext.NonPlayer, -1);
 				var reqPawn = PawnGenerator.GeneratePawn(req);
 
 				if (targetThing is Pawn pawn)

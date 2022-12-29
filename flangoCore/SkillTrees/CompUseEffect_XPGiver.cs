@@ -22,7 +22,7 @@ namespace flangoCore
                 if (PawnUtility.ShouldSendNotificationAbout(user))
                 {
                     float xp = skills.CalculateXP(amount, ignoreMult);
-                    Messages.Message("fc_SkillTreeXPGiverUsed_All".Translate(user.LabelShort, xp, user.Named("USER")), user, MessageTypeDefOf.PositiveEvent);
+                    Messages.Message("fc_SkillTreeXPGiverUsed_All".Translate(user.Named("USER"), xp), user, MessageTypeDefOf.PositiveEvent);
                 }
             }
             else
@@ -35,7 +35,7 @@ namespace flangoCore
 
                 if (PawnUtility.ShouldSendNotificationAbout(user))
                 {
-                    Messages.Message("fc_SkillTreeXPGiverUsed_Tree".Translate(user.LabelShort, Tree.LabelCap, xp1, xp2, user.Named("USER")), user, MessageTypeDefOf.PositiveEvent);
+                    Messages.Message("fc_SkillTreeXPGiverUsed_Tree".Translate(user.Named("USER"), Tree.LabelCap, xp1, xp2), user, MessageTypeDefOf.PositiveEvent);
                 }
             }
         }

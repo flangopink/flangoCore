@@ -27,7 +27,7 @@ namespace flangoCore
             }
         }
 
-        public List<IExposable> sources = new List<IExposable>();
+        public List<IExposable> sources = new();
 
         public int MaxCastingTicks => def.overrideGroupCooldown ? def.cooldownTicksRange.RandomInRange : def.groupDef.cooldownTicks;
 
@@ -62,7 +62,7 @@ namespace flangoCore
 
             if (Prefs.DevMode && CooldownTicksLeft > 0)
             {
-                Command_Action command_Action = new Command_Action
+                Command_Action command_Action = new()
                 {
                     defaultLabel = "Reset cooldown",
                     action = delegate

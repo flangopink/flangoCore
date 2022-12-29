@@ -10,7 +10,7 @@ namespace flangoCore
     public class CompRecolorable : CompColorable
     {
         private static readonly Texture2D Icon = ContentFinder<Texture2D>.Get("Designations/Paint");
-        private readonly List<Color> cachedColors = new List<Color>();
+        private readonly List<Color> cachedColors = new();
 
         public CompRecolorable()
         {
@@ -21,7 +21,7 @@ namespace flangoCore
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {
-            Command_ColorIcon c_detonate = new Command_ColorIcon()
+            Command_ColorIcon c_detonate = new()
             {
                 defaultLabel = "Recolor",
                 defaultDesc = "Recolor this item.",

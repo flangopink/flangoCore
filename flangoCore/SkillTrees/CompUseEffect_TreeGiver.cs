@@ -15,7 +15,7 @@ namespace flangoCore
             skills.GiveTree(Tree);
             if (PawnUtility.ShouldSendNotificationAbout(user))
             {
-                Messages.Message("fc_SkillTreeGiverUsed".Translate(user.LabelShort, Tree.label, user.Named("USER")), user, MessageTypeDefOf.PositiveEvent);
+                Messages.Message("fc_SkillTreeGiverUsed".Translate(user.Named("USER"), Tree.LabelCap), user, MessageTypeDefOf.PositiveEvent);
             }
         }
 
