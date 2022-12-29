@@ -96,9 +96,9 @@
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
-    <Compile Include="ApparelRestrictor\ModExt_Requirements.cs" />
-    <Compile Include="ApparelRestrictor\Patch_EquipmentUtility_CanEquip.cs" />
-    <Compile Include="ApparelRestrictor\Patch_Pawn_ApparelTracker_Notify_ApparelRemoved.cs" />
+    <Compile Include="ItemRequirements\ModExt_Requirements.cs" />
+    <Compile Include="ItemRequirements\Patch_EquipmentUtility_CanEquip.cs" />
+    <Compile Include="ItemRequirements\Patch_Pawn_ApparelTracker_Notify_ApparelRemoved.cs" />
     <Compile Include="Beams\Verb_ShootBeamBurst.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ArmorShredding.cs" />
     <Compile Include="CustomizableProjectiles\ModExt_ProjectileExplosiveShaped.cs" />
