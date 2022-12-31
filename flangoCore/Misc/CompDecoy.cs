@@ -18,8 +18,8 @@ namespace flangoCore
 
     public class CompProperties_Decoy : CompProperties
     {
-        public IntRange jobDurationTicks = new IntRange(300, 480); // 5~8 sec
-        public IntRange forcedAttackCount = new IntRange(2, 6);
+        public IntRange jobDurationTicks = new(300, 480); // 5~8 sec
+        public IntRange forcedAttackCount = new(2, 6);
         public int disappearAfterTicks = 600; // 10 sec
         public int updateInterval = 60; // if 0 then only initial pawns get affected
         public float range = 9.9f;
@@ -38,6 +38,13 @@ namespace flangoCore
         public CompProperties_Decoy Props => (CompProperties_Decoy)props;
         private int timer;
         private IntVec3 lastPos;
+
+        public override void PostExposeData()
+        {
+            base.PostExposeData();
+            Scribe_Values.Look(ref timer, "timer");
+            Scribe_Values.Look(ref lastPos, "lastPos");
+        }
 
         public override void CompTick()
         {

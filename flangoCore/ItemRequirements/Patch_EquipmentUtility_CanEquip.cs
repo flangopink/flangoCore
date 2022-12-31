@@ -1,10 +1,14 @@
 ﻿using Verse;
 using HarmonyLib;
 using RimWorld;
+using System;
 using System.Linq;
 
 namespace flangoCore
 {
+    [HarmonyPatch(typeof(EquipmentUtility), "CanEquip", 
+        new Type[] { typeof(Thing), typeof(Pawn), typeof(string), typeof(bool)}, 
+        new ArgumentType[] { ArgumentType.Normal, ArgumentType.Normal, ArgumentType.Out, ArgumentType.Normal })]
     public class Patch_EquipmentUtility_CanEquip
     {
         [HarmonyPostfix]

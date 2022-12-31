@@ -18,13 +18,13 @@ namespace flangoCore
 
                 if (comps.HasComp<CompProperties_SkillTreeGiver>())
                 {
-                    CompProperties_UseEffect props = new CompProperties_UseEffect() { compClass = typeof(CompUseEffect_TreeGiver) };
+                    CompProperties_UseEffect props = new(){ compClass = typeof(CompUseEffect_TreeGiver) };
                     def.AddAndResolve(props);
                 }
 
                 if (comps.HasComp<CompProperties_SkillTreeXPGiver>())
                 {
-                    CompProperties_UseEffect props = new CompProperties_UseEffect() { compClass = typeof(CompUseEffect_XPGiver) };
+                    CompProperties_UseEffect props = new(){ compClass = typeof(CompUseEffect_XPGiver) };
                     def.AddAndResolve(props);
                 }
 
@@ -32,7 +32,7 @@ namespace flangoCore
                 {
                     if (!def.comps.Any(cp => typeof(CompProperties_Skills).IsAssignableFrom(cp.compClass)))
                     {
-                        CompProperties_Skills props = new CompProperties_Skills() { compClass = typeof(CompSkills) };
+                        CompProperties_Skills props = new() { compClass = typeof(CompSkills) };
                         def.AddAndResolve(props);
                     }
                 }

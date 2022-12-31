@@ -96,6 +96,9 @@
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
+    <Compile Include="Animations\CompAnimatedWeapon.cs" />
+    <Compile Include="Animations\Patch_PawnRenderer_DrawEquipment_Anim.cs" />
+    <Compile Include="Animations\Patch_Pawn_EquipmentTracker_Notify.cs" />
     <Compile Include="ItemRequirements\ModExt_Requirements.cs" />
     <Compile Include="ItemRequirements\Patch_EquipmentUtility_CanEquip.cs" />
     <Compile Include="ItemRequirements\Patch_Pawn_ApparelTracker_Notify_ApparelRemoved.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Misc\InitializeComps.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
     <Compile Include="Misc\Patch_Pawn_PathFollower_CostToMoveIntoCell.cs" />
+    <Compile Include="Misc\Patch_PawnRenderer_DrawEquipmentAiming_Offsets.cs" />
     <Compile Include="Misc\ThingWithComps_NoStyle.cs" />
     <Compile Include="SkillTrees\CompAbilityEffect_GainXP.cs" />
     <Compile Include="SkillTrees\CompUseEffect_TreeGiver.cs" />
@@ -202,6 +206,7 @@
     <Publicize Include="Assembly-CSharp:Verse.DamageDef.externalViolenceForMechanoids" />
     <Publicize Include="Assembly-CSharp:RimWorld.JobDriver_UseItem.useDuration" />
     <Publicize Include="Assembly-CSharp:RimWorld.JobDriver_UseItem.warmupMote" />
+    <Publicize Include="Assembly-CSharp:Verse.PawnRenderer.CarryWeaponOpenly" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

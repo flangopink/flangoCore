@@ -9,10 +9,7 @@ namespace flangoCore
         public List<FleckProps> onAddFlecks;
         public List<FleckProps> onTickFlecks;
         public List<FleckProps> onRemoveFlecks;
-        //public Color skinColor;
-
-        //public bool canColor;
-        //public Color color = Color.white; // doesn't work
+        public Color color;
 
         public HediffCompProperties_VFX()
         {
@@ -24,19 +21,9 @@ namespace flangoCore
     {
         public HediffCompProperties_VFX Props => (HediffCompProperties_VFX)props;
 
-        //private Color? originalColor;
-
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
-            base.CompPostPostAdd(dinfo);
             if (parent.pawn.Dead) return;
-
-            /*if (Props.skinColor != null)
-            {
-                originalColor = parent.pawn.story.SkinColor;
-                parent.pawn.story.skinColorOverride = Props.skinColor;
-                _ = parent.pawn.story.SkinColor;
-            }*/
 
             if (!Props.onAddFlecks.NullOrEmpty())
             {
@@ -52,7 +39,6 @@ namespace flangoCore
 
         public override void CompPostTick(ref float severityAdjustment)
         {
-            base.CompPostTick(ref severityAdjustment);
             if (parent.pawn.Dead) parent.pawn.health.RemoveHediff(parent);
 
             if (!Props.onTickFlecks.NullOrEmpty())
@@ -69,13 +55,7 @@ namespace flangoCore
 
         public override void CompPostPostRemoved()
         {
-            base.CompPostPostRemoved();
             if (parent.pawn.Dead) return;
-
-            /*if (Props.skinColor != null)
-            {
-                parent.pawn.story.skinColorOverride = originalColor;
-            }*/
 
             if (!Props.onRemoveFlecks.NullOrEmpty())
             {

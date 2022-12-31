@@ -80,7 +80,7 @@ namespace flangoCore
 			curTab = treesByTab.Keys.FirstOrDefault();*/
 		}
 
-		public bool PawnHasSkillTrees() => SelThing.TryGetComp<CompSkills>().AnyTreesUnlocked();
+		public bool PawnHasSkillTrees() => SelThing.TryGetComp<CompSkills>()?.AnyTreesUnlocked() ?? false;
 
 		public void UpdateTreeTabs(List<SkillTreeDef> trees)
 		{

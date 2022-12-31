@@ -15,9 +15,6 @@ namespace flangoCore
 
             var harmony = new Harmony("com.flangopink.flangoCore");
 
-            harmony.Patch(AccessTools.Method(typeof(EquipmentUtility), "CanEquip", 
-                new Type[] { typeof(Thing), typeof(Pawn), typeof(string).MakeByRefType(), typeof(bool)}), postfix: new HarmonyMethod(typeof(Patch_EquipmentUtility_CanEquip).GetMethod("Postfix")));
-
             harmony.PatchAll();
 
             if (ModLister.HasActiveModWithName("Vanilla Expanded Framework") && FlangoCore.settings.enableVFEPatches)

@@ -29,7 +29,6 @@ namespace flangoCore
 	{
 		public bool optionalPatchTest = true;
 
-
 		public bool enableVFEPatches = true;
 
 		public bool enableDeflectionText = true;
@@ -56,8 +55,6 @@ namespace flangoCore
 		}
 
 		public float skillTreeUIScale = 1f;
-
-
 
 		public void DoWindowContents(Rect canvas)
 		{
@@ -105,7 +102,7 @@ namespace flangoCore
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled("Optional Patch Test", ref optionalPatchTest);
 
-			listing_Standard.End();
+            listing_Standard.End();
 		}
 
 		public override void ExposeData()
