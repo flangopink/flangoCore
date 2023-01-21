@@ -181,7 +181,7 @@ namespace flangoCore
 
                 Scribe_References.Look(ref sourcePrecept, "sourcePrecept");
                 Scribe_Values.Look(ref TicksUntilCasting, "TicksUntilCasting", -5);
-                Scribe_Collections.Look(ref sources, "sources", LookMode.Value);
+                Scribe_Collections.Look(ref sources, "sources", LookMode.Deep);
                 if (Scribe.mode == LoadSaveMode.PostLoadInit)
                 {
                     Initialize();

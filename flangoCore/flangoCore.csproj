@@ -145,6 +145,7 @@
     <Compile Include="SkillTrees\Dev\SkillTreeEditor.cs" />
     <Compile Include="SkillTrees\HediffComp_XPOverTime.cs" />
     <Compile Include="Misc\JobDriver_UseItemHold.cs" />
+    <Compile Include="Stats\StatWorker_ProjectileDeflectionChance.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
     <Compile Include="SkillTrees\CompSkillTreeGiver.cs" />
