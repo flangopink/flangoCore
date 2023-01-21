@@ -37,13 +37,19 @@ namespace flangoCore
         {
             get
             {
-                StatDefOf_flangoCore.ProjectileDeflectionChance.defaultBaseValue = baseDeflectionChance * 0.01f;
-                return baseDeflectionChance;
+				float val = baseDeflectionChance * 0.01f;
+                StatDefOf_flangoCore.ProjectileDeflectionChance.defaultBaseValue = val;
+                return val;
             }
             set => baseDeflectionChance = value;
         }
 		public bool deflectionChanceAffectedByMeleeSkill = false;
-        public float deflectionPerSkill = 1.5f;
+        private float deflectionPerSkill = 1.5f;
+        public float DeflectionPerSkill
+        {
+            get => deflectionPerSkill * 0.01f;
+            set => baseDeflectionChance = value;
+        }
         public bool deflectionAccuracyAffectedByMeleeSkill = true;
 		public bool blockNonHostileProjectiles = false;
         public bool enableDeflectionText = true;
@@ -54,8 +60,9 @@ namespace flangoCore
         {
             get
             {
-                StatDefOf_flangoCore.RangedDodgeChance.defaultBaseValue = baseDodgeChance * 0.01f;
-                return baseDodgeChance;
+				float val = baseDodgeChance * 0.01f;
+                StatDefOf_flangoCore.RangedDodgeChance.defaultBaseValue = val;
+                return val;
             }
             set => baseDodgeChance = value;
         }
@@ -72,14 +79,14 @@ namespace flangoCore
 
 
 
-        //public float skillTreeUIScale = 1f;
+        public float skillTreeUIScale = 1f;
 
 		//public bool enableAnimatedWeapons = true;
 
 
         public void DoWindowContents(Rect canvas)
 		{
-            Listing_Standard listing_Standard = new() { ColumnWidth = canvas.width / 2.25f };
+            Listing_Standard listing_Standard = new() { ColumnWidth = canvas.width / 2.1f };
             listing_Standard.Begin(canvas);
 
 			listing_Standard.Gap(16f);
@@ -91,7 +98,7 @@ namespace flangoCore
 			// Deflection
 			listing_Standard.Gap(16f);
             string bDef = baseDeflectionChance.ToString();
-            listing_Standard.TextFieldNumericLabeled("fc_baseDeflectionChance".Translate(), ref baseDodgeChance, ref bDef, 0, 100);
+            listing_Standard.TextFieldNumericLabeled("fc_baseDeflectionChance".Translate(), ref baseDeflectionChance, ref bDef, 0, 100);
             listing_Standard.CheckboxLabeled(Translator.Translate("fc_deflectionChanceAffectedByMeleeSkill"), ref deflectionChanceAffectedByMeleeSkill);
             string bDefPerLvl = deflectionPerSkill.ToString();
             listing_Standard.TextFieldNumericLabeled("fc_deflectionChancePerMeleeLevel".Translate(), ref deflectionPerSkill, ref bDefPerLvl, 0, 100);
@@ -103,7 +110,8 @@ namespace flangoCore
 			listing_Standard.Label("fc_deflectionChanceExplained".Translate());
 			listing_Standard.Outdent();
 
-			// Dodge
+            // Dodge
+            listing_Standard.Gap(16f);
             string bDodge = baseDodgeChance.ToString();
 			listing_Standard.TextFieldNumericLabeled("fc_baseDodgeChance".Translate(), ref baseDodgeChance, ref bDodge, 0, 100);
             listing_Standard.CheckboxLabeled(Translator.Translate("fc_dodgeScalesWithMovement"), ref dodgeScalesWithMovement);
@@ -126,9 +134,9 @@ namespace flangoCore
 			listing_Standard.NewColumn();
 
 			// Skill Trees
-			//listing_Standard.Gap(16f);
-			//listing_Standard.Label("fc_SkillTreeUIScale".Translate());
-			//listing_Standard.Slider(skillTreeUIScale, 0.5f, 2f);
+			listing_Standard.Gap(16f);
+			listing_Standard.Label("fc_SkillTreeUIScale".Translate());
+            skillTreeUIScale = listing_Standard.Slider(skillTreeUIScale, 0.5f, 2f); // fucking sliders
 
 			// Optional Patches
 			listing_Standard.Gap(16f);
@@ -159,6 +167,8 @@ namespace flangoCore
 			Scribe_Values.Look(ref enableAbilityCooldownOnEquipForHediffs, "enableAbilityCooldownOnEquipForHediffs", false);
 
 			Scribe_Values.Look(ref corpseCapacity, "corpseCapacity", 20);
+
+			Scribe_Values.Look(ref skillTreeUIScale, "skillTreeUIScale", 1f);
 
 			Scribe_Values.Look(ref baseDodgeChance, "baseDodgeChance", 0);
 			Scribe_Values.Look(ref dodgeScalesWithMovement, "dodgeScalesWithMovement", true);

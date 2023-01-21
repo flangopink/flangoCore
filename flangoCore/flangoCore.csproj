@@ -96,9 +96,6 @@
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
-    <Compile Include="Animations\CompAnimatedWeapon.cs" />
-    <Compile Include="Animations\Patch_PawnRenderer_DrawEquipment_Anim.cs" />
-    <Compile Include="Animations\Patch_Pawn_EquipmentTracker_Notify.cs" />
     <Compile Include="ItemRequirements\ModExt_Requirements.cs" />
     <Compile Include="ItemRequirements\Patch_EquipmentUtility_CanEquip.cs" />
     <Compile Include="ItemRequirements\Patch_Pawn_ApparelTracker_Notify_ApparelRemoved.cs" />
@@ -145,7 +142,9 @@
     <Compile Include="SkillTrees\Dev\SkillTreeEditor.cs" />
     <Compile Include="SkillTrees\HediffComp_XPOverTime.cs" />
     <Compile Include="Misc\JobDriver_UseItemHold.cs" />
+    <Compile Include="Stats\SkillNeed_DeflectionMelee.cs" />
     <Compile Include="Stats\StatWorker_ProjectileDeflectionChance.cs" />
+    <Compile Include="Stats\StatWorker_RangedDodgeChance.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
     <Compile Include="SkillTrees\CompSkillTreeGiver.cs" />

@@ -4,15 +4,19 @@ using Verse;
 
 namespace flangoCore
 {
-    public class StatWorker_ProjectileDeflectionChance : StatWorker
+    /*public class StatWorker_ProjectileDeflectionChance : StatWorker
     {
         private float DeflectionPerSkill => FlangoCore.settings.deflectionPerSkill * 0.01f;
-        private bool ScalesWithMelee => FlangoCore.settings.deflectionAccuracyAffectedByMeleeSkill;
+        private bool ScalesWithMelee => FlangoCore.settings.deflectionChanceAffectedByMeleeSkill;
 
         public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
         {
-            float melee = ScalesWithMelee && req.Pawn.skills != null? req.Pawn.skills.GetSkill(SkillDefOf.Melee).Level * DeflectionPerSkill : 0f; // x1.5
-            return base.GetValueUnfinalized(req) + melee;
+            if (req.HasThing && req.Thing is Pawn pawn)
+            {
+                float melee = ScalesWithMelee && pawn.skills != null ? pawn.skills.GetSkill(SkillDefOf.Melee).Level * DeflectionPerSkill : 0f; // x1.5
+                return base.GetValueUnfinalized(req) + melee;
+            }
+            return base.GetValueUnfinalized(req);
         }
 
         public override string GetExplanationUnfinalized(StatRequest req, ToStringNumberSense numberSense)
@@ -35,5 +39,5 @@ namespace flangoCore
         {
             StatDefOf_flangoCore.ProjectileDeflectionChance.defaultBaseValue = FlangoCore.settings.BaseDeflectionChance;
         }
-    }
+    }*/
 }

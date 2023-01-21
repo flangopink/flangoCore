@@ -6,7 +6,7 @@ namespace flangoCore
 {
     public class StatWorker_RangedDodgeChance : StatWorker
     {
-        private float GetMoving(StatRequest req) => req.Pawn.health.capacities.GetLevel(PawnCapacityDefOf.Moving);
+        /*private float GetMoving(StatRequest req) => req.Pawn.health.capacities.GetLevel(PawnCapacityDefOf.Moving);
 
         public override float GetValueUnfinalized(StatRequest req, bool applyPostProcess = true)
         {
@@ -22,6 +22,6 @@ namespace flangoCore
                 stringBuilder.AppendLine(PawnCapacityDefOf.Moving + " " + GetMoving(req).ToStringPercent() + ": x" + GetMoving(req).ToStringPercent());
             }
             return stringBuilder.ToString();
-        }
+        }*/
     }
 }

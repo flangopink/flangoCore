@@ -25,7 +25,7 @@ namespace flangoCore
             }
 
             if (FlangoCore.settings.enableVCF) EnableVCF(harmony);
-            if (FlangoCore.settings.enableAnimatedWeapons) EnableAnimations(harmony);
+            //if (FlangoCore.settings.enableAnimatedWeapons) EnableAnimations(harmony);
 
             Log.Message($"<color=#FFC0CB>Launched successfully! Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
         }
@@ -46,13 +46,13 @@ namespace flangoCore
             harmony.Patch(VCFOrig, new HarmonyMethod(VCFPrefix));
         }
 
-        static void EnableAnimations(Harmony harmony)
+        /*static void EnableAnimations(Harmony harmony)
         {
             // DrawEquipment is private
             harmony.Patch(AccessTools.Method(typeof(PawnRenderer), "DrawEquipment"), new HarmonyMethod(typeof(Patch_PawnRenderer_DrawEquipment_Anim).GetMethod("Prefix"), 100));
             harmony.Patch(typeof(Pawn_EquipmentTracker).GetMethod("Notify_EquipmentAdded"), postfix: new HarmonyMethod(typeof(Patch_Pawn_EquipmentTracker_Notify_EquipmentAdded_Anim).GetMethod("Postfix")));
             harmony.Patch(typeof(Pawn_EquipmentTracker).GetMethod("Notify_EquipmentRemoved"), postfix: new HarmonyMethod(typeof(Patch_Pawn_EquipmentTracker_Notify_EquipmentRemoved_Anim).GetMethod("Postfix")));
             harmony.Patch(typeof(Pawn_EquipmentTracker).GetMethod("EquipmentTrackerTick"), postfix: new HarmonyMethod(typeof(Patch_Pawn_EquipmentTracker_EquipmentTrackerTick).GetMethod("Postfix")));
-        }
+        }*/
     }
 }
