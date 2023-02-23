@@ -14,7 +14,7 @@ namespace flangoCore
         {
             if (__instance.usedTarget.Thing is Pawn pawn)
             {
-                float chance = pawn.GetStatValue(StatDefOf_flangoCore.ProjectileDeflectionChance);
+                float chance = pawn.GetStatValue(DefOf_flangoCore.ProjectileDeflectionChance);
 
                 if (chance == 0) return true;
 

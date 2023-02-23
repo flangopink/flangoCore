@@ -17,7 +17,7 @@ namespace flangoCore
                 float num = equipment.GetStatValue(StatDefOf.RangedWeapon_Cooldown);
                 if (attacker != null)
                 {
-                    num *= attacker.GetStatValue(StatDefOf_flangoCore.VerbCooldownFactor);
+                    num *= attacker.GetStatValue(DefOf_flangoCore.VerbCooldownFactor);
                 }
                 __result = num;
                 return false;

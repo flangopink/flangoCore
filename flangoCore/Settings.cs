@@ -31,6 +31,8 @@ namespace flangoCore
 
 		public bool enableVFEPatches = true;
 
+		public bool randomizerEnabled = false;
+
 		// Deflection
         private float baseDeflectionChance = 0;
         public float BaseDeflectionChance
@@ -38,7 +40,7 @@ namespace flangoCore
             get
             {
 				float val = baseDeflectionChance * 0.01f;
-                StatDefOf_flangoCore.ProjectileDeflectionChance.defaultBaseValue = val;
+                DefOf_flangoCore.ProjectileDeflectionChance.defaultBaseValue = val;
                 return val;
             }
             set => baseDeflectionChance = value;
@@ -61,7 +63,7 @@ namespace flangoCore
             get
             {
 				float val = baseDodgeChance * 0.01f;
-                StatDefOf_flangoCore.RangedDodgeChance.defaultBaseValue = val;
+                DefOf_flangoCore.RangedDodgeChance.defaultBaseValue = val;
                 return val;
             }
             set => baseDodgeChance = value;
@@ -142,6 +144,10 @@ namespace flangoCore
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled("Optional Patch Test", ref optionalPatchTest);
 
+			// Randomizer
+			listing_Standard.Gap(16f);
+			listing_Standard.CheckboxLabeled("Enable randomizer", ref randomizerEnabled);
+
 			// Animated Weapons (WIP)
             //listing_Standard.Gap(16f);
             //listing_Standard.CheckboxLabeled(Translator.Translate("fc_enableAnimatedWeapons"), ref enableAnimatedWeapons);
@@ -176,6 +182,8 @@ namespace flangoCore
             Scribe_Values.Look(ref optionalPatchTest, "optionalPatchTest", true);
 
             Scribe_Values.Look(ref enableVFEPatches, "enableVFEPatches", true);
+
+            Scribe_Values.Look(ref randomizerEnabled, "randomizerEnabled", false);
         }
 	}
 }
