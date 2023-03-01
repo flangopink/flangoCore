@@ -9,10 +9,10 @@ using System;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(FloatMenuMakerMap), "CanTakeOrder")]
+    //[HarmonyPatch(typeof(FloatMenuMakerMap), "CanTakeOrder")]
     public static class Patch_FloatMenuMakerMap_CanTakeOrder
     {
-        [HarmonyPostfix]
+        //[HarmonyPostfix]
         public static void MakePawnControllable(Pawn pawn, ref bool __result)
         {
             if (pawn.IsDraftable() && pawn.Faction != null && (pawn.Faction?.IsPlayer ?? false))
@@ -23,17 +23,17 @@ namespace flangoCore
         }
     }
 
-    [HarmonyPatch(typeof(FloatMenuMakerMap), "AddUndraftedOrders")]
+    //[HarmonyPatch(typeof(FloatMenuMakerMap), "AddUndraftedOrders")]
     public static class FloatMenuMakerMap_AddUndraftedOrders
     {
-        [HarmonyPrefix]
+        //[HarmonyPrefix]
         public static bool AvoidGeneralErrorIfPawnIsAnimal(Pawn pawn)
         {
             return !pawn.IsDraftable();
         }
     }
 
-    [HarmonyPatch(typeof(FloatMenuMakerMap), "AddDraftedOrders")]
+    //[HarmonyPatch(typeof(FloatMenuMakerMap), "AddDraftedOrders")]
     public static class FloatMenuMakerMap_AddDraftedOrders_Transpiler
     {
         // i have no idea what this one does.

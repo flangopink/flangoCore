@@ -3,10 +3,10 @@ using Verse;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(Pawn_EquipmentTracker), "DestroyEquipment")]
+    //[HarmonyPatch(typeof(Pawn_EquipmentTracker), "DestroyEquipment")]
     public static class Patch_EquipmentTracker_DestroyEquipment
     {
-        [HarmonyPrefix]
+        //[HarmonyPrefix]
         public static bool Prefix(Pawn_EquipmentTracker __instance)
         {
             return !__instance.pawn.IsDraftable();

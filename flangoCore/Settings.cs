@@ -30,6 +30,7 @@ namespace flangoCore
 		public bool optionalPatchTest = true;
 
 		public bool enableVFEPatches = true;
+		public bool enableDraftables = true;
 
 		public bool randomizerEnabled = false;
 
@@ -144,9 +145,14 @@ namespace flangoCore
 			listing_Standard.Gap(16f);
 			listing_Standard.CheckboxLabeled("Optional Patch Test", ref optionalPatchTest);
 
-			// Randomizer
+			// Optional Patches
 			listing_Standard.Gap(16f);
-			listing_Standard.CheckboxLabeled("Enable randomizer", ref randomizerEnabled);
+			listing_Standard.CheckboxLabeled("fc_EnableDraftables", ref enableDraftables);
+            listing_Standard.Label("fc_EnableDraftablesWarning".Translate());
+
+            // Randomizer
+            listing_Standard.Gap(16f);
+			listing_Standard.CheckboxLabeled("fc_EnableRandomizer", ref randomizerEnabled);
 
 			// Animated Weapons (WIP)
             //listing_Standard.Gap(16f);
@@ -182,6 +188,8 @@ namespace flangoCore
             Scribe_Values.Look(ref optionalPatchTest, "optionalPatchTest", true);
 
             Scribe_Values.Look(ref enableVFEPatches, "enableVFEPatches", true);
+
+            Scribe_Values.Look(ref enableDraftables, "enableDraftables", true);
 
             Scribe_Values.Look(ref randomizerEnabled, "randomizerEnabled", false);
         }

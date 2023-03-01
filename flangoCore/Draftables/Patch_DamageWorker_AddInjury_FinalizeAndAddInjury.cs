@@ -5,10 +5,10 @@ using System.Linq;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(DamageWorker_AddInjury), "FinalizeAndAddInjury", new Type[] { typeof(Pawn), typeof(Hediff_Injury), typeof(DamageInfo), typeof(DamageWorker.DamageResult) })]
+    //[HarmonyPatch(typeof(DamageWorker_AddInjury), "FinalizeAndAddInjury", new Type[] { typeof(Pawn), typeof(Hediff_Injury), typeof(DamageInfo), typeof(DamageWorker.DamageResult) })]
     public class Patch_DamageWorker_AddInjury_FinalizeAndAddInjury
     {
-        [HarmonyPostfix]
+        //[HarmonyPostfix]
         public static void Postfix(Pawn pawn)
         {
             CompDraftable comp = pawn.TryGetComp<CompDraftable>();

@@ -4,10 +4,10 @@ using Verse;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(PawnComponentsUtility), "AddAndRemoveDynamicComponents")]
+    //[HarmonyPatch(typeof(PawnComponentsUtility), "AddAndRemoveDynamicComponents")]
     public static class Patch_PawnComponentsUtility_AddAndRemoveDynamicComponents
     {
-        [HarmonyPostfix]
+        //[HarmonyPostfix]
         public static void AddDraftability(Pawn pawn)
         {
             if ((pawn.Faction?.IsPlayer ?? false) && pawn.IsDraftable())

@@ -3,10 +3,10 @@ using Verse;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(MechanitorUtility), "EverControllable")]
+    //[HarmonyPatch(typeof(MechanitorUtility), "EverControllable")]
     public static class Patch_MechanitorUtility_EverControllable
     {
-        [HarmonyPrefix]
+        //[HarmonyPrefix]
         public static bool EverControllable(Pawn mech, ref bool __result)
         {
             if (mech.IsDraftable())
