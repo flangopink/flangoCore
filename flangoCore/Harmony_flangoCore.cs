@@ -50,16 +50,16 @@ namespace flangoCore
         static void EnableDraftables(Harmony harmony)
         {
             harmony.Patch(typeof(Bill).GetMethod("PawnAllowedToStartAnew"), new HarmonyMethod(typeof(Patch_Bill_PawnAllowedToStartAnew).GetMethod("AvoidBillErrorIfPawnIsNonHuman")));
-            harmony.Patch(typeof(DamageWorker_AddInjury).GetMethod("FinalizeAndAddInjury", new Type[] { typeof(Pawn), typeof(Hediff_Injury), typeof(DamageInfo), typeof(DamageWorker.DamageResult) }), postfix: new HarmonyMethod(typeof(Patch_DamageWorker_AddInjury_FinalizeAndAddInjury).GetMethod("Postfix")));
+            harmony.Patch(AccessTools.Method(typeof(DamageWorker_AddInjury), "FinalizeAndAddInjury", new Type[] { typeof(Pawn), typeof(Hediff_Injury), typeof(DamageInfo), typeof(DamageWorker.DamageResult) }), postfix: new HarmonyMethod(typeof(Patch_DamageWorker_AddInjury_FinalizeAndAddInjury).GetMethod("Postfix")));
             harmony.Patch(typeof(Pawn_EquipmentTracker).GetMethod("DestroyEquipment"), new HarmonyMethod(typeof(Patch_EquipmentTracker_DestroyEquipment).GetMethod("Prefix")));
             harmony.Patch(typeof(MechanitorUtility).GetMethod("EverControllable"), new HarmonyMethod(typeof(Patch_MechanitorUtility_EverControllable).GetMethod("EverControllable")));
             harmony.Patch(typeof(Pawn).GetMethod("get_IsColonistPlayerControlled"), postfix: new HarmonyMethod(typeof(Patch_Pawn_IsColonistPlayerControlled).GetMethod("AddPawnAsColonist")));
             harmony.Patch(typeof(Pawn).GetMethod("WorkTypeIsDisabled"), postfix: new HarmonyMethod(typeof(Patch_Pawn_WorkTypeIsDisabled).GetMethod("RemoveTendFromPawns")));
             harmony.Patch(typeof(PawnComponentsUtility).GetMethod("AddAndRemoveDynamicComponents"), postfix: new HarmonyMethod(typeof(Patch_PawnComponentsUtility_AddAndRemoveDynamicComponents).GetMethod("AddDraftability")));
-            harmony.Patch(typeof(PawnRenderer).GetMethod("DrawEquipment"), new HarmonyMethod(typeof(Patch_PawnRenderer_DrawEquipment).GetMethod("DrawEquipment")));
-            harmony.Patch(typeof(FloatMenuMakerMap).GetMethod("CanTakeOrder"), postfix: new HarmonyMethod(typeof(Patch_FloatMenuMakerMap_CanTakeOrder).GetMethod("MakePawnControllable")));
-            harmony.Patch(typeof(FloatMenuMakerMap).GetMethod("AddUndraftedOrders"), new HarmonyMethod(typeof(FloatMenuMakerMap_AddUndraftedOrders).GetMethod("AvoidGeneralErrorIfPawnIsAnimal")));
-            harmony.Patch(typeof(FloatMenuMakerMap).GetMethod("AddDraftedOrders"), transpiler: new HarmonyMethod(typeof(FloatMenuMakerMap_AddDraftedOrders_Transpiler).GetMethod("AddDraftedOrders_Transpiler")));
+            harmony.Patch(AccessTools.Method(typeof(PawnRenderer), "DrawEquipment"), new HarmonyMethod(typeof(Patch_PawnRenderer_DrawEquipment).GetMethod("DrawEquipment")));
+            harmony.Patch(AccessTools.Method(typeof(FloatMenuMakerMap), "CanTakeOrder"), postfix: new HarmonyMethod(typeof(Patch_FloatMenuMakerMap_CanTakeOrder).GetMethod("MakePawnControllable")));
+            harmony.Patch(AccessTools.Method(typeof(FloatMenuMakerMap), "AddUndraftedOrders"), new HarmonyMethod(typeof(Patch_FloatMenuMakerMap_AddUndraftedOrders).GetMethod("AvoidGeneralErrorIfPawnIsAnimal")));
+            //harmony.Patch(AccessTools.Method(typeof(FloatMenuMakerMap), "AddDraftedOrders"), transpiler: new HarmonyMethod(typeof(FloatMenuMakerMap_AddDraftedOrders_Transpiler).GetMethod("AddDraftedOrders_Transpiler")));
         }
 
         /*static void EnableAnimations(Harmony harmony)

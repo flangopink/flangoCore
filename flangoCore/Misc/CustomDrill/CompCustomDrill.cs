@@ -175,7 +175,7 @@ namespace flangoCore
             if (parent.Spawned)
             {
                 var things = Props.cantDrillNearThings;
-                if (!things.NullOrEmpty() && Utils.HasBadThingNearby(parent.Position, parent.Map, Props.cantDrillNearRadius, things, out var other))
+                if (!things.NullOrEmpty() && Utils.HasThingsNearby(parent.Position, parent.Map, Props.cantDrillNearRadius, things, out var other))
                 {
                     badThings = other;
                     cantDrillFlag = true;

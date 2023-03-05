@@ -166,12 +166,74 @@ namespace flangoCore
             return GetThingsInRange(cell, map, maxRange, requireLOS).Select(x => x.def).ToList();
         }
 
-        public static bool HasComp(this List<CompProperties> defComps, CompProperties comp) => defComps.Contains(comp);
-        public static bool HasComp(this ThingDef def, CompProperties comp) => def.comps.Contains(comp);
         public static bool HasComp<T>(this List<CompProperties> defComps) => defComps.OfType<T>().Any();
         public static bool HasComp<T>(this ThingDef def) => def.comps.OfType<T>().Any();
         public static bool HasComp<T>(this HediffDef def) => def.comps.OfType<T>().Any();
-      
+
+        public static bool HasCompClass<T>(this ThingDef def)
+        { 
+            var comps = def.comps;
+            for (int i = 0; i < comps.Count; i++)
+            {
+                if (comps[i].compClass == typeof(T)) return true;
+            }
+            return false;
+        }
+
+        public static List<ThingDef> SelectDefs<T>(this List<T> list) where T : Thing
+        {
+            List<ThingDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        public static List<HediffDef> SelectHediffDefs<T>(this List<T> list) where T : Hediff
+        {
+            List<HediffDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        public static List<TraitDef> SelectTraitDefs<T>(this List<T> list) where T : Trait
+        {
+            List<TraitDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        public static List<GeneDef> SelectGeneDefs<T>(this List<T> list) where T : Gene
+        {
+            List<GeneDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        // Rewritten Intersect, because LINQ is slow.
+        public static List<T> FindMatching<T>(this List<T> list, List<T> other)
+        {
+            List<T> matches = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int k = 0; k < other.Count; k++)
+                {
+                    if (list[i].Equals(other[k])) matches.Add(list[i]);
+                }
+            }
+            return matches;
+        }
+
         public static T RandomByWeight<T>(this Dictionary<T, float> dict)
         {
             float sum = 0;
@@ -184,7 +246,7 @@ namespace flangoCore
             return dict.LastOrDefault().Key;
         }
 
-        public static bool HasBadThingNearby(IntVec3 pos, Map map, float radius, List<ThingDef> other, out List<Thing> result)
+        public static bool HasThingsNearby(IntVec3 pos, Map map, float radius, List<ThingDef> other, out List<Thing> result)
         {
             var things = GetThingsInRange(pos, map, radius);
             result = new();

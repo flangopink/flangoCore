@@ -18,12 +18,25 @@ namespace flangoCore
             {
                 ThingDef def = thing.def;
 
-                if (def.IsApparel || def.equipmentType == EquipmentType.Primary)
+                if (def.IsApparel || def.HasCompClass<CompEquippable>())
                 {
                     ModExt_Requirements ext = def.GetModExtension<ModExt_Requirements>();
                     if (ext == null) return;
 
                     bool strict = !(ext.anyCategory || ext.anyItemInCategories != CategoryFlags.None);
+
+                    // Apparel
+                    if (!ext.apparelDefs.NullOrEmpty() && pawn.apparel?.WornApparelCount > 0)
+                    {
+                        var defs = pawn.apparel.WornApparel.SelectDefs();
+                        var matches = defs.FindMatching(ext.apparelDefs);
+                        if (matches.NullOrEmpty() || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Apparel) && matches.Count() != ext.apparelDefs.Count))
+                        {
+                            __result = false;
+                            cantReason = "fc_MissingRequiredApparel".Translate();
+                            return;
+                        }
+                    }
 
                     if (!(ext.gender == Gender.None || pawn.gender == ext.gender))
                     {
@@ -40,27 +53,13 @@ namespace flangoCore
                         return;
                     }
 
-                    // Apparel
-                    if (!ext.apparelDefs.NullOrEmpty() && pawn.apparel?.WornApparelCount > 0)
-                    {
-                        var defs = pawn.apparel.WornApparel.Select(x => x.def).ToList();
-                        var matches = defs.Intersect(ext.apparelDefs);
-
-                        if ((matches.EnumerableNullOrEmpty() && strict) || matches.Count() == 0 || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Apparel) && matches.Count() != ext.apparelDefs.Count()))
-                        {
-                            __result = false;
-                            cantReason = "fc_MissingRequiredApparel".Translate();
-                            return;
-                        }
-                    }
-
                     // Hediffs
                     if (!ext.hediffDefs.NullOrEmpty())
                     {
-                        var defs = pawn.health.hediffSet.hediffs.Select(x => x.def).ToList();
-                        var matches = defs.Intersect(ext.hediffDefs);
+                        var defs = pawn.health.hediffSet.hediffs.SelectHediffDefs();
+                        var matches = defs.FindMatching(ext.hediffDefs);
 
-                        if ((matches.EnumerableNullOrEmpty() && strict) || matches.Count() == 0 || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Hediffs) && matches.Count() != ext.hediffDefs.Count()))
+                        if ((matches.NullOrEmpty() && strict) || matches.Count() == 0 || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Hediffs) && matches.Count() != ext.hediffDefs.Count))
                         {
                             __result = false;
                             cantReason = "fc_MissingRequiredHediff".Translate();
@@ -71,10 +70,10 @@ namespace flangoCore
                     // Traits
                     if (!ext.traitDefs.NullOrEmpty())
                     {
-                        var defs = pawn.story.traits.allTraits.Select(x => x.def).ToList();
-                        var matches = defs.Intersect(ext.traitDefs);
+                        var defs = pawn.story.traits.allTraits.SelectTraitDefs();
+                        var matches = defs.FindMatching(ext.traitDefs);
 
-                        if ((matches.EnumerableNullOrEmpty() && strict) || matches.Count() == 0 || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Traits) && matches.Count() != ext.traitDefs.Count()))
+                        if ((matches.NullOrEmpty() && strict) || matches.Count() == 0 || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Traits) && matches.Count() != ext.traitDefs.Count))
                         {
                             __result = false;
                             cantReason = "fc_MissingRequiredTrait".Translate();
@@ -124,10 +123,10 @@ namespace flangoCore
                     // Genes
                     if (!ext.geneDefs.NullOrEmpty())
                     {
-                        var defs = pawn.genes.GenesListForReading.Select(x => x.def).ToList();
-                        var matches = defs.Intersect(ext.geneDefs);
+                        var defs = pawn.genes.GenesListForReading.SelectGeneDefs();
+                        var matches = defs.FindMatching(ext.geneDefs);
 
-                        if ((matches.EnumerableNullOrEmpty() && strict) || matches.Count() == 0 || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Genes) && matches.Count() != ext.geneDefs.Count()))
+                        if ((matches.NullOrEmpty() && strict) || matches.Count() == 0 || (!ext.anyItemInCategories.HasFlag(CategoryFlags.Genes) && matches.Count() != ext.geneDefs.Count))
                         {
                             __result = false;
                             cantReason = "fc_MissingRequiredGene".Translate();

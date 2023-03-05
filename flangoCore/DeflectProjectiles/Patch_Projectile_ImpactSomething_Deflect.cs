@@ -43,20 +43,20 @@ namespace flangoCore
                     {
                         if (FlangoCore.settings.enableDeflectionText)
                         {
-                            MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.Map, "fc_projectileBlocked".Translate());
+                            MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.MapHeld, "fc_projectileBlocked".Translate());
                         }
                     }
                     else
                     {
-                        Projectile obj = (Projectile)GenSpawn.Spawn(__instance.def, pawn.Position, pawn.Map);
+                        Projectile obj = (Projectile)GenSpawn.Spawn(__instance.def, pawn.Position, pawn.MapHeld);
                         obj.Launch(pawn, pawn.Position.ToVector3(), new LocalTargetInfo(other.Position), other, projectileHitFlags, false, equipment);
                         if (FlangoCore.settings.enableDeflectionText)
                         {
-                            MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.Map, "fc_projectileDeflected".Translate());
+                            MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.MapHeld, "fc_projectileDeflected".Translate());
                         }
                     }
 
-                    pawn.Map.flecks.CreateFleck(FleckMaker.GetDataStatic(pawn.DrawPos, pawn.Map, DefDatabase<FleckDef>.GetNamed("SparkFlash")));
+                    pawn.Map.flecks.CreateFleck(FleckMaker.GetDataStatic(pawn.DrawPos, pawn.MapHeld, DefDatabase<FleckDef>.GetNamed("SparkFlash")));
 
                     return false;
                 }

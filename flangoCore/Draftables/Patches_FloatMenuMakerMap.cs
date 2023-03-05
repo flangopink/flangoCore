@@ -24,7 +24,7 @@ namespace flangoCore
     }
 
     //[HarmonyPatch(typeof(FloatMenuMakerMap), "AddUndraftedOrders")]
-    public static class FloatMenuMakerMap_AddUndraftedOrders
+    public static class Patch_FloatMenuMakerMap_AddUndraftedOrders
     {
         //[HarmonyPrefix]
         public static bool AvoidGeneralErrorIfPawnIsAnimal(Pawn pawn)
@@ -41,7 +41,7 @@ namespace flangoCore
         {
             MethodInfo shouldSkip = AccessTools.Method(typeof(Draftables), "IsDraftableControllable");
             List<CodeInstruction> codes = instructions.ToList();
-            FieldInfo pawnField = AccessTools.Field(typeof(FloatMenuMakerMap).GetNestedTypes(AccessTools.all).First((Type c) => c.Name.Contains("c__DisplayClass8_0")), "pawn");
+            FieldInfo pawnField = AccessTools.Field(typeof(FloatMenuMakerMap).GetNestedTypes(AccessTools.all).FirstOrDefault((Type c) => c.Name.Contains("c__DisplayClass8_0")), "pawn");
             FieldInfo skillsField = AccessTools.Field(typeof(Pawn), "skills");
             FieldInfo constructionDefField = AccessTools.Field(typeof(SkillDefOf), "Construction");
             bool patched = false;

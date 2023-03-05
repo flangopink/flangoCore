@@ -80,7 +80,7 @@ namespace flangoCore
 				List<Thing> thingList = (parent.Position + GenRadial.RadialPattern[i]).GetThingList(parent.Map);
 				for (int j = 0; j < thingList.Count; j++)
 				{
-					if (!(thingList[j] is Pawn pawn) || !AppliesTo(pawn))
+					if (thingList[j] is not Pawn pawn || !AppliesTo(pawn))
 					{
 						continue;
 					}
