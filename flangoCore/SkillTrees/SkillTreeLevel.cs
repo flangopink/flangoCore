@@ -12,6 +12,6 @@ namespace flangoCore
 
 		public Texture2D icon;
 
-		public float xpToUnlock = -1; // -1 only prereqs, 0 always available, ...?
+		//public float xpToUnlock = -1; // -1 only prereqs, 0 always available, ...?
 	}
 }

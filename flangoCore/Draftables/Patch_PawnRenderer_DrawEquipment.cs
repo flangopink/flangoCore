@@ -4,10 +4,10 @@ using Verse;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(PawnRenderer), "DrawEquipment")]
+    //[HarmonyPatch(typeof(PawnRenderer), "DrawEquipment")]
     public static class Patch_PawnRenderer_DrawEquipment
     {
-        [HarmonyPrefix]
+        //[HarmonyPrefix]
         public static bool DrawEquipment(PawnRenderer __instance, Pawn ___pawn, ref Vector3 rootLoc, ref Rot4 pawnRotation, ref PawnRenderFlags flags)
         {
             if (!___pawn.Dead && ___pawn.def.HasComp(typeof(CompDraftable)))

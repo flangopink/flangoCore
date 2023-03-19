@@ -88,7 +88,7 @@ namespace flangoCore
                         {
                             if (h.extraDamage != null)
                             {
-                                DamageInfo dinfo2 = new DamageInfo(h.extraDamage.def, h.extraDamage.amount, h.extraDamage.AdjustedArmorPenetration(), ExactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing);
+                                DamageInfo dinfo2 = new(h.extraDamage.def, h.extraDamage.amount, h.extraDamage.AdjustedArmorPenetration(), ExactRotation.eulerAngles.y, launcher, null, equipmentDef, DamageInfo.SourceCategory.ThingOrUnknown, intendedTarget.Thing);
                                 hitThing.TakeDamage(dinfo2).AssociateWithLog(new BattleLogEntry_RangedImpact(launcher, hitThing, intendedTarget.Thing, equipmentDef, def, targetCoverDef));
                             }
 

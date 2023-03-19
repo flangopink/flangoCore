@@ -3,7 +3,6 @@ using Verse;
 using RimWorld;
 using UnityEngine;
 using System.Linq;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace flangoCore
 {
@@ -13,7 +12,7 @@ namespace flangoCore
         [HarmonyPrefix]
         public static bool TakeDamage_Prefix(Thing __instance, ref DamageInfo dinfo)
         {
-            if (!(__instance is Pawn)) return true;
+            if (__instance is not Pawn) return true;
             Pawn pawn = (Pawn)__instance;
 
             ModExt_ExtraDamageToRace mExt = dinfo.Def.GetModExtension<ModExt_ExtraDamageToRace>();

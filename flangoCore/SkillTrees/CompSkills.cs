@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime;
 using RimWorld;
 using Verse;
 
@@ -23,13 +21,13 @@ namespace flangoCore
 	//[HotSwap.HotSwappable]
     public class CompSkills : ThingComp
 	{
-		private List<SkillDef> learnedSkills = new List<SkillDef>();
+		private List<SkillDef> learnedSkills = new();
 		public List<SkillDef> LearnedSkills => learnedSkills;
 
 		public int canUnlockLevel = 1;
 		public float xpMultiplier = 1;
 
-		public Dictionary<SkillTreeDef, float> treeXPs = new Dictionary<SkillTreeDef, float>();
+		public Dictionary<SkillTreeDef, float> treeXPs = new();
 		public SkillTreeDef selectedTree;
 
 		private Pawn Pawn => (Pawn)parent;
@@ -45,7 +43,7 @@ namespace flangoCore
 			//Log.Message(selectedTree.ToString());
 		}
 
-		public override void CompTick()
+		/*public override void CompTick()
 		{
 			if (KeyBindingDefOf.Misc12.JustPressed)
             {
@@ -57,7 +55,7 @@ namespace flangoCore
                     break;
                 }
             }
-		}
+		}*/
 
         public float GetXP()
         {
@@ -121,7 +119,7 @@ namespace flangoCore
 			if (!treeXPs.ContainsKey(tree))
             {
 				treeXPs.Add(tree, 0);
-				if (selectedTree == null) selectedTree = tree;
+				selectedTree ??= tree;
 				((ITab_Pawn_Skills)parent.def.inspectorTabsResolved.FirstOrDefault(x => x is ITab_Pawn_Skills)).UpdateTreeTabs(treeXPs.Keys.ToList());
             }
         }

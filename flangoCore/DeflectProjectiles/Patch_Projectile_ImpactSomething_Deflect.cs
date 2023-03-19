@@ -1,7 +1,6 @@
 ﻿using RimWorld;
 using Verse;
 using HarmonyLib;
-using Verse.Sound;
 
 namespace flangoCore
 {
@@ -11,59 +10,56 @@ namespace flangoCore
         [HarmonyPrefix]
         public static bool Prefix(Projectile __instance)
         {
-            if (__instance.usedTarget.Thing is Pawn pawn && pawn.equipment != null && pawn.Drafted)
+            if (__instance.usedTarget.Thing is Pawn pawn)
             {
-                var ext = pawn.equipment.Primary?.def.GetModExtension<ModExt_DeflectProjectiles>();
-                if (ext == null || (ext.cantDeflect != null && ext.cantDeflect.Contains(__instance.def))) return true;
+                float chance = pawn.GetStatValue(DefOf_flangoCore.ProjectileDeflectionChance);
 
-                if (pawn.skills != null)
+                if (chance == 0) return true;
+
+                bool accAffectedByMelee = FlangoCore.settings.deflectionAccuracyAffectedByMeleeSkill;
+                int accuracy = 2;
+                if (pawn.skills != null) 
                 {
-                    if (FlangoCore.settings.deflectionChanceAffectedByMeleeSkill)
-                    {
-                        ext.deflectChance += pawn.skills.GetSkill(SkillDefOf.Melee).Level;
-                    }
-                    if (FlangoCore.settings.deflectionAccuracyAffectedByMeleeSkill)
-                    {
-                        ext.deflectAccuracy += pawn.skills.GetSkill(SkillDefOf.Melee).Level;
-                    }
+                    var melee = pawn.skills.GetSkill(SkillDefOf.Melee);
+                    accuracy = !melee.TotallyDisabled && accAffectedByMelee ? (int)(melee.Level * 0.5f) : 2; 
                 }
 
                 float roll = Rand.Value;
-                if (roll < ext.deflectChance)
+                if (roll < chance)
                 {
-                    ext.deflectSound?.PlayOneShot(pawn);
+                    //ext.deflectSound?.PlayOneShot(pawn);
+                    DefDatabase<SoundDef>.GetNamed("Deflect_Metal");
                     pawn.Drawer.Notify_DamageDeflected(new DamageInfo(__instance.def.projectile.damageDef, 1f));
 
-                    ThingWithComps equipment = null;
-                    if (pawn.equipment?.Primary != null)
-                    {
-                        equipment = pawn.equipment.Primary;
-                    }
+                    ThingWithComps equipment = pawn.equipment?.Primary;
 
                     ProjectileHitFlags projectileHitFlags = ProjectileHitFlags.NonTargetWorld;
                     float hitRoll = Rand.Value;
-                    if (hitRoll < ext.deflectAccuracy)
+                    if (hitRoll < accuracy)
                     {
                         projectileHitFlags = ProjectileHitFlags.All;
                     }
 
                     Thing other = __instance.Launcher;
                     __instance.Destroy();
-                    if (pawn.Faction.HostileTo(other.Faction))
+                    if (FlangoCore.settings.blockNonHostileProjectiles && !pawn.Faction.HostileTo(other.Faction))
                     {
-                        Projectile obj = (Projectile)GenSpawn.Spawn(__instance.def, pawn.Position, pawn.Map);
+                        if (FlangoCore.settings.enableDeflectionText)
+                        {
+                            MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.MapHeld, "fc_projectileBlocked".Translate());
+                        }
+                    }
+                    else
+                    {
+                        Projectile obj = (Projectile)GenSpawn.Spawn(__instance.def, pawn.Position, pawn.MapHeld);
                         obj.Launch(pawn, pawn.Position.ToVector3(), new LocalTargetInfo(other.Position), other, projectileHitFlags, false, equipment);
                         if (FlangoCore.settings.enableDeflectionText)
                         {
-                            MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.Map, "fc_projectileDeflected".Translate());
+                            MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.MapHeld, "fc_projectileDeflected".Translate());
                         }
                     }
-                    else if (FlangoCore.settings.enableDeflectionText)
-                    {
-                        MoteMaker.ThrowText(pawn.Position.ToVector3(), pawn.Map, "fc_projectileBlocked".Translate());
-                    }
 
-                    ext.deflectFleck?.MakeFleck(pawn.Map, pawn.DrawPos);
+                    pawn.Map.flecks.CreateFleck(FleckMaker.GetDataStatic(pawn.DrawPos, pawn.MapHeld, DefDatabase<FleckDef>.GetNamed("SparkFlash")));
 
                     return false;
                 }

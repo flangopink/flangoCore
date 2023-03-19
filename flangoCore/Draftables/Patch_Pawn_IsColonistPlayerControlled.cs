@@ -4,10 +4,10 @@ using Verse;
 
 namespace flangoCore
 {
-    [HarmonyPatch(typeof(Pawn), "get_IsColonistPlayerControlled")]
+    //[HarmonyPatch(typeof(Pawn), "get_IsColonistPlayerControlled")]
     public static class Patch_Pawn_IsColonistPlayerControlled
     {
-        [HarmonyPostfix]
+        //[HarmonyPostfix]
         public static void AddPawnAsColonist(Pawn __instance, ref bool __result)
         {
             if (__instance.IsDraftable())

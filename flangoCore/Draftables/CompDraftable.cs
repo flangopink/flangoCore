@@ -1,4 +1,5 @@
-﻿using Verse;
+﻿using System.Collections.Generic;
+using Verse;
 
 namespace flangoCore
 {
@@ -9,6 +10,15 @@ namespace flangoCore
         public CompProperties_Draftable() 
         {
             compClass = typeof(CompDraftable);
+        }
+
+        public override IEnumerable<string> ConfigErrors(ThingDef parentDef)
+        {
+            foreach (string s in base.ConfigErrors(parentDef)) yield return s;
+            if (!FlangoCore.settings.enableDraftables) 
+            {
+                Log.Error(parentDef.defName + " contains CompDraftable, but Draftables are disabled in flangoCore settings. It will not work if spawned.");
+            }
         }
     }
 

@@ -18,9 +18,8 @@ namespace flangoCore
 		RealDays
     }
 
-	public class HediffCompProperties_SeverityPerDayExtra : HediffCompProperties
+	public class HediffCompProperties_SeverityPerDayExtra : HediffCompProperties_SeverityPerDay
 	{
-		public float severityPerDay;
 		public bool onlyShowInInfo;
 		public TimeFormat timeFormat = TimeFormat.Hours;
 		public int decimalPlaces = -1;
@@ -32,7 +31,7 @@ namespace flangoCore
 		}
 	}
 
-	public class HediffComp_SeverityPerDayExtra : HediffComp
+	public class HediffComp_SeverityPerDayExtra : HediffComp_SeverityPerDay
 	{
 		//protected const int SeverityUpdateInterval = 200;
 
@@ -138,14 +137,9 @@ namespace flangoCore
 			}
 		}
 
-		public virtual float SeverityChangePerDay()
-		{
-			return Props.severityPerDay;
-		}
-
 		public override string CompDebugString()
 		{
-			StringBuilder stringBuilder = new StringBuilder();
+			StringBuilder stringBuilder = new();
 			stringBuilder.Append(base.CompDebugString());
 			if (!Pawn.Dead)
 			{

@@ -2,6 +2,7 @@
 using Verse;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 namespace flangoCore
 {
@@ -11,15 +12,17 @@ namespace flangoCore
         public HediffDef result;
 
         public ThingDef spawnThing;
+        public ThingDef spawnThingStuff;
         public float spawnThingRadius = 1.9f;
         public int spawnThingCount = 1;
+        public int spawnThingStackCount = 1;
 
         public bool isAreaOfEffect;
         public bool useCenterCellForAOE = true;
         public float resultRadius = 2.9f;
 
-        public bool dontRemoveOther;
-        public bool dontRemoveSelf;
+        public bool removeOther = true;
+        public bool removeSelf = true;
 
         public FleckProps reactFleck;
 
@@ -75,7 +78,8 @@ namespace flangoCore
             {
                 foreach (HediffDef h in Props.removesHediffs)
                 {
-                    pawn.hediffSet.hediffs.Remove(pawn.hediffSet.GetFirstHediffOfDef(h));
+                    var hed = pawn.hediffSet.GetFirstHediffOfDef(h);
+                    if (hed != null) pawn.hediffSet.hediffs.Remove(hed);
                 }
             }
 
@@ -90,31 +94,10 @@ namespace flangoCore
                         {
                             var cells = GenRadial.RadialCellsAround(parent.pawn.Position, combo.resultRadius, combo.useCenterCellForAOE);
                             foreach (IntVec3 cell in cells)
-                            {
-                                foreach (Pawn p in cell.GetThingList(parent.pawn.Map))
-                                {
+                                foreach (Pawn p in cell.GetThingList(parent.pawn.Map).Cast<Pawn>())
                                     ApplyCombo(p.health, combo);
-
-                                    if (combo.reactFleck != null && parent.pawn.Map != null)
-                                    {
-                                        combo.reactFleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
-                                    }
-
-                                    DealDamage(combo);
-                                }
-                            }
                         }
-                        else
-                        {
-                            ApplyCombo(pawn, combo);
-
-                            if (combo.reactFleck != null && parent.pawn.Map != null)
-                            {
-                                combo.reactFleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
-                            }
-
-                            DealDamage(combo);
-                        }
+                        else ApplyCombo(pawn, combo);
                     }
                 }
             }
@@ -124,20 +107,24 @@ namespace flangoCore
         {
             if (pawnHealth == null) return;
             if (combo.result != null) pawnHealth.AddHediff(combo.result);
-            if (!combo.dontRemoveOther) pawnHealth.RemoveHediff(pawnHealth.hediffSet.hediffs.Find(x => x.def == combo.reactWith));
-            if (!combo.dontRemoveSelf) pawnHealth.RemoveHediff(parent);
+            if (combo.removeOther) pawnHealth.RemoveHediff(pawnHealth.hediffSet.hediffs.Find(x => x.def == combo.reactWith));
+            if (combo.removeSelf) pawnHealth.RemoveHediff(parent);
             if (combo.throwText) MoteMaker.ThrowText(parent.pawn.Position.ToVector3() + combo.textOffset, parent.pawn.Map, combo.text, combo.textColor, combo.textDuration);
+            if (parent.pawn.Map != null) combo.reactFleck?.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
+            DealDamage(combo);
             if (combo.spawnThing != null)
             {
+                Thing t = ThingMaker.MakeThing(combo.spawnThing, combo.spawnThingStuff);
+                t.stackCount = combo.spawnThingStackCount;
                 if (combo.spawnThingRadius > 0)
                 {
                     var cells = GenRadial.RadialCellsAround(parent.pawn.Position, combo.spawnThingRadius, false);
                     for (int i = 0; i < combo.spawnThingCount; i++)
                     {
-                        GenSpawn.Spawn(combo.spawnThing, cells.RandomElement(), parent.pawn.Map);
+                        GenSpawn.Spawn(t, cells.RandomElement(), parent.pawn.Map);
                     }
                 }
-                else GenSpawn.Spawn(combo.spawnThing, parent.pawn.Position.RandomAdjacentCell8Way(), parent.pawn.Map);
+                else GenSpawn.Spawn(t, parent.pawn.Position.RandomAdjacentCell8Way(), parent.pawn.Map);
             }
         }
 

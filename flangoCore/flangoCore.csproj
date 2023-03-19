@@ -96,6 +96,7 @@
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_Multishot.cs" />
     <Compile Include="ItemRequirements\ModExt_Requirements.cs" />
     <Compile Include="ItemRequirements\Patch_EquipmentUtility_CanEquip.cs" />
     <Compile Include="ItemRequirements\Patch_Pawn_ApparelTracker_Notify_ApparelRemoved.cs" />
@@ -123,16 +124,23 @@
     <Compile Include="Draftables\Patch_Pawn_IsColonistPlayerControlled.cs" />
     <Compile Include="Draftables\Patch_Pawn_WorkTypeIsDisabled.cs" />
     <Compile Include="Misc\CompAnimatedTexture.cs" />
+    <Compile Include="Misc\CompTeleporter.cs" />
+    <Compile Include="Misc\CustomDrill\CompCustomDrill.cs" />
+    <Compile Include="Misc\CompSwapObject.cs" />
     <Compile Include="Misc\CompAudioSource.cs" />
-    <Compile Include="Misc\CompColorableWithGizmo.cs" />
+    <Compile Include="Misc\CompRecolorable.cs" />
     <Compile Include="Misc\CompDecoy.cs" />
     <Compile Include="Misc\CompFleckEmitterFlickable.cs" />
     <Compile Include="Misc\CompFleckEmitterItem.cs" />
     <Compile Include="Misc\CompRemoteExplosive.cs" />
+    <Compile Include="Misc\CustomDrill\JobDriver_OperateCustomDrill.cs" />
+    <Compile Include="Misc\CustomDrill\WorkGiver_CustomDrill.cs" />
     <Compile Include="Misc\DebugTools.cs" />
     <Compile Include="Misc\InitializeComps.cs" />
+    <Compile Include="Misc\Randomizer.cs" />
     <Compile Include="Misc\Patch_CompFlickable_DoFlick.cs" />
     <Compile Include="Misc\Patch_Pawn_PathFollower_CostToMoveIntoCell.cs" />
+    <Compile Include="Misc\Patch_PawnRenderer_DrawEquipmentAiming_Offsets.cs" />
     <Compile Include="Misc\ThingWithComps_NoStyle.cs" />
     <Compile Include="SkillTrees\CompAbilityEffect_GainXP.cs" />
     <Compile Include="SkillTrees\CompUseEffect_TreeGiver.cs" />
@@ -141,6 +149,9 @@
     <Compile Include="SkillTrees\Dev\SkillTreeEditor.cs" />
     <Compile Include="SkillTrees\HediffComp_XPOverTime.cs" />
     <Compile Include="Misc\JobDriver_UseItemHold.cs" />
+    <Compile Include="Stats\SkillNeed_DeflectionMelee.cs" />
+    <Compile Include="Stats\StatWorker_ProjectileDeflectionChance.cs" />
+    <Compile Include="Stats\StatWorker_RangedDodgeChance.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="XML\XMLToggleablePatch.cs" />
     <Compile Include="SkillTrees\CompSkillTreeGiver.cs" />
@@ -177,7 +188,7 @@
     <Compile Include="SkillTrees\SkillTreeLevel.cs" />
     <Compile Include="SkillTrees\XPSourceFlags.cs" />
     <Compile Include="Stats\Patch_Projectile_ImpactSomething_Dodge.cs" />
-    <Compile Include="Stats\StatDefOf_flangoCore.cs" />
+    <Compile Include="Stats\DefOf_flangoCore.cs" />
     <Compile Include="Stats\Patch_VerbProperties_AdjustedCooldown.cs" />
     <Compile Include="VanillaExpanded\Patch_Building_ItemProcessor_CheckTheHoppers.cs" />
     <Compile Include="VanillaExpanded\ModExt_AcceptedHoppers.cs" />
@@ -202,6 +213,7 @@
     <Publicize Include="Assembly-CSharp:Verse.DamageDef.externalViolenceForMechanoids" />
     <Publicize Include="Assembly-CSharp:RimWorld.JobDriver_UseItem.useDuration" />
     <Publicize Include="Assembly-CSharp:RimWorld.JobDriver_UseItem.warmupMote" />
+    <Publicize Include="Assembly-CSharp:Verse.PawnRenderer.CarryWeaponOpenly" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

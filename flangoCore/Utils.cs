@@ -4,6 +4,8 @@ using System.Linq;
 using RimWorld;
 using Verse;
 using UnityEngine;
+using Verse.AI;
+using static HarmonyLib.Code;
 
 namespace flangoCore
 {
@@ -17,9 +19,22 @@ namespace flangoCore
         RandomAdjacent
     }
 
+    [Flags]
+    public enum FactionFlags
+    {
+        Hostile = 0,
+        Neutral = 1,
+        Colony = 2,
+        NonFaction = 4,
+        NeutralNoNonFaction = 8,
+        All = 16
+    }
+
+
     public static class Utils
     {
         private const float R = 0.9f;
+        public static readonly Color DefaultRingColor = new(0.8f, 0.49f, 0.43f);
 
         public static bool InTheSameRoom(IntVec3 locA, IntVec3 locB, Map map) => locA.GetRoom(map) is Room room && (room == null || room == locB.GetRoom(map));
 
@@ -132,20 +147,157 @@ namespace flangoCore
                 if (pawn.Spawned && (!pawn.Dead || (affectDowned && pawn.Downed)))
                 {
                     float pawnDist = pawn.Position.DistanceToSquared(cell);
-                    if (pawnDist <= range) 
+                    if (pawnDist <= range)
                     {
                         if (requireLOS && !GenSight.LineOfSight(cell, pawn.Position, map)) continue;
-                        list.Add(pawn); 
+                        list.Add(pawn);
                     }
                 }
             }
             return list;
         }
-        public static bool HasComp(this List<CompProperties> defComps, CompProperties comp) => defComps.Contains(comp);
-        public static bool HasComp(this ThingDef def, CompProperties comp) => def.comps.Contains(comp);
+        public static List<Thing> GetThingsInRange(IntVec3 cell, Map map, float maxRange, bool requireLOS = false)
+        {
+            List<Thing> list = new();
+            float range = maxRange * maxRange;
+            foreach (Thing t in map.spawnedThings)
+            {
+                if (!t.Destroyed)
+                {
+                    float pawnDist = t.Position.DistanceToSquared(cell);
+                    if (pawnDist <= range) 
+                    {
+                        if (requireLOS && !GenSight.LineOfSight(cell, t.Position, map)) continue;
+                        list.Add(t); 
+                    }
+                }
+            }
+            return list;
+        }
+        public static List<ThingDef> GetThingDefsInRange(IntVec3 cell, Map map, float maxRange, bool requireLOS = false)
+        {
+            return GetThingsInRange(cell, map, maxRange, requireLOS).Select(x => x.def).ToList();
+        }
+
         public static bool HasComp<T>(this List<CompProperties> defComps) => defComps.OfType<T>().Any();
         public static bool HasComp<T>(this ThingDef def) => def.comps.OfType<T>().Any();
-      
+        public static bool HasComp<T>(this HediffDef def) => def.comps.OfType<T>().Any();
+
+        /*public static bool HasCompClass<T>(this ThingDef def)
+        { 
+            var comps = def.comps;
+            for (int i = 0; i < comps.Count; i++)
+            {
+                if (comps[i].compClass == typeof(T)) return true;
+            }
+            return false;
+        }*/
+
+        public static List<ThingDef> SelectDefs<T>(this List<T> list) where T : Thing
+        {
+            List<ThingDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        public static List<HediffDef> SelectHediffDefs<T>(this List<T> list) where T : Hediff
+        {
+            List<HediffDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        public static List<TraitDef> SelectTraitDefs<T>(this List<T> list) where T : Trait
+        {
+            List<TraitDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        public static List<GeneDef> SelectGeneDefs<T>(this List<T> list) where T : Gene
+        {
+            List<GeneDef> defs = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                defs.Add(list[i].def);
+            }
+            return defs;
+        }
+
+        // Rewritten Intersect, because LINQ is slow.
+        public static List<T> FindMatching<T>(this List<T> list, List<T> other)
+        {
+            List<T> matches = new();
+            for (int i = 0; i < list.Count; i++)
+            {
+                for (int k = 0; k < other.Count; k++)
+                {
+                    if (list[i].Equals(other[k])) matches.Add(list[i]);
+                }
+            }
+            return matches;
+        }
+
+        public static T RandomByWeight<T>(this Dictionary<T, float> dict)
+        {
+            float sum = 0;
+            float r = Rand.Range(0, dict.Sum(x => x.Value));
+            foreach (var item in dict)
+            {
+                if (r < (sum + item.Value)) return item.Key;
+                else sum += item.Value;
+            }
+            return dict.LastOrDefault().Key;
+        }
+
+        public static bool HasThingsNearby(IntVec3 pos, Map map, float radius, List<ThingDef> other, out List<Thing> result)
+        {
+            var things = GetThingsInRange(pos, map, radius);
+            result = new();
+            Thing t;
+            for (int i = 0; i < things.Count; i++)
+            {
+                t = things[i];
+                if (t.Position == pos) continue;
+                if (other.Contains(t.def)) result.Add(t);
+            }
+            return result.Count > 0;
+        }
+
+        public static void DrawThingOverlayRadius(IntVec3 pos, ThingDef def, float radius, List<Thing> other, SimpleColor lineColor = SimpleColor.Red, Color? ringColor = null)
+        {
+            if (ringColor != null) GenDraw.DrawRadiusRing(pos, radius, (Color)ringColor);
+            int num = 0;
+            foreach (Thing item in other)
+            {
+                if (num++ > 10) break;
+                GenDraw.DrawLineBetween(GenThing.TrueCenter(pos, Rot4.North, def.size, def.Altitude), item.TrueCenter(), lineColor);
+            }
+        }
+
+        public static bool TargetFactionValid(this Pawn pawn, FactionFlags flags)
+        {
+            return flags switch
+            {
+                FactionFlags.All => true,
+                FactionFlags.NonFaction => pawn.Faction == null,
+                FactionFlags.Colony => pawn.Faction == Faction.OfPlayer,
+                FactionFlags.Neutral => pawn.Faction != Faction.OfPlayer && !pawn.Faction.HostileTo(Faction.OfPlayer),
+                FactionFlags.NeutralNoNonFaction => pawn.Faction != null && pawn.Faction != Faction.OfPlayer && !pawn.Faction.HostileTo(Faction.OfPlayer),
+                FactionFlags.Hostile => pawn.Faction.HostileTo(Faction.OfPlayer),
+                _ => true,
+            };
+        }
+
         /*
         public static List<T> ListMatches<T>(this List<T> mainList, List<T> subList)
         {
