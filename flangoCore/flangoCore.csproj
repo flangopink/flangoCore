@@ -96,6 +96,7 @@
     <Compile Include="Abilities\TransformThing\Command_Transform.cs" />
     <Compile Include="Abilities\TransformThing\CompAbilityEffect_AbilityTransform.cs" />
     <Compile Include="Abilities\TransformThing\TransformOutcomeOptions.cs" />
+    <Compile Include="CustomizableProjectiles\Proj_Multishot.cs" />
     <Compile Include="ItemRequirements\ModExt_Requirements.cs" />
     <Compile Include="ItemRequirements\Patch_EquipmentUtility_CanEquip.cs" />
     <Compile Include="ItemRequirements\Patch_Pawn_ApparelTracker_Notify_ApparelRemoved.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Draftables\Patch_Pawn_IsColonistPlayerControlled.cs" />
     <Compile Include="Draftables\Patch_Pawn_WorkTypeIsDisabled.cs" />
     <Compile Include="Misc\CompAnimatedTexture.cs" />
+    <Compile Include="Misc\CompTeleporter.cs" />
     <Compile Include="Misc\CustomDrill\CompCustomDrill.cs" />
     <Compile Include="Misc\CompSwapObject.cs" />
     <Compile Include="Misc\CompAudioSource.cs" />

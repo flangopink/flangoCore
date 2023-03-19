@@ -9,7 +9,7 @@ namespace flangoCore
 {
     public class Verb_ShootBeamBurst : Verb
     {
-		private List<Vector3> beamHitLocations = new List<Vector3>();
+		private List<Vector3> beamHitLocations = new();
 
 		private Effecter endEffecter;
 
@@ -182,8 +182,8 @@ namespace flangoCore
 				return;
 			}
 			float angleFlat = (currentTarget.Cell - caster.Position).AngleFlat;
-			BattleLogEntry_RangedImpact log = new BattleLogEntry_RangedImpact(EquipmentSource, thing, currentTarget.Thing, EquipmentSource.def, null, null);
-			DamageInfo dinfo = new DamageInfo(verbProps.beamDamageDef, verbProps.beamDamageDef.defaultDamage, verbProps.beamDamageDef.defaultArmorPenetration, angleFlat, base.EquipmentSource, null, base.EquipmentSource.def, DamageInfo.SourceCategory.ThingOrUnknown, currentTarget.Thing);
+			BattleLogEntry_RangedImpact log = new(EquipmentSource, thing, currentTarget.Thing, EquipmentSource.def, null, null);
+			DamageInfo dinfo = new(verbProps.beamDamageDef, verbProps.beamDamageDef.defaultDamage, verbProps.beamDamageDef.defaultArmorPenetration, angleFlat, base.EquipmentSource, null, base.EquipmentSource.def, DamageInfo.SourceCategory.ThingOrUnknown, currentTarget.Thing);
 			thing.TakeDamage(dinfo).AssociateWithLog(log);
 			if (thing.CanEverAttachFire())
 			{

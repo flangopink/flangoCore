@@ -12,7 +12,7 @@ namespace flangoCore
 
 		public static int TotalPoints;
 
-		public bool unlockWholeLevels;
+		//public bool unlockWholeLevels;
 
 		public XPSourceFlags xpSources;
 
@@ -72,20 +72,17 @@ namespace flangoCore
 		{
 			base.ResolveReferences();
 
-			if (BlankSkill == null) 
-			{ 
-				BlankSkill = new SkillDef();
-			}
+			BlankSkill ??= new SkillDef();
 			TotalPoints++;
 
-			int stilLevel = 0;
+			int lvl = 0;
 			skillDefs = new List<SkillDef>();
 			foreach (SkillTreeLevel stl in levels)
             {
-				stilLevel++;
+                lvl++;
                 foreach (SkillDef skill in stl.skills)
                 {
-					skill.reqLevel = stilLevel;
+					skill.reqLevel = lvl;
 					skillDefs.Add(skill);
 				}
             }
@@ -98,7 +95,8 @@ namespace flangoCore
 			{
 				skillLevelsInOrder[skillGroup.Key - 1] = skillGroup.OrderBy((SkillDef s) => s.reqLevel).SelectMany(delegate (SkillDef s)
 				{
-					IEnumerable<SkillDef> result;
+					return Gen.YieldSingle(s);
+					/*IEnumerable<SkillDef> result;
 					if (!s.spaceAfter)
 					{
 						result = Gen.YieldSingle(s);
@@ -108,7 +106,7 @@ namespace flangoCore
 						IEnumerable<SkillDef> enumerable = new List<SkillDef> { s, BlankSkill };
 						result = enumerable;
 					}
-					return result;
+					return result;*/
 				}).ToArray();
 			}
 			HasSkills = skillLevelsInOrder.Any((SkillDef[] arr) => !arr.NullOrEmpty());

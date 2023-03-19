@@ -147,12 +147,12 @@ namespace flangoCore
 
 			// Optional Patches
 			listing_Standard.Gap(16f);
-			listing_Standard.CheckboxLabeled("fc_EnableDraftables", ref enableDraftables);
+			listing_Standard.CheckboxLabeled("fc_EnableDraftables".Translate(), ref enableDraftables);
             listing_Standard.Label("fc_EnableDraftablesWarning".Translate());
 
             // Randomizer
             listing_Standard.Gap(16f);
-			listing_Standard.CheckboxLabeled("fc_EnableRandomizer", ref randomizerEnabled);
+			listing_Standard.CheckboxLabeled("fc_EnableRandomizer".Translate(), ref randomizerEnabled);
 
 			// Animated Weapons (WIP)
             //listing_Standard.Gap(16f);

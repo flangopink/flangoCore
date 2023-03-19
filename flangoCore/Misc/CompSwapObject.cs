@@ -10,7 +10,7 @@ namespace flangoCore
         public ThingDef swapThingStuff;
         public string commandLabel = "Swap object...";
         public string commandDesc = "Swap current object with another.";
-        public string commandIcon = "";
+        public string commandIcon = null;
 
         public CompProperties_SwapObject()
         {
@@ -35,7 +35,7 @@ namespace flangoCore
     {
         public CompProperties_SwapObject Props => (CompProperties_SwapObject)props;
 
-        public Texture2D Icon => ContentFinder<Texture2D>.Get(Props.commandIcon) ?? BaseContent.BadTex;
+        public Texture2D Icon => !Props.commandIcon.NullOrEmpty() ? ContentFinder<Texture2D>.Get(Props.commandIcon) : BaseContent.BadTex;
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
         {

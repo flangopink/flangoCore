@@ -13,6 +13,7 @@ namespace flangoCore
             if (FlangoCore.settings.randomizerEnabled)
             {
                 var races = DefDatabase<PawnKindDef>.AllDefs;
+                var recipes = DefDatabase<RecipeDef>.AllDefs;
 
                 foreach (PawnKindDef race in races)
                 {
@@ -34,6 +35,12 @@ namespace flangoCore
                         //race.race.graphicData = other.race.graphicData;
                         //race.race.graphic = other.race.graphic;
                     }*/
+                }
+
+                foreach (RecipeDef def in recipes)
+                {
+                    def.label = recipes.RandomElement().label;
+                    def.description = recipes.RandomElement().description;
                 }
             }
         }
@@ -83,6 +90,7 @@ namespace flangoCore
 
                     while (true)
                     {
+                        other = terrains.RandomElement();
                         if (def.graphic == null || other.graphic == null) break;
                         def.graphic = other.graphic;
                         break;

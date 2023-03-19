@@ -5,6 +5,7 @@ using RimWorld;
 using Verse;
 using UnityEngine;
 using Verse.AI;
+using static HarmonyLib.Code;
 
 namespace flangoCore
 {
@@ -17,6 +18,18 @@ namespace flangoCore
         Ring,
         RandomAdjacent
     }
+
+    [Flags]
+    public enum FactionFlags
+    {
+        Hostile = 0,
+        Neutral = 1,
+        Colony = 2,
+        NonFaction = 4,
+        NeutralNoNonFaction = 8,
+        All = 16
+    }
+
 
     public static class Utils
     {
@@ -170,7 +183,7 @@ namespace flangoCore
         public static bool HasComp<T>(this ThingDef def) => def.comps.OfType<T>().Any();
         public static bool HasComp<T>(this HediffDef def) => def.comps.OfType<T>().Any();
 
-        public static bool HasCompClass<T>(this ThingDef def)
+        /*public static bool HasCompClass<T>(this ThingDef def)
         { 
             var comps = def.comps;
             for (int i = 0; i < comps.Count; i++)
@@ -178,7 +191,7 @@ namespace flangoCore
                 if (comps[i].compClass == typeof(T)) return true;
             }
             return false;
-        }
+        }*/
 
         public static List<ThingDef> SelectDefs<T>(this List<T> list) where T : Thing
         {
@@ -269,6 +282,20 @@ namespace flangoCore
                 if (num++ > 10) break;
                 GenDraw.DrawLineBetween(GenThing.TrueCenter(pos, Rot4.North, def.size, def.Altitude), item.TrueCenter(), lineColor);
             }
+        }
+
+        public static bool TargetFactionValid(this Pawn pawn, FactionFlags flags)
+        {
+            return flags switch
+            {
+                FactionFlags.All => true,
+                FactionFlags.NonFaction => pawn.Faction == null,
+                FactionFlags.Colony => pawn.Faction == Faction.OfPlayer,
+                FactionFlags.Neutral => pawn.Faction != Faction.OfPlayer && !pawn.Faction.HostileTo(Faction.OfPlayer),
+                FactionFlags.NeutralNoNonFaction => pawn.Faction != null && pawn.Faction != Faction.OfPlayer && !pawn.Faction.HostileTo(Faction.OfPlayer),
+                FactionFlags.Hostile => pawn.Faction.HostileTo(Faction.OfPlayer),
+                _ => true,
+            };
         }
 
         /*

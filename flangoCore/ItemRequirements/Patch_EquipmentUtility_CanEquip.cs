@@ -18,7 +18,7 @@ namespace flangoCore
             {
                 ThingDef def = thing.def;
 
-                if (def.IsApparel || def.HasCompClass<CompEquippable>())
+                if (def.IsApparel || def.HasComp(typeof(CompEquippable)))
                 {
                     ModExt_Requirements ext = def.GetModExtension<ModExt_Requirements>();
                     if (ext == null) return;

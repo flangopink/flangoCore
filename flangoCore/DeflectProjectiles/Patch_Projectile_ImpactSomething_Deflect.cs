@@ -1,8 +1,6 @@
 ﻿using RimWorld;
 using Verse;
 using HarmonyLib;
-using Verse.Sound;
-using Verse.Noise;
 
 namespace flangoCore
 {
@@ -19,7 +17,12 @@ namespace flangoCore
                 if (chance == 0) return true;
 
                 bool accAffectedByMelee = FlangoCore.settings.deflectionAccuracyAffectedByMeleeSkill;
-                int accuracy = pawn.skills != null && accAffectedByMelee ? (int)(pawn.skills.GetSkill(SkillDefOf.Melee).Level * 0.5f) : 2;
+                int accuracy = 2;
+                if (pawn.skills != null) 
+                {
+                    var melee = pawn.skills.GetSkill(SkillDefOf.Melee);
+                    accuracy = !melee.TotallyDisabled && accAffectedByMelee ? (int)(melee.Level * 0.5f) : 2; 
+                }
 
                 float roll = Rand.Value;
                 if (roll < chance)

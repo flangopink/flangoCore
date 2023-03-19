@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace flangoCore
 {
-	//[HotSwap.HotSwappable]
+	[HotSwap.HotSwappable]
 	[StaticConstructorOnStartup]
 	public class ITab_Pawn_Skills : ITab
 	{
@@ -279,9 +279,9 @@ namespace flangoCore
 
 			for (int i = -1; i < tree.skillLevelsInOrder.Length; i++)
 			{
-				float xOffset = tree.MaxLevel > 4 ? skillTreeXOffsets[2] : skillTreeXOffsets[tree.MaxLevel-1];
-				//Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / (tree.MaxLevel * xOffset), inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
-				Rect rect = new(inRect.x + i * inRect.width / (tree.MaxLevel) * xOffset + absoluteXOffset[0], inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
+				float xOffset = tree.MaxLevel > 3 ? (0.18775f * (tree.MaxLevel+1)) : skillTreeXOffsets[tree.MaxLevel-1]; //skillTreeXOffsets[2]
+                //Rect rect = new Rect(inRect.x + (tree.MaxLevel - 1 + i) * inRect.width / (tree.MaxLevel * xOffset), inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
+                Rect rect = new(inRect.x + i * inRect.width / (tree.MaxLevel) * xOffset + absoluteXOffset[0], inRect.y + inRect.height * 0.5f, inRect.width, inRect.height);
 				//Log.Message(rect.ToString());
 				// Tree icon
 				if (i == -1)
@@ -379,7 +379,7 @@ namespace flangoCore
 			bool flag = false;
 			if (!CompSkills.HasSkill(skill))
 			{
-				if (skill.reqLevel <= CompSkills.canUnlockLevel && CompSkills.GetXP() >= skill.cost && (skill.prerequisites.NullOrEmpty() || CompSkills.LearnedSkills.Intersect(skill.prerequisites).Count() == skill.prerequisites.Count()))
+				if (/*skill.reqLevel <= CompSkills.canUnlockLevel &&*/ CompSkills.GetXP() >= skill.cost && (skill.prerequisites.NullOrEmpty() || CompSkills.LearnedSkills.Intersect(skill.prerequisites).Count() == skill.prerequisites.Count()))
 				{
 					unlockable = true;
 				}

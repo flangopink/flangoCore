@@ -17,13 +17,13 @@ namespace flangoCore
         public IntRange randomIntervalTicks = new(200, 800);
         public string commandPlayLabel = "Play";
         public string commandPlayDesc = "Play selected sound.";
-        public string commandPlayIcon = "";
+        public string commandPlayIcon = null;
         public string commandSwitchLabel = "Switch audio...";
         public string commandSwitchDesc = "Switch current audio.";
-        public string commandSwitchIcon = "";
+        public string commandSwitchIcon = null;
         public string commandStopLabel = "Stop";
         public string commandStopDesc = "Stop sound.";
-        public string commandStopIcon = "";
+        public string commandStopIcon = null;
 
         public CompProperties_AudioSource()
         {
@@ -35,9 +35,9 @@ namespace flangoCore
     {
         public CompProperties_AudioSource Props => (CompProperties_AudioSource)props;
 
-        public Texture2D PlayIcon => ContentFinder<Texture2D>.Get(Props.commandPlayIcon) ?? BaseContent.BadTex;
-        public Texture2D SwitchIcon => ContentFinder<Texture2D>.Get(Props.commandSwitchIcon) ?? BaseContent.BadTex;
-        public Texture2D StopIcon => ContentFinder<Texture2D>.Get(Props.commandStopIcon) ?? BaseContent.BadTex;
+        public Texture2D PlayIcon => !Props.commandPlayIcon.NullOrEmpty() ? ContentFinder<Texture2D>.Get(Props.commandPlayIcon) : BaseContent.BadTex;
+        public Texture2D SwitchIcon => !Props.commandSwitchIcon.NullOrEmpty() ? ContentFinder<Texture2D>.Get(Props.commandSwitchIcon) : BaseContent.BadTex;
+        public Texture2D StopIcon => !Props.commandStopIcon.NullOrEmpty() ? ContentFinder<Texture2D>.Get(Props.commandStopIcon) : BaseContent.BadTex;
 
         private SoundDef currentSound;
 
