@@ -56,7 +56,7 @@ namespace flangoCore
 
         public override void CompTick()
         {
-            if (Props.random && Find.TickManager.TicksGame % Props.randomIntervalTicks.RandomInRange == 0)
+            if (Props.random && parent.IsHashIntervalTick(Props.randomIntervalTicks.RandomInRange))
             {
                 currentSound = Props.soundDefs.RandomElement();
                 PlayAtThing(currentSound, parent);

@@ -32,7 +32,7 @@ namespace flangoCore
         public CompProperties_Teleporter() => compClass = typeof(CompTeleporter);
     }
 
-    [HotSwappable]
+    //[HotSwappable]
     public class CompTeleporter : ThingComp
     {
         public CompProperties_Teleporter Props => (CompProperties_Teleporter)props;
@@ -57,7 +57,7 @@ namespace flangoCore
 
         public override void CompTick()
         {
-            if (Props.updateInterval > 0 && Find.TickManager.TicksGame % Props.updateInterval == 0)
+            if (Props.updateInterval > 0 && parent.IsHashIntervalTick(Props.updateInterval))
             {
                 TryTeleport();
             }

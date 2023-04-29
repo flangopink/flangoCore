@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace flangoCore
 {
-	[HotSwap.HotSwappable]
+	//[HotSwap.HotSwappable]
 	[StaticConstructorOnStartup]
 	public class ITab_Pawn_Skills : ITab
 	{

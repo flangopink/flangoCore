@@ -22,7 +22,7 @@ namespace flangoCore
         public CompProperties_Decoy() => compClass = typeof(CompDecoy);
     }
 
-    [HotSwappable]
+    //[HotSwappable]
     public class CompDecoy : ThingComp
     {
         public CompProperties_Decoy Props => (CompProperties_Decoy)props;
@@ -46,7 +46,7 @@ namespace flangoCore
                 return;
             }
 
-            if (Props.updateInterval > 0 && Find.TickManager.TicksGame % Props.updateInterval == 0)
+            if (Props.updateInterval > 0 && parent.IsHashIntervalTick(Props.updateInterval))
                 AggroNearbyPawns();
 
             timer--;

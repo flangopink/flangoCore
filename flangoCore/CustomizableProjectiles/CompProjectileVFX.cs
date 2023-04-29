@@ -25,17 +25,13 @@ namespace flangoCore
 
         public override void CompTick()
         {
-            base.CompTick();
-            int curTick = Find.TickManager.TicksGame;
+            if (Props.flecks.NullOrEmpty()) return;
 
-            if (!Props.flecks.NullOrEmpty())
+            foreach (FleckProps fleck in Props.flecks)
             {
-                foreach (FleckProps fleck in Props.flecks)
+                if (parent.Map != null && parent.IsHashIntervalTick(fleck.intervalTicks))
                 {
-                    if (parent.Map != null && curTick % fleck.intervalTicks == 0)
-                    {
-                        fleck.MakeFleck(parent.Map, parent.DrawPos);
-                    }
+                    fleck.MakeFleck(parent.Map, parent.DrawPos);
                 }
             }
         }

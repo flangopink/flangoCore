@@ -26,7 +26,7 @@ namespace flangoCore
         public bool requireLOS = true;
     }
 
-    [HotSwappable]
+    //[HotSwappable]
     public class Projectile_ThingSpawner : Projectile
     {
         public ModExt_ProjectileThingSpawner Ext => def.GetModExtension<ModExt_ProjectileThingSpawner>();
@@ -49,7 +49,7 @@ namespace flangoCore
             if (ticksToImpact > 0) 
             {
                 delayTicks++;
-                if (Find.TickManager.TicksGame % Ext.intervalTicks.RandomInRange == 0)
+                if (this.IsHashIntervalTick(Ext.intervalTicks.RandomInRange))
                 {
                     if (Map == null || !Position.InBounds(Map)) return;
                     if (delayTicks > Ext.delayAfterShot)

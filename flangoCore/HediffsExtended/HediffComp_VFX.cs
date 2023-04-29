@@ -23,16 +23,13 @@ namespace flangoCore
 
         public override void CompPostPostAdd(DamageInfo? dinfo)
         {
-            if (parent.pawn.Dead) return;
+            if (parent.pawn.Dead || Props.onAddFlecks.NullOrEmpty()) return;
 
-            if (!Props.onAddFlecks.NullOrEmpty())
+            foreach (FleckProps fleck in Props.onAddFlecks)
             {
-                foreach (FleckProps fleck in Props.onAddFlecks)
+                if (parent.pawn.Map != null)
                 {
-                    if (parent.pawn.Map != null)
-                    {
-                        fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
-                    }
+                    fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
                 }
             }
         }
@@ -41,30 +38,26 @@ namespace flangoCore
         {
             if (parent.pawn.Dead) parent.pawn.health.RemoveHediff(parent);
 
-            if (!Props.onTickFlecks.NullOrEmpty())
+            if (Props.onTickFlecks.NullOrEmpty()) return;
+
+            foreach (FleckProps fleck in Props.onTickFlecks)
             {
-                foreach (FleckProps fleck in Props.onTickFlecks)
+                if (parent.pawn.Map != null && parent.pawn.IsHashIntervalTick(fleck.intervalTicks))
                 {
-                    if (parent.pawn.Map != null && Find.TickManager.TicksGame % fleck.intervalTicks == 0)
-                    {
-                        fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
-                    }
+                    fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
                 }
             }
         }
 
         public override void CompPostPostRemoved()
         {
-            if (parent.pawn.Dead) return;
+            if (Props.onRemoveFlecks.NullOrEmpty() || parent.pawn.Dead) return;
 
-            if (!Props.onRemoveFlecks.NullOrEmpty())
+            foreach (FleckProps fleck in Props.onRemoveFlecks)
             {
-                foreach (FleckProps fleck in Props.onRemoveFlecks)
+                if (parent.pawn.Map != null)
                 {
-                    if (parent.pawn.Map != null)
-                    {
-                        fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
-                    }
+                    fleck.MakeFleck(parent.pawn.Map, parent.pawn.DrawPos);
                 }
             }
         }

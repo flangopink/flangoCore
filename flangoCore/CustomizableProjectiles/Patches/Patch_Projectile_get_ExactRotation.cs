@@ -19,7 +19,7 @@ namespace flangoCore
                 {
                     if (props.stopRotatingOnImpact && __instance.landed) return false;
 
-                    __result = Quaternion.AngleAxis((props.counterClockwise ? -1 : 1) * Find.TickManager.TicksGame % 360 * props.rotationSpeed, Vector3.up);
+                    __result = Quaternion.AngleAxis((props.counterClockwise ? -1 : 1) * (__instance.HashOffsetTicks() % 360) * props.rotationSpeed, Vector3.up);
                     return false;
                 }
             }

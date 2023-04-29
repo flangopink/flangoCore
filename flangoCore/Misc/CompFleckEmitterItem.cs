@@ -23,7 +23,7 @@ namespace flangoCore
             base.CompTick();
             if (Props.fleck != null)
             {
-                if (parent.Map != null && Find.TickManager.TicksGame % Props.fleck.intervalTicks == 0)
+                if (parent.Map != null && parent.IsHashIntervalTick(Props.fleck.intervalTicks))
                 {
                     if (Props.emitWhenEquipped && parent.ParentHolder is Pawn pawn && pawn.equipment?.Primary == parent)
                     {

@@ -26,7 +26,7 @@ namespace flangoCore
 
             if (FlangoCore.settings.enableVCF) EnableVCF(harmony);
             if (FlangoCore.settings.enableDraftables) EnableDraftables(harmony);
-            //if (FlangoCore.settings.enableAnimatedWeapons) EnableAnimations(harmony);
+            //if (FlangoCore.settings.enableAnimatedWeapons) EnableAnimations(harmony); // Enable animations
 
             Log.Message($"<color=#FFC0CB>Launched successfully! Harmony patches: {harmony.GetPatchedMethods().Select(Harmony.GetPatchInfo).SelectMany((Patches p) => p.Prefixes.Concat(p.Postfixes).Concat(p.Transpilers)).Count((Patch p) => p.owner == harmony.Id)}\nThank you for using flangoCore!</color>");
         }

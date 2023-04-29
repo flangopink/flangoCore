@@ -22,7 +22,7 @@ namespace flangoCore
 
 		public override void CompPostTick(ref float severityAdjustment)
         {
-            if (Find.TickManager.TicksGame % Props.intervalTicks == 0)
+            if (parent.pawn.IsHashIntervalTick(Props.intervalTicks))
             {
 				Hediff hediff = HediffMaker.MakeHediff(Props.hediffDef, parent.pawn);
 				hediff.Severity = Props.hediffSeverity;

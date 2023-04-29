@@ -23,7 +23,7 @@ namespace flangoCore
             base.CompTick();
             if (Props.fleck != null && SwitchIsOn)
             {
-                if (parent.Map != null && Find.TickManager.TicksGame % Props.fleck.intervalTicks == 0)
+                if (parent.Map != null && parent.IsHashIntervalTick(Props.fleck.intervalTicks))
                 {
                     Props.fleck.MakeFleck(parent.Map, parent.DrawPos);
                 }

@@ -15,7 +15,7 @@ namespace flangoCore
         public bool sideBySide;
     }
 
-    [HotSwappable]
+    //[HotSwappable]
     public class Projectile_Multishot : Projectile
     {
         public ModExt_ProjectileMultishot Ext => def.GetModExtension<ModExt_ProjectileMultishot>();
