@@ -11,7 +11,5 @@ namespace flangoCore
         public static StatDef ProjectileDeflectionChance;
 
         public static JobDef OperateCustomDrill;
-
-        public static ThingDef CustomDeepDrill;
     }
 }

@@ -39,7 +39,7 @@ namespace flangoCore
         {
             if (Pawn.Dead) Pawn.health.RemoveHediff(parent);
             base.CompPostTick(ref severityAdjustment);
-            if (Find.TickManager.TicksGame % Props.intervalTicks == 0)
+            if (parent.pawn.IsHashIntervalTick(Props.intervalTicks))
             {
                 if (Props.giveToAllTrees) skills.GiveXPToAllTrees(Props.xpAmount, Props.ignoreMultiplier);
                 else skills.TryGiveXPToTree(Props.xpAmount, Props.tree, Props.ignoreMultiplier);

@@ -1,4 +1,5 @@
 ﻿using RimWorld;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -29,7 +30,10 @@ namespace flangoCore
                 color = Color,
                 action = delegate
                 {
-                    Find.WindowStack.Add(new Dialog_ChooseColor("fc_Recolor".Translate(), Color, cachedColors, delegate(Color color) { SetColor(color); }));
+                    var window = new Dialog_ChooseColor("fc_Recolor".Translate(), Color, cachedColors, delegate (Color color) { SetColor(color); })
+                    { resizeable = true };
+                    window.windowRect.size = new Vector2(1200, 600);
+                    Find.WindowStack.Add(window);
                 }
             };
         }

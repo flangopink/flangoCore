@@ -64,7 +64,7 @@ namespace flangoCore
 
 		public override void CompTick()
 		{
-			if (!parent.Spawned || Find.TickManager.TicksGame % Props.tickInterval != 0)
+			if (!parent.Spawned || !parent.IsHashIntervalTick(Props.tickInterval))
 			{
 				return;
 			}

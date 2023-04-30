@@ -26,7 +26,7 @@ namespace flangoCore
 
         public string saveKeysPrefix;
 
-        public Vector3 EmissionOffset => new Vector3(Rand.Range(offsetMin.x, offsetMax.x), Rand.Range(offsetMin.y, offsetMax.y), Rand.Range(offsetMin.z, offsetMax.z));
+        public Vector3 EmissionOffset => new(Rand.Range(offsetMin.x, offsetMax.x), Rand.Range(offsetMin.y, offsetMax.y), Rand.Range(offsetMin.z, offsetMax.z));
 
         // Check for bools instead of comps
         public bool hasCompPowerTrader;
@@ -77,7 +77,7 @@ namespace flangoCore
             }
 
 
-            if (Find.TickManager.TicksGame % Props.updateInterval == 0)
+            if (parent.IsHashIntervalTick(Props.updateInterval))
             {
 
                 if (Props.hasCompPowerTrader)
